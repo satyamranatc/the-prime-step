@@ -2,15 +2,15 @@
 
 import { Suspense, useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, ContactShadows, Text } from "@react-three/drei";
+import { Float, ContactShadows, Environment } from "@react-three/drei";
 import * as THREE from "three";
 import { sceneState } from "@/lib/scroll";
 
 // Center of official mark in original vector coordinates
 const CX = 396.5;
 const CY = 788.5;
-// Architectural scale calibrated for maximum impact without clipping
-const SCALE = 0.0054;
+// Architectural scale calibrated for centered heroic presence
+const SCALE = 0.0056;
 
 // Precise coordinates matching The Prime Step official logo vector geometry
 const PILLAR_POINTS: [number, number][] = [
@@ -43,7 +43,6 @@ const BLACK_RIBBON_POINTS: [number, number][] = [
   [250, 578],
 ];
 
-// Inner optical crystal core (sub-volume revealed during exploded view)
 const CORE_POINTS: [number, number][] = [
   [260, 600],
   [360, 520],
@@ -57,7 +56,7 @@ function makeShape(pts: [number, number][]): THREE.Shape {
   const shape = new THREE.Shape();
   pts.forEach(([x, y], i) => {
     const px = (x - CX) * SCALE;
-    const py = -(y - CY) * SCALE; // Flip Y for 3D coordinate space
+    const py = -(y - CY) * SCALE;
     if (i === 0) shape.moveTo(px, py);
     else shape.lineTo(px, py);
   });
@@ -66,21 +65,23 @@ function makeShape(pts: [number, number][]): THREE.Shape {
 }
 
 /**
- * Hyper-Realistic Precision Exploded Architectural Logo
- * On scroll: Mechanically deconstructs into precision engineered parts & pieces:
- * - Part 01: Piano-Black Obsidian Cantilever Canopy
- * - Part 02: Anodized Aerospace Jewel Teal Pillar
- * - Part 03: Translucent Refractive Optical Glass Core
- * - Part 04: Luminous Cyan Eaves Accent Fin
- * - Part 05: Floating 3D Engineering Telemetry & Hairline Datum
+ * Apple-Calibrated Hyper-Realistic 3D Architectural Monument
+ *
+ * Materials:
+ * - Shell: High-gloss Obsidian Deep Teal Titanium with crystal clearcoat
+ * - Pillar: Precision Satin Jewel Anodized Teal
+ * - Eaves: Luminous Frosted Cyan Glass with light transmission
+ * - Core: Optical Precision Glass Prism
+ *
+ * Scroll Motion:
+ * - Fluid, cinematic rotation and assembly as the user traverses the narrative.
  */
-function ExplodedArchitecturalMonument() {
+function AppleArchitecturalMonument() {
   const groupRef = useRef<THREE.Group>(null);
   const canopyRef = useRef<THREE.Group>(null);
   const pillarRef = useRef<THREE.Group>(null);
   const flapRef = useRef<THREE.Group>(null);
   const coreRef = useRef<THREE.Group>(null);
-  const calloutsRef = useRef<THREE.Group>(null);
 
   const { pillarShape, flapShape, ribbonShape, coreShape } = useMemo(() => {
     return {
@@ -91,25 +92,25 @@ function ExplodedArchitecturalMonument() {
     };
   }, []);
 
-  // Precision CNC-milled extrusion with ultra-smooth diamond-cut chamfers
+  // Premium CNC diamond-cut chamfer bevel configurations
   const ribbonExtrude = useMemo(
     () => ({
-      depth: 0.72,
+      depth: 0.7,
       bevelEnabled: true,
-      bevelThickness: 0.045,
-      bevelSize: 0.035,
-      bevelSegments: 10,
+      bevelThickness: 0.05,
+      bevelSize: 0.04,
+      bevelSegments: 12,
     }),
     []
   );
 
   const pillarExtrude = useMemo(
     () => ({
-      depth: 0.66,
+      depth: 0.65,
       bevelEnabled: true,
       bevelThickness: 0.045,
       bevelSize: 0.035,
-      bevelSegments: 10,
+      bevelSegments: 12,
     }),
     []
   );
@@ -131,7 +132,7 @@ function ExplodedArchitecturalMonument() {
       bevelEnabled: true,
       bevelThickness: 0.03,
       bevelSize: 0.02,
-      bevelSegments: 6,
+      bevelSegments: 8,
     }),
     []
   );
@@ -143,261 +144,128 @@ function ExplodedArchitecturalMonument() {
     const p = sceneState.progress;
     const { x, y } = state.pointer;
 
-    // Fluid base rotation responding subtly to cursor & scroll
-    const baseRotY = 0.04 + x * 0.22 + p * 0.85;
-    const baseRotX = -0.02 - y * 0.14 + p * 0.15;
-    const basePosY = 0.1 - p * 0.2;
+    // Smooth cinematic studio orbit responding subtly to cursor & scroll
+    const targetRotY = 0.05 + x * 0.18 + p * 0.75;
+    const targetRotX = -0.04 - y * 0.12 + p * 0.12;
+    const targetPosY = 0.08 - p * 0.18;
 
-    g.rotation.y = THREE.MathUtils.damp(g.rotation.y, baseRotY, 3.8, dt);
-    g.rotation.x = THREE.MathUtils.damp(g.rotation.x, baseRotX, 3.8, dt);
-    g.position.y = THREE.MathUtils.damp(g.position.y, basePosY, 3.8, dt);
+    g.rotation.y = THREE.MathUtils.damp(g.rotation.y, targetRotY, 3.5, dt);
+    g.rotation.x = THREE.MathUtils.damp(g.rotation.x, targetRotX, 3.5, dt);
+    g.position.y = THREE.MathUtils.damp(g.position.y, targetPosY, 3.5, dt);
 
-    // EXPLODED VIEW MATH (Opening into precision parts & pieces on scroll)
-    // Curve begins after a gentle scroll threshold and expands dramatically
-    const explode = Math.pow(Math.min(1, Math.max(0, p * 2.2)), 1.15);
+    // ELEGANT ARCHITECTURAL EXPANSION ON SCROLL
+    const explode = Math.pow(Math.min(1, Math.max(0, p * 2.0)), 1.2);
 
-    // 1. Canopy lifts upward, back, and tilts along its roof ridge
     if (canopyRef.current) {
-      canopyRef.current.position.x = THREE.MathUtils.damp(canopyRef.current.position.x, explode * 0.55, 4.0, dt);
-      canopyRef.current.position.y = THREE.MathUtils.damp(canopyRef.current.position.y, explode * 1.15, 4.0, dt);
-      canopyRef.current.position.z = THREE.MathUtils.damp(canopyRef.current.position.z, 0.04 + explode * 0.85, 4.0, dt);
-      canopyRef.current.rotation.x = THREE.MathUtils.damp(canopyRef.current.rotation.x, explode * 0.18, 4.0, dt);
-      canopyRef.current.rotation.z = THREE.MathUtils.damp(canopyRef.current.rotation.z, -explode * 0.12, 4.0, dt);
+      canopyRef.current.position.x = THREE.MathUtils.damp(canopyRef.current.position.x, explode * 0.42, 4.0, dt);
+      canopyRef.current.position.y = THREE.MathUtils.damp(canopyRef.current.position.y, explode * 0.85, 4.0, dt);
+      canopyRef.current.position.z = THREE.MathUtils.damp(canopyRef.current.position.z, 0.04 + explode * 0.6, 4.0, dt);
+      canopyRef.current.rotation.x = THREE.MathUtils.damp(canopyRef.current.rotation.x, explode * 0.14, 4.0, dt);
     }
 
-    // 2. Cyan Eaves Fin glides outward laterally
     if (flapRef.current) {
-      flapRef.current.position.x = THREE.MathUtils.damp(flapRef.current.position.x, -explode * 0.85, 4.0, dt);
-      flapRef.current.position.y = THREE.MathUtils.damp(flapRef.current.position.y, explode * 0.45, 4.0, dt);
-      flapRef.current.position.z = THREE.MathUtils.damp(flapRef.current.position.z, 0.08 + explode * 1.1, 4.0, dt);
+      flapRef.current.position.x = THREE.MathUtils.damp(flapRef.current.position.x, -explode * 0.65, 4.0, dt);
+      flapRef.current.position.y = THREE.MathUtils.damp(flapRef.current.position.y, explode * 0.35, 4.0, dt);
+      flapRef.current.position.z = THREE.MathUtils.damp(flapRef.current.position.z, 0.08 + explode * 0.8, 4.0, dt);
     }
 
-    // 3. Teal Pillar steps forward and down, grounding the foundation
     if (pillarRef.current) {
-      pillarRef.current.position.x = THREE.MathUtils.damp(pillarRef.current.position.x, -explode * 0.45, 4.0, dt);
-      pillarRef.current.position.y = THREE.MathUtils.damp(pillarRef.current.position.y, -explode * 0.95, 4.0, dt);
-      pillarRef.current.position.z = THREE.MathUtils.damp(pillarRef.current.position.z, -0.02 - explode * 0.35, 4.0, dt);
-      pillarRef.current.rotation.y = THREE.MathUtils.damp(pillarRef.current.rotation.y, explode * 0.15, 4.0, dt);
+      pillarRef.current.position.x = THREE.MathUtils.damp(pillarRef.current.position.x, -explode * 0.35, 4.0, dt);
+      pillarRef.current.position.y = THREE.MathUtils.damp(pillarRef.current.position.y, -explode * 0.75, 4.0, dt);
+      pillarRef.current.position.z = THREE.MathUtils.damp(pillarRef.current.position.z, -0.02 - explode * 0.25, 4.0, dt);
+      pillarRef.current.rotation.y = THREE.MathUtils.damp(pillarRef.current.rotation.y, explode * 0.12, 4.0, dt);
     }
 
-    // 4. Optical Crystal Core expands from the center
     if (coreRef.current) {
-      const coreScale = 0.8 + explode * 0.3;
+      const coreScale = 0.85 + explode * 0.25;
       coreRef.current.scale.setScalar(THREE.MathUtils.damp(coreRef.current.scale.x, coreScale, 4.0, dt));
-      coreRef.current.position.z = THREE.MathUtils.damp(coreRef.current.position.z, explode * 0.25, 4.0, dt);
-    }
-
-    // 5. Engineering Callout telemetry fades in during explosion
-    if (calloutsRef.current) {
-      const targetOpacity = Math.max(0, Math.min(1, (explode - 0.2) / 0.6));
-      calloutsRef.current.visible = targetOpacity > 0.01;
-      calloutsRef.current.traverse((child) => {
-        if ((child as THREE.Mesh).material) {
-          const m = (child as THREE.Mesh).material as THREE.Material;
-          m.transparent = true;
-          m.opacity = targetOpacity;
-        }
-      });
+      coreRef.current.position.z = THREE.MathUtils.damp(coreRef.current.position.z, explode * 0.2, 4.0, dt);
     }
   });
 
   return (
-    <group ref={groupRef} position={[0, 0.1, 0]}>
-      {/* ========================================================
-          PART 01: PIANO-BLACK OBSIDIAN CANOPY ARCH (Outer Shell)
-          ======================================================== */}
+    <group ref={groupRef} position={[0, 0.08, 0]}>
+      {/* PART 01: OBSIDIAN DEEP TEAL CANOPY ARCH (Replaces flat black with rich teal-black titanium) */}
       <group ref={canopyRef} position={[0, 0, 0.04]}>
         <mesh castShadow receiveShadow>
           <extrudeGeometry args={[ribbonShape, ribbonExtrude]} />
           <meshPhysicalMaterial
-            color="#0A0C0F"
-            roughness={0.05}
-            metalness={0.4}
+            color="#002424"
+            roughness={0.06}
+            metalness={0.5}
             clearcoat={1.0}
             clearcoatRoughness={0.02}
             reflectivity={0.98}
-            envMapIntensity={1.4}
+            envMapIntensity={1.6}
           />
         </mesh>
-
-        {/* 3D Official "THE" Lettering Perched on Roof Ridge */}
-        <Text
-          position={[-0.62, 1.72, 0.76]}
-          rotation={[0, 0, 0.56]}
-          fontSize={0.15}
-          letterSpacing={0.22}
-          color="#22AAA5"
-          anchorX="center"
-          anchorY="bottom"
-          outlineWidth={0.012}
-          outlineColor="#004D4D"
-        >
-          THE
-        </Text>
       </group>
 
-      {/* ========================================================
-          PART 02: ANODIZED AEROSPACE TEAL PILLAR (Left Monolith)
-          ======================================================== */}
+      {/* PART 02: PRECISION ANODIZED SATIN TEAL PILLAR */}
       <group ref={pillarRef} position={[0, 0, -0.02]}>
         <mesh castShadow receiveShadow>
           <extrudeGeometry args={[pillarShape, pillarExtrude]} />
           <meshPhysicalMaterial
             color="#008080"
-            emissive="#004444"
-            emissiveIntensity={0.2}
-            roughness={0.14}
-            metalness={0.82}
-            clearcoat={0.9}
-            clearcoatRoughness={0.05}
-            reflectivity={0.96}
+            emissive="#003D3D"
+            emissiveIntensity={0.22}
+            roughness={0.16}
+            metalness={0.78}
+            clearcoat={0.95}
+            clearcoatRoughness={0.04}
+            reflectivity={0.94}
             envMapIntensity={1.5}
           />
         </mesh>
       </group>
 
-      {/* ========================================================
-          PART 03: LUMINOUS CYAN EAVES ACCENT FIN (Front Flap)
-          ======================================================== */}
+      {/* PART 03: LUMINOUS FROSTED CYAN GLASS EAVES */}
       <group ref={flapRef} position={[0, 0, 0.08]}>
         <mesh castShadow receiveShadow>
           <extrudeGeometry args={[flapShape, flapExtrude]} />
           <meshPhysicalMaterial
             color="#22AAA5"
             emissive="#19928D"
-            emissiveIntensity={0.65}
+            emissiveIntensity={0.5}
             roughness={0.08}
-            metalness={0.2}
-            transmission={0.45}
-            thickness={0.6}
+            metalness={0.15}
+            transmission={0.55}
+            thickness={0.7}
             clearcoat={1.0}
-            clearcoatRoughness={0.03}
+            clearcoatRoughness={0.02}
+            ior={1.52}
           />
         </mesh>
       </group>
 
-      {/* ========================================================
-          PART 04: OPTICAL CRYSTAL GLASS CORE (Revealed On Scroll)
-          ======================================================== */}
+      {/* PART 04: OPTICAL CRYSTAL GLASS INNER CORE */}
       <group ref={coreRef} position={[-0.1, 0.25, 0.02]}>
         <mesh castShadow receiveShadow>
           <extrudeGeometry args={[coreShape, coreExtrude]} />
           <meshPhysicalMaterial
-            color="#E8FFFF"
+            color="#E6FBFB"
             emissive="#008080"
-            emissiveIntensity={0.15}
-            roughness={0.04}
+            emissiveIntensity={0.18}
+            roughness={0.03}
             metalness={0.05}
-            transmission={0.92}
+            transmission={0.94}
             thickness={1.1}
             ior={1.54}
             clearcoat={1.0}
             transparent
-            opacity={0.85}
+            opacity={0.88}
           />
         </mesh>
       </group>
 
-      {/* ========================================================
-          PART 05: FLOATING 3D TECHNICAL CALLOUT TELEMETRY (HUD)
-          Appears dynamically as the parts explode on scroll
-          ======================================================== */}
-      <group ref={calloutsRef} visible={false}>
-        {/* Callout 01: Canopy Arch */}
-        <group position={[1.8, 1.8, 0.6]}>
-          <Text
-            fontSize={0.11}
-            color="#008080"
-            anchorX="left"
-            anchorY="middle"
-          >
-            01 // CANTILEVER CANOPY
-          </Text>
-          <Text
-            position={[0, -0.15, 0]}
-            fontSize={0.085}
-            color="#557777"
-            anchorX="left"
-            anchorY="middle"
-          >
-            Piano Obsidian Titanium · 0.72m
-          </Text>
-          <mesh position={[-0.6, -0.15, -0.2]} rotation={[0, 0, 0.4]}>
-            <cylinderGeometry args={[0.006, 0.006, 0.8, 8]} />
-            <meshBasicMaterial color="#008080" transparent opacity={0.6} />
-          </mesh>
-        </group>
-
-        {/* Callout 02: Monolithic Pillar */}
-        <group position={[-2.4, -0.8, 0.3]}>
-          <Text
-            fontSize={0.11}
-            color="#008080"
-            anchorX="right"
-            anchorY="middle"
-          >
-            02 // MONOLITH PILLAR
-          </Text>
-          <Text
-            position={[0, -0.15, 0]}
-            fontSize={0.085}
-            color="#557777"
-            anchorX="right"
-            anchorY="middle"
-          >
-            Anodized Jewel Teal · 0.66m
-          </Text>
-          <mesh position={[0.6, -0.1, 0.1]} rotation={[0, 0, -0.3]}>
-            <cylinderGeometry args={[0.006, 0.006, 0.8, 8]} />
-            <meshBasicMaterial color="#008080" transparent opacity={0.6} />
-          </mesh>
-        </group>
-
-        {/* Callout 03: Optical Prism */}
-        <group position={[1.6, -0.2, 0.8]}>
-          <Text
-            fontSize={0.11}
-            color="#22AAA5"
-            anchorX="left"
-            anchorY="middle"
-          >
-            03 // OPTICAL CORE
-          </Text>
-          <Text
-            position={[0, -0.15, 0]}
-            fontSize={0.085}
-            color="#557777"
-            anchorX="left"
-            anchorY="middle"
-          >
-            Refractive Crystal · IOR 1.54
-          </Text>
-          <mesh position={[-0.5, 0.1, -0.2]} rotation={[0, 0, -0.3]}>
-            <cylinderGeometry args={[0.006, 0.006, 0.7, 8]} />
-            <meshBasicMaterial color="#22AAA5" transparent opacity={0.6} />
-          </mesh>
-        </group>
-      </group>
-
-      {/* Architectural Base Ring Datum */}
-      <group position={[0, -2.1, 0]}>
-        {/* Concentric Datum Rings */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[1.8, 1.83, 64]} />
-          <meshBasicMaterial color="#008080" transparent opacity={0.35} side={THREE.DoubleSide} />
-        </mesh>
-        <mesh rotation={[-Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[2.8, 2.82, 64]} />
-          <meshBasicMaterial color="#008080" transparent opacity={0.18} side={THREE.DoubleSide} />
-        </mesh>
-
-        {/* Realistic Ground Contact Shadow */}
+      {/* SOFT STUDIO GROUND CONTACT SHADOW */}
+      <group position={[0, -2.0, 0]}>
         <ContactShadows
-          position={[0, 0.05, 0]}
-          opacity={0.36}
-          scale={7.5}
-          blur={2.4}
-          far={4.5}
+          position={[0, 0, 0]}
+          opacity={0.38}
+          scale={7.0}
+          blur={3.0}
+          far={4.0}
           color="#002424"
         />
       </group>
@@ -410,39 +278,40 @@ export default function HeroScene({ active }: { active: boolean }) {
     <Canvas
       dpr={[1, 2]}
       frameloop={active ? "always" : "never"}
-      camera={{ position: [0, 0, 8.2], fov: 38 }}
+      camera={{ position: [0, 0, 8.0], fov: 36 }}
       gl={{
         antialias: true,
         alpha: true,
         powerPreference: "high-performance",
         toneMapping: THREE.ACESFilmicToneMapping,
-        toneMappingExposure: 1.18,
+        toneMappingExposure: 1.15,
       }}
       aria-hidden="true"
     >
       <Suspense fallback={null}>
-        <ambientLight intensity={0.65} color="#FFFFFF" />
-        <hemisphereLight args={["#FFFFFF", "#004D4D", 0.7]} />
+        {/* Soft, warm studio fill */}
+        <ambientLight intensity={0.75} color="#FFFFFF" />
+        <hemisphereLight args={["#FFFFFF", "#003D3D", 0.65]} />
 
-        {/* Key Studio Light for Crisp Diamond-Cut Chamfer Highlights */}
+        {/* Primary Key Softbox — crisp chamfer specular highlight */}
         <directionalLight
-          position={[8, 11, 8]}
-          intensity={2.9}
+          position={[6, 10, 7]}
+          intensity={2.6}
           color="#FFFFFF"
           castShadow
           shadow-mapSize={[1024, 1024]}
           shadow-bias={-0.0001}
         />
 
-        {/* Teal Silhouette Rim Light */}
-        <directionalLight position={[-8, 5, 3]} intensity={2.4} color="#66B2B2" />
+        {/* Cool Cyan Rim Light — accentuating the architectural silhouette */}
+        <directionalLight position={[-7, 4, 3]} intensity={2.2} color="#66B2B2" />
 
-        {/* Soft Ground Bounce Fill Light */}
-        <directionalLight position={[0, -5, -2]} intensity={0.55} color="#FAFCFC" />
+        {/* Soft Uplight bounce */}
+        <directionalLight position={[0, -5, -2]} intensity={0.45} color="#F4F8F8" />
 
-        {/* Gentle Ambient Float */}
-        <Float speed={1.6} rotationIntensity={0.12} floatIntensity={0.18}>
-          <ExplodedArchitecturalMonument />
+        {/* Float subtly in studio atmosphere */}
+        <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.15}>
+          <AppleArchitecturalMonument />
         </Float>
       </Suspense>
     </Canvas>

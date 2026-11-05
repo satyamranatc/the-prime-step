@@ -232,13 +232,13 @@ export default function Programs() {
                     </>
                   )}
 
-                  {/* 3D Syllabus Car Drive Link */}
+                  {/* 3D Syllabus Interactive Drive Link */}
                   <div className="mt-8" data-ptxt>
                     <Link
                       href={`/roadmap/${roadmapKey}`}
-                      className="group inline-flex items-center gap-3 rounded-full border border-brand bg-brand/10 px-5 py-2.5 text-xs font-semibold text-deep transition-all duration-300 hover:bg-brand hover:text-white md:text-sm shadow-sm"
+                      className="group inline-flex items-center gap-2.5 rounded-full bg-deep text-paper px-6 py-3 text-xs md:text-sm font-semibold transition-all duration-300 hover:bg-brand shadow-sm"
                     >
-                      <span>🚗 Drive 3D Syllabus Roadmap</span>
+                      <span>Drive 3D Syllabus Roadmap</span>
                       <span className="transition-transform duration-300 group-hover:translate-x-1">
                         →
                       </span>

@@ -71,9 +71,19 @@ export default function RoadmapClient({ courseId }: { courseId: string }) {
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
 
+    // Global wheel forwarder ensuring the 3D highway never gets stuck in the middle
+    const handleWheel = (e: WheelEvent) => {
+      const scrollEl = document.querySelector<HTMLDivElement>("main div[style*='overflow']");
+      if (scrollEl) {
+        scrollEl.scrollTop += e.deltaY;
+      }
+    };
+    window.addEventListener("wheel", handleWheel, { passive: true });
+
     return () => {
       document.body.style.overflow = origBodyOverflow;
       document.documentElement.style.overflow = origHtmlOverflow;
+      window.removeEventListener("wheel", handleWheel);
     };
   }, []);
 
@@ -160,7 +170,7 @@ export default function RoadmapClient({ courseId }: { courseId: string }) {
         dpr={[1, 1.8]}
       >
         <Suspense fallback={null}>
-          <ScrollControls pages={totalPages} damping={0.25}>
+          <ScrollControls pages={totalPages} damping={0.16}>
             <Scene course={course} roadCurve={roadCurve} />
           </ScrollControls>
         </Suspense>

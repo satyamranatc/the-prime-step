@@ -5,7 +5,6 @@ import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { setLenis } from "@/lib/scroll";
 import Loader from "./Loader";
-import Cursor from "./Cursor";
 import Nav from "./Nav";
 
 /**
@@ -101,7 +100,6 @@ export default function Experience({ children }: { children: ReactNode }) {
   return (
     <>
       <Loader />
-      <Cursor />
       <Nav />
       {children}
     </>

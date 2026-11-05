@@ -21,17 +21,19 @@ export default function Car({
   // Load the sports car model
   const { scene } = useGLTF("/cartoon_sports_car.glb");
 
-  // Style the car to match The Prime Step signature brand theme (Vibrant Teal / Charcoal / Glowing LED)
+  // Realistic material separation — distinct tires, tinted glass, red taillights & metallic teal body
   useLayoutEffect(() => {
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
         const name = (mesh.name || "").toLowerCase();
-        const matName = ((mesh.material as THREE.Material)?.name || "").toUpperCase();
+        const origMat = (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material) as THREE.Material;
+        const matName = (origMat?.name || "").toUpperCase();
 
-        // 1. COMPLETELY HIDE the embedded tarmac/shadow disc (Object_63 / TARMAC)
+        // 1. COMPLETELY HIDE the flat black tarmac shadow disc (Object_63 / TARMAC)
         if (
           mesh.name === "Object_63" ||
+          mesh.name === "Object_29" ||
           matName === "TARMAC" ||
           name.includes("tarmac") ||
           name.includes("shadow") ||
@@ -45,66 +47,94 @@ export default function Car({
         mesh.castShadow = true;
         mesh.receiveShadow = true;
 
+        // 2. Headlights: Radiant Xenon LED
         if (matName.includes("HEADLIGHTS") || name.includes("headlight")) {
-          // Radiant Xenon Headlights
           mesh.material = new THREE.MeshStandardMaterial({
             color: new THREE.Color("#E8FFFF"),
-            emissive: new THREE.Color("#38F8F0"),
+            emissive: new THREE.Color("#00E5FF"),
             emissiveIntensity: 3.5,
-            roughness: 0.1,
-            metalness: 0.2,
-          });
-        } else if (matName.includes("LAMPS") || name.includes("taillight") || name.includes("lamp")) {
-          // Brilliant Crimson LED Taillight Strip (clearly visible from the rear view!)
-          mesh.material = new THREE.MeshStandardMaterial({
-            color: new THREE.Color("#FF1E40"),
-            emissive: new THREE.Color("#FF0828"),
-            emissiveIntensity: 5.0,
-            roughness: 0.15,
+            roughness: 0.08,
             metalness: 0.1,
           });
-        } else if (matName.includes("GLASS") || name.includes("glass") || name.includes("window")) {
-          // Tinted Obsidian Aerodynamic Glass
+        }
+        // 3. Taillights: Brilliant Crimson LED Strip (clearly visible from rear chase camera)
+        else if (
+          matName.includes("LAMPS") ||
+          name.includes("taillight") ||
+          name.includes("lamp") ||
+          mesh.name === "Object_21"
+        ) {
+          mesh.material = new THREE.MeshStandardMaterial({
+            color: new THREE.Color("#FF1035"),
+            emissive: new THREE.Color("#FF0828"),
+            emissiveIntensity: 5.5,
+            roughness: 0.1,
+            metalness: 0.05,
+          });
+        }
+        // 4. Windows & Windshield: Tinted Obsidian Aerodynamic Glass
+        else if (
+          matName.includes("GLASS") ||
+          name.includes("glass") ||
+          name.includes("window") ||
+          mesh.name === "Object_16" ||
+          mesh.name === "Object_24" ||
+          mesh.name === "Object_28"
+        ) {
           mesh.material = new THREE.MeshPhysicalMaterial({
-            color: new THREE.Color("#081414"),
-            roughness: 0.05,
-            metalness: 0.15,
+            color: new THREE.Color("#061012"),
+            roughness: 0.04,
+            metalness: 0.1,
             clearcoat: 1.0,
-            clearcoatRoughness: 0.04,
+            clearcoatRoughness: 0.03,
             transparent: true,
             opacity: 0.88,
           });
-        } else if (
+        }
+        // 5. Tires, Rims, Diffuser, Spoiler Brackets & Matte Lower Trim
+        else if (
           matName.includes("MATTE") ||
+          name.includes("tyre") ||
           name.includes("tire") ||
           name.includes("wheel") ||
-          name.includes("bumper") ||
-          name.includes("diffuser")
+          name.includes("rim") ||
+          name.includes("brake") ||
+          name.includes("diffuser") ||
+          name.includes("steering") ||
+          mesh.name === "Object_3" ||
+          mesh.name === "Object_6" ||
+          mesh.name === "Object_9" ||
+          mesh.name === "Object_12" ||
+          mesh.name === "Object_15" ||
+          mesh.name === "Object_18" ||
+          mesh.name === "Object_20" ||
+          mesh.name === "Object_23" ||
+          mesh.name === "Object_27"
         ) {
-          // Satin Charcoal trims, tires, spoiler & diffuser
           mesh.material = new THREE.MeshStandardMaterial({
-            color: new THREE.Color("#18191E"),
-            roughness: 0.45,
-            metalness: 0.2,
+            color: new THREE.Color("#16171B"),
+            roughness: 0.55,
+            metalness: 0.25,
           });
-        } else if (matName.includes("MIRROR")) {
-          // Glossy Mirror housing
+        }
+        // 6. Side Mirrors
+        else if (matName.includes("MIRRORS") || name.includes("mirror")) {
           mesh.material = new THREE.MeshStandardMaterial({
-            color: new THREE.Color("#008080"),
+            color: new THREE.Color("#002828"),
             roughness: 0.1,
-            metalness: 0.5,
+            metalness: 0.8,
           });
-        } else {
-          // Main Sports Car Body (CARRERA_4096 / Body Panels):
-          // VIBRANT, RADIANT SIGNATURE PRIME TEAL LACQUER!
+        }
+        // 7. Sports Car Main Body Panels (Deep Metallic Jewel Teal Lacquer)
+        else {
           mesh.material = new THREE.MeshPhysicalMaterial({
-            color: new THREE.Color("#00A896"),
-            emissive: new THREE.Color("#00403C"),
-            emissiveIntensity: 0.25,
-            roughness: 0.12,
-            metalness: 0.35,
+            color: new THREE.Color("#008080"),
+            emissive: new THREE.Color("#003838"),
+            emissiveIntensity: 0.15,
+            roughness: 0.1,
+            metalness: 0.65,
             clearcoat: 1.0,
-            clearcoatRoughness: 0.03,
+            clearcoatRoughness: 0.02,
             reflectivity: 0.98,
           });
         }
@@ -120,8 +150,9 @@ export default function Car({
     const rawOffset = scroll.offset;
     if (isNaN(rawOffset)) return;
 
-    const cameraProgress = rawOffset * 0.95;
-    const carProgress = Math.min(1, cameraProgress + 0.015);
+    // Smooth progress mapping
+    const cameraProgress = Math.min(1, Math.max(0, rawOffset * 0.95));
+    const carProgress = Math.min(1, Math.max(0, cameraProgress + 0.015));
 
     // Dynamic Milestone detection
     const currentActiveNode = useRoadmapStore.getState().activeNode;
@@ -139,7 +170,7 @@ export default function Car({
       newActiveNode = numSteps; // Grand Finale
     } else {
       for (let i = thresholds.length - 1; i >= 0; i--) {
-        if (carProgress >= thresholds[i] - 0.03) {
+        if (carProgress >= thresholds[i] - 0.035) {
           newActiveNode = i;
           break;
         }
@@ -174,11 +205,11 @@ export default function Car({
     <group ref={carRef}>
       <primitive object={scene} scale={1.15} rotation={[0, 4.7, 0]} />
 
-      {/* Rear illumination so the back of the car is brilliantly lit */}
-      <directionalLight position={[0, 4, 7]} intensity={2.2} color="#FFFFFF" />
+      {/* Rear illumination so the metallic curves and taillights gleam in the camera */}
+      <directionalLight position={[0, 4, 7]} intensity={2.4} color="#FFFFFF" />
 
-      {/* Cyan neon underglow on the road */}
-      <pointLight color="#00E5D8" intensity={3.5} distance={4.5} position={[0, 0.45, 0]} />
+      {/* Cyan neon road underglow */}
+      <pointLight color="#00E5D8" intensity={2.8} distance={4.0} position={[0, 0.45, 0]} />
     </group>
   );
 }

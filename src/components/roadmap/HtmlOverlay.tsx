@@ -13,16 +13,16 @@ export default function HtmlOverlay({ course }: { course: RoadmapCourse }) {
     <div className="pointer-events-none fixed inset-0 z-40 overflow-hidden select-none">
       {/* 1. STARTING LINE HERO CARD (activeNode === -1) */}
       {activeNode === -1 && (
-        <div className="pointer-events-auto absolute top-20 left-4 md:top-24 md:left-10 max-w-md md:max-w-xl transition-all duration-500 ease-out animate-[fadeIn_0.5s_ease-out]">
+        <div className="pointer-events-none absolute top-20 left-4 md:top-24 md:left-10 max-w-md md:max-w-xl transition-all duration-500 ease-out animate-[fadeIn_0.5s_ease-out]">
           <div className="rounded-3xl border border-pale/90 bg-paper/95 p-6 shadow-2xl backdrop-blur-xl md:p-8">
             <div className="eyebrow mb-3.5 inline-flex items-center gap-2 rounded-full border border-brand/30 bg-soft px-3.5 py-1 text-xs font-semibold text-brand">
               <span>🏁</span>
               <span>The Prime Step Interactive Highway</span>
             </div>
 
-            <h1 className="display mb-3 text-3xl text-deep sm:text-4xl md:text-5xl leading-tight">
+            <h1 className="display mb-3 text-3xl font-bold text-deep sm:text-4xl md:text-5xl leading-tight">
               {course.title} <br />
-              <span className="italic text-brand">Syllabus Journey</span>
+              <span className="text-brand">Syllabus Journey</span>
             </h1>
 
             <p className="mb-5 text-xs sm:text-sm leading-relaxed text-deep/80 md:text-base">
@@ -45,7 +45,7 @@ export default function HtmlOverlay({ course }: { course: RoadmapCourse }) {
       {activeNode >= 0 && activeNode < numSteps && (
         <div
           key={activeNode}
-          className="pointer-events-auto absolute top-20 right-4 md:top-24 md:right-10 max-w-md md:max-w-lg transition-all duration-500 ease-out animate-[slideIn_0.4s_ease-out]"
+          className="pointer-events-none absolute top-20 right-4 md:top-24 md:right-10 max-w-md md:max-w-lg transition-all duration-500 ease-out animate-[slideIn_0.4s_ease-out]"
         >
           {(() => {
             const step = course.steps[activeNode];
@@ -83,7 +83,7 @@ export default function HtmlOverlay({ course }: { course: RoadmapCourse }) {
                 </div>
 
                 {/* Heading */}
-                <h2 className="display mb-2.5 text-xl text-deep sm:text-2xl md:text-3xl leading-snug">
+                <h2 className="display mb-2.5 text-xl font-bold text-deep sm:text-2xl md:text-3xl leading-snug">
                   {step.heading}
                 </h2>
 
