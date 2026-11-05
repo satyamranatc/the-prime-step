@@ -192,11 +192,11 @@ export default function RoadPath({
       </mesh>
 
       <mesh geometry={borderGeo} position={[0, -0.01, 0]}>
-        <meshBasicMaterial color="#008080" transparent opacity={0.2} side={THREE.DoubleSide} />
+        <meshBasicMaterial color="#008080" transparent opacity={0.85} side={THREE.DoubleSide} />
       </mesh>
 
       <mesh geometry={centerLineGeo} position={[0, 0.01, 0]}>
-        <meshBasicMaterial color="#008080" transparent opacity={0.6} side={THREE.DoubleSide} />
+        <meshBasicMaterial color="#00A896" transparent opacity={0.95} side={THREE.DoubleSide} />
       </mesh>
 
       {nodePositions.map((pos, index) => (

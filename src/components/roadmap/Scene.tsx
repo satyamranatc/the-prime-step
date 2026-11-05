@@ -4,7 +4,6 @@ import { Environment, ContactShadows } from "@react-three/drei";
 import * as THREE from "three";
 import CameraRig from "./CameraRig";
 import RoadPath from "./RoadPath";
-import HtmlOverlay from "./HtmlOverlay";
 import Car from "./Car";
 import type { RoadmapCourse } from "@/lib/roadmapCourses";
 
@@ -32,19 +31,18 @@ export default function Scene({
 
       {/* Realistic ground shadow */}
       <ContactShadows
-        position={[0, -0.08, 0]}
+        position={[0, -0.05, 0]}
         resolution={1024}
-        scale={220}
-        blur={2}
-        opacity={0.35}
-        far={12}
-        color="#002B2B"
+        scale={200}
+        blur={2.5}
+        opacity={0.28}
+        far={10}
+        color="#001818"
       />
 
       <RoadPath course={course} roadCurve={roadCurve} />
       <Car course={course} roadCurve={roadCurve} />
       <CameraRig roadCurve={roadCurve} />
-      <HtmlOverlay course={course} />
     </>
   );
 }

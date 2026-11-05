@@ -8,6 +8,7 @@ import * as THREE from "three";
 import { ROADMAP_COURSES } from "@/lib/roadmapCourses";
 import { generateRoadCurve } from "@/components/roadmap/curve";
 import Scene from "@/components/roadmap/Scene";
+import HtmlOverlay from "@/components/roadmap/HtmlOverlay";
 import { useRoadmapStore } from "@/lib/roadmapStore";
 import Logo from "@/components/ui/Logo";
 
@@ -25,7 +26,7 @@ function LoadingScreen() {
 
   return (
     <div
-      className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-paper transition-opacity duration-700"
+      className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-paper transition-opacity duration-700"
       style={{ opacity: isComplete ? 0 : 1, pointerEvents: isComplete ? "none" : "auto" }}
     >
       <div className="mb-6 flex flex-col items-center">
@@ -79,24 +80,34 @@ export default function RoadmapClient({ courseId }: { courseId: string }) {
   const numSteps = course.steps.length;
   const totalPages = numSteps + 2;
   const roadCurve = useMemo(() => generateRoadCurve(numSteps), [numSteps]);
-  const isFinished = activeNode >= numSteps - 1;
+  const isFinished = activeNode >= numSteps;
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-paper select-none">
-      {/* Top Navigation Bar */}
+      {/* 1. Frosted Top Navigation Bar — Solid Protection Barrier */}
       <nav
         aria-label="Roadmap navigation"
-        className="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-center justify-between p-4 md:p-6"
+        className="pointer-events-none fixed inset-x-0 top-0 z-50 flex items-center justify-between border-b border-deep/10 bg-paper/90 px-4 py-3 shadow-xs backdrop-blur-md md:px-8 md:py-3.5"
       >
         <Link
           href="/#programs"
-          className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-deep/15 bg-paper/90 px-4 py-2 text-xs font-semibold text-deep shadow-sm backdrop-blur-md transition-colors hover:bg-soft md:text-sm"
+          className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-deep/15 bg-paper px-4 py-2 text-xs font-semibold text-deep shadow-xs transition-colors hover:bg-soft md:text-sm"
         >
           <span>←</span> Back to Programs
         </Link>
 
-        <div className="pointer-events-auto hidden items-center gap-3 md:flex">
-          <Logo height={40} />
+        {/* Center Course Badge */}
+        <div className="pointer-events-auto flex items-center gap-3">
+          <Logo height={34} className="hidden md:block" />
+          <div className="h-4 w-px bg-deep/20 hidden md:block" />
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-deep md:text-sm">
+              {course.title}
+            </span>
+            <span className="rounded-full bg-brand/10 px-2 py-0.5 text-[11px] font-semibold text-brand border border-brand/20">
+              3D Highway
+            </span>
+          </div>
         </div>
 
         <Link
@@ -107,9 +118,12 @@ export default function RoadmapClient({ courseId }: { courseId: string }) {
         </Link>
       </nav>
 
-      {/* Floating Bottom Driving Hint / Milestone Status */}
-      <div className="pointer-events-none absolute bottom-6 inset-x-0 z-30 flex justify-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-paper/90 px-4 py-1.5 text-xs font-medium text-deep shadow-md backdrop-blur-md transition-all">
+      {/* 2. Interactive Stage Card HUD (Zero Overlap, Zero Collision) */}
+      <HtmlOverlay course={course} />
+
+      {/* 3. Floating Bottom Driving Hint / Milestone Status */}
+      <div className="pointer-events-none fixed bottom-5 inset-x-0 z-40 flex justify-center">
+        <div className="inline-flex items-center gap-2.5 rounded-full border border-brand/20 bg-paper/95 px-4 py-1.5 text-xs font-medium text-deep shadow-md backdrop-blur-md transition-all">
           {isFinished ? (
             <>
               <span>🏁</span>
@@ -119,22 +133,22 @@ export default function RoadmapClient({ courseId }: { courseId: string }) {
             <>
               <span className="inline-block animate-pulse text-brand">⚡</span>
               <span>Milestone {activeNode + 1} of {numSteps} Cleared</span>
-              <span className="font-mono text-brand">↓ Scroll ahead</span>
+              <span className="font-mono text-brand text-[11px]">↓ Scroll to drive ahead</span>
             </>
           ) : (
             <>
               <span className="inline-block animate-bounce text-brand">↓</span>
-              <span>Scroll down to drive through syllabus stages</span>
+              <span>Scroll mouse wheel or touch to drive</span>
               <span className="font-mono text-brand">• {numSteps} Milestones</span>
             </>
           )}
         </div>
       </div>
 
-      {/* Loading Screen Overlay */}
+      {/* 4. Loading Screen Overlay */}
       <LoadingScreen />
 
-      {/* 3D Driveable Roadmap Canvas */}
+      {/* 5. 3D Driveable Roadmap Canvas */}
       <Canvas
         camera={{ position: [0, 5, 10], fov: 58 }}
         shadows={{ type: THREE.PCFShadowMap }}
