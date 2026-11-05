@@ -19,7 +19,7 @@ function webglOK() {
   }
 }
 
-/** Static fallback when WebGL is unavailable. */
+/** Static architectural fallback when WebGL is unavailable. */
 function FallbackStairs() {
   return (
     <svg viewBox="0 0 400 300" className="h-full w-full" aria-hidden="true">
@@ -46,7 +46,7 @@ export default function Hero() {
   const activePersona = PERSONAS.find((p) => p.id === personaId) ?? PERSONAS[0];
 
   useEffect(() => {
-    // Capability detection can only happen client-side.
+    // Capability detection client-side
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setGl(webglOK());
   }, []);
@@ -68,22 +68,22 @@ export default function Hero() {
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       const tl = gsap
         .timeline({ paused: true, defaults: { ease: "expo.out" } })
-        .from("[data-hero] [data-w]", { yPercent: 115, duration: 1.5, stagger: 0.09 })
-        .from("[data-hero-fade]", { opacity: 0, y: 26, duration: 1.1, stagger: 0.1 }, "-=1")
-        .from("[data-scene]", { opacity: 0, scale: 0.94, y: 40, duration: 1.8 }, "<-0.3")
-        .from("[data-rule]", { scaleX: 0, transformOrigin: "left", duration: 1.6 }, "<");
+        .from("[data-hero] [data-w]", { yPercent: 115, duration: 1.5, stagger: 0.08 })
+        .from("[data-hero-fade]", { opacity: 0, y: 24, duration: 1.1, stagger: 0.1 }, "-=1")
+        .from("[data-scene]", { opacity: 0, scale: 0.95, duration: 0.8 }, "<-0.4")
+        .from("[data-rule]", { scaleX: 0, transformOrigin: "left", duration: 1.5 }, "<");
 
       const play = () => tl.play();
       if (document.documentElement.dataset.ready) play();
       else window.addEventListener("pps-ready", play, { once: true });
       off = () => window.removeEventListener("pps-ready", play);
 
-      // Hero scene responds to scroll
+      // Hero 3D Exploded View tracks smoothly with page scroll
       ScrollTrigger.create({
         trigger: el,
         start: "top top",
         end: "bottom top",
-        scrub: true,
+        scrub: 0.8,
         onUpdate: (self) => {
           sceneState.progress = self.progress;
         },
@@ -104,10 +104,10 @@ export default function Hero() {
       className="relative min-h-[100svh] overflow-hidden bg-paper"
       aria-labelledby="hero-title"
     >
-      {/* 3D scene — kept cleanly inside the right column on desktop, top area on mobile */}
+      {/* 3D Exploded Architectural Scene (Right 50% on Desktop, Header Area on Mobile) */}
       <div
         data-scene
-        className="pointer-events-none absolute inset-x-0 top-[8svh] h-[33svh] md:pointer-events-auto md:top-[7svh] md:right-[2%] md:left-[50%] md:h-[68svh] md:max-w-[720px] md:ml-auto"
+        className="pointer-events-none absolute inset-x-0 top-[7svh] h-[36svh] md:pointer-events-auto md:top-[6svh] md:right-[2%] md:left-[48%] md:h-[78svh] md:max-w-[740px] md:ml-auto z-10"
       >
         {gl === true && <HeroScene active={inView} />}
         {gl === false && (
@@ -117,42 +117,83 @@ export default function Hero() {
         )}
       </div>
 
+      {/* Main Hero Architectural Content */}
       <div
         data-hero
-        className="relative mx-auto flex min-h-[100svh] max-w-[1480px] flex-col justify-end px-6 pt-[42svh] pb-10 md:px-10 md:pt-32 md:pb-12"
+        className="relative mx-auto flex min-h-[100svh] max-w-[1480px] flex-col justify-between px-6 pt-24 pb-8 md:px-10 md:pt-36 md:pb-10"
       >
-        <div data-hero-copy>
-          <p className="eyebrow mb-5 text-brand" data-hero-fade>
-            IT Training &amp; Job-Ready Skill Institute — Indore &nbsp;·&nbsp; <span className="normal-case tracking-normal">Seekho practical, bano job-ready</span>
-          </p>
-          <h1 id="hero-title" className="display text-[14.5vw] text-deep sm:text-[10.5vw] md:max-w-[46vw] md:text-[7.2vw]">
+        {/* Top Eyebrow Badge */}
+        <div data-hero-fade>
+          <div className="eyebrow inline-flex items-center gap-2 rounded-full border border-brand/25 bg-soft px-3.5 py-1 text-xs text-brand">
+            <span className="size-1.5 rounded-full bg-brand animate-pulse" />
+            <span>Academic Rigour · Software Architecture · Indore, India</span>
+          </div>
+        </div>
+
+        {/* Hero Title & Mission Copy */}
+        <div data-hero-copy className="my-auto max-w-2xl py-6 md:py-10">
+          <h1 id="hero-title" className="display text-[13.5vw] text-deep sm:text-[9.5vw] md:max-w-[48vw] md:text-[6.4vw] leading-[0.98]">
             <Split text="Every career|begins with|*a* *single* *step.*" />
-            <span className="sr-only"> — The Prime Step, IT training institute in Indore</span>
+            <span className="sr-only"> — The Prime Step, premier technology institute in Indore</span>
           </h1>
 
           <div className="mt-6 grid gap-6 md:mt-8">
-            <p className="max-w-lg text-base leading-relaxed text-deep md:text-[1.1rem]" data-hero-fade>
-              Learn to <strong className="font-semibold">build websites &amp; mobile apps</strong>,{" "}
-              <strong className="font-semibold">analyse business data</strong>, and{" "}
-              <strong className="font-semibold">work with AI</strong> — taught step by step from
-              scratch in Indore, with real projects and placement support.
+            <p className="max-w-xl text-base leading-relaxed text-deep/85 md:text-[1.125rem]" data-hero-fade>
+              Central India&apos;s flagship institute for modern software architecture, distributed cloud systems, and applied AI. Built on practical product development, architectural mastery, and placement excellence.
             </p>
+
             <div className="flex flex-wrap items-center gap-4" data-hero-fade>
-              <CTA href="#admission" label="Talk to admissions" />
-              <CTA href="#programs" label="See all courses" variant="ghost" />
+              <CTA href="#programs" label="Explore Flagship Programs" />
+              <CTA href="#admission" label="Schedule Campus Tour" variant="ghost" />
+            </div>
+
+            {/* Credibility Credentials Ribbon */}
+            <div className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-medium text-deep/70 md:text-sm" data-hero-fade>
+              <span className="flex items-center gap-2">
+                <span className="text-brand">✦</span> 100% Practical Engineering
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-brand">✦</span> Microservices, Cloud &amp; AI
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-brand">✦</span> Vijay Nagar · Bhawarkua
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Interactive "Who are you?" pathfinder */}
-        <div
-          data-hero-fade
-          className="mt-10 rounded-2xl border border-pale bg-soft/80 p-5 md:mt-14 md:p-7"
-          aria-label="Choose who you are to see your recommended path"
-        >
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="eyebrow text-brand">Who are you? &nbsp;·&nbsp; Apna path chunein</p>
-            <div role="tablist" aria-label="Visitor type" className="flex flex-wrap gap-2">
+        {/* Bottom Editorial Bar & Scroll Indicator */}
+        <div data-hero-fade data-rule className="border-t border-deep/15 pt-5">
+          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-xs md:text-sm text-deep">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-deep">Campuses:</span>
+              <span className="text-deep/75">{BRANCHES.map((b) => b.name).join("  ·  ")}</span>
+            </div>
+
+            <div className="flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-brand">
+              <span>Scroll to deconstruct architecture</span>
+              <span className="relative block h-px w-12 overflow-hidden bg-pale">
+                <span className="absolute inset-y-0 left-0 w-1/2 animate-[slide_2s_ease-in-out_infinite] bg-brand" />
+              </span>
+              <span>↓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Chapter 01.5: Interactive Academic Trajectory Pathfinder (Dignified & Spacious) */}
+      <div className="relative mx-auto max-w-[1480px] px-6 py-14 md:px-10 md:py-20 border-t border-pale">
+        <div className="rounded-3xl border border-pale/90 bg-soft/60 p-6 md:p-10 shadow-xs">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="eyebrow text-brand">Academic Trajectory · Choose Your Starting Point</p>
+              <h2 className="display mt-1 text-2xl text-deep md:text-3xl">
+                Personalized Learning Pathways
+              </h2>
+            </div>
+
+            {/* Persona Segment Tabs */}
+            <div role="tablist" aria-label="Visitor background" className="flex flex-wrap gap-2">
               {PERSONAS.map((p) => {
                 const selected = p.id === personaId;
                 return (
@@ -163,10 +204,10 @@ export default function Hero() {
                     aria-selected={selected}
                     onClick={() => setPersonaId(p.id)}
                     data-cursor
-                    className={`rounded-full px-4 py-2 text-xs font-medium transition-colors duration-300 md:text-sm ${
+                    className={`rounded-full px-4 py-2 text-xs font-medium transition-all duration-300 md:text-sm ${
                       selected
-                        ? "bg-deep text-paper"
-                        : "border border-deep/25 bg-paper text-deep hover:border-brand"
+                        ? "bg-deep text-paper shadow-sm"
+                        : "border border-deep/20 bg-paper text-deep hover:border-brand"
                     }`}
                   >
                     {p.label}
@@ -176,24 +217,25 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="mt-5 grid items-center gap-6 border-t border-pale/70 pt-5 md:grid-cols-[1.2fr_1fr_auto]">
+          {/* Active Persona Path Blueprint */}
+          <div className="mt-8 grid items-center gap-6 border-t border-pale/80 pt-6 md:grid-cols-[1.3fr_1fr_auto]">
             <div>
               <p className="eyebrow text-brand">{activePersona.hindi}</p>
-              <h2 className="display mt-1 text-2xl text-deep md:text-3xl">
+              <h3 className="display mt-1 text-xl text-deep md:text-2xl">
                 {activePersona.headline}
-              </h2>
-              <p className="mt-2 max-w-xl text-sm leading-relaxed text-deep md:text-base">
+              </h3>
+              <p className="mt-2 max-w-xl text-xs leading-relaxed text-deep/80 md:text-sm">
                 {activePersona.sub}
               </p>
             </div>
 
             <div>
-              <p className="eyebrow text-deep">Popular starting courses</p>
+              <p className="eyebrow text-deep/80">Recommended Starting Curricula</p>
               <ul className="mt-2.5 flex flex-wrap gap-2">
                 {activePersona.recommended.map((item) => (
                   <li
                     key={item}
-                    className="rounded-full border border-brand/40 bg-paper px-3.5 py-1 text-xs font-medium text-deep md:text-sm"
+                    className="rounded-full border border-brand/30 bg-paper px-3 py-1 text-xs font-medium text-deep shadow-2xs"
                   >
                     {item}
                   </li>
@@ -206,21 +248,8 @@ export default function Hero() {
             </div>
           </div>
         </div>
-
-        <div data-rule className="mt-8 h-px w-full bg-deep/30 md:mt-10" />
-        <div
-          className="eyebrow mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-deep"
-          data-hero-fade
-        >
-          <span>{BRANCHES.map((b) => b.name).join("  ·  ")}</span>
-          <span className="flex items-center gap-3">
-            Scroll
-            <span className="relative block h-px w-12 overflow-hidden bg-pale">
-              <span className="absolute inset-y-0 left-0 w-1/2 animate-[slide_2s_ease-in-out_infinite] bg-brand" />
-            </span>
-          </span>
-        </div>
       </div>
+
       <style>{`@keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(220%)}}@media (prefers-reduced-motion:reduce){[class*="animate-[slide"]{animation:none}}`}</style>
     </section>
   );

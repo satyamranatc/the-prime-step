@@ -75,17 +75,11 @@ export default function Programs() {
         scrollTrigger: {
           trigger: sec,
           pin: true,
-          scrub: 0.7,
+          scrub: 1,
           start: "top top",
           end: () => `+=${dist()}`,
           invalidateOnRefresh: true,
           anticipatePin: 1,
-          snap: {
-            snapTo: 1 / DISCIPLINES.length,
-            duration: { min: 0.25, max: 0.7 },
-            ease: "power2.inOut",
-            delay: 0.05,
-          },
           onUpdate: (self) => {
             if (bar.current) bar.current.style.transform = `scaleX(${self.progress})`;
             if (count.current) {

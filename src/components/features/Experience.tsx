@@ -20,7 +20,11 @@ export default function Experience({ children }: { children: ReactNode }) {
     let tick: ((t: number) => void) | null = null;
 
     if (!calm) {
-      lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 0.9 });
+      lenis = new Lenis({
+        lerp: 0.1,
+        wheelMultiplier: 0.85,
+        touchMultiplier: 1.2,
+      });
       setLenis(lenis);
       lenis.on("scroll", ScrollTrigger.update);
       tick = (t: number) => lenis?.raf(t * 1000);
