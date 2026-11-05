@@ -55,3 +55,4 @@ export function playChime() {
     // Audio policies or unsupported in background
   }
 }
+

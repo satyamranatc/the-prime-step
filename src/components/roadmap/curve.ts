@@ -23,3 +23,4 @@ export function generateRoadCurve(numSteps: number) {
 
   return new THREE.CatmullRomCurve3(points, false, "centripetal", 0.5);
 }
+

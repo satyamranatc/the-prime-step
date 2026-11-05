@@ -127,3 +127,4 @@ export default function Car({
 }
 
 useGLTF.preload("/cartoon_sports_car.glb");
+

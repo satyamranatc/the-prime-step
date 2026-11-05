@@ -107,7 +107,7 @@ export default function Hero() {
       {/* 3D scene — kept cleanly inside the right column on desktop, top area on mobile */}
       <div
         data-scene
-        className="pointer-events-none absolute inset-x-0 top-[9svh] h-[34svh] md:pointer-events-auto md:top-[6svh] md:right-[2%] md:left-[46%] md:h-[64svh]"
+        className="pointer-events-none absolute inset-x-0 top-[8svh] h-[33svh] md:pointer-events-auto md:top-[7svh] md:right-[2%] md:left-[50%] md:h-[68svh] md:max-w-[720px] md:ml-auto"
       >
         {gl === true && <HeroScene active={inView} />}
         {gl === false && (
