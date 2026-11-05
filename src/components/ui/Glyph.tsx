@@ -42,47 +42,26 @@ function Network() {
   );
 }
 
-function Tree() {
-  const nodes = [
-    [200, 70],
-    [120, 170],
-    [280, 170],
-    [80, 280],
-    [160, 280],
-    [240, 280],
-    [320, 280],
-  ];
-  const edges = [
-    [0, 1],
-    [0, 2],
-    [1, 3],
-    [1, 4],
-    [2, 5],
-    [2, 6],
-  ];
+function Search() {
+  const picked = 37;
   return (
     <>
-      {edges.map(([a, b]) => (
-        <line
-          key={`${a}${b}`}
-          x1={nodes[a][0]}
-          y1={nodes[a][1]}
-          x2={nodes[b][0]}
-          y2={nodes[b][1]}
-          className="stroke-deep"
-          {...line}
-        />
-      ))}
-      {nodes.map(([x, y], i) => (
-        <circle
-          key={i}
-          cx={x}
-          cy={y}
-          r={i === 0 ? 20 : 14}
-          className={i === 0 ? "fill-brand stroke-deep" : "fill-pale stroke-deep"}
-          {...line}
-        />
-      ))}
+      {Array.from({ length: 64 }).map((_, i) => {
+        const x = 70 + (i % 8) * 34;
+        const y = 70 + Math.floor(i / 8) * 34;
+        return (
+          <circle
+            key={i}
+            cx={x}
+            cy={y}
+            r={i === picked ? 11 : 6}
+            className={i === picked ? "fill-brand stroke-deep" : "fill-pale stroke-light"}
+            {...line}
+          />
+        );
+      })}
+      <circle cx="226" cy="214" r="62" className="fill-paper/40 stroke-deep" strokeWidth="6" vectorEffect="non-scaling-stroke" />
+      <line x1="270" y1="258" x2="340" y2="328" className="stroke-deep" strokeWidth="12" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
     </>
   );
 }
@@ -172,7 +151,7 @@ const glyphs: Record<GlyphId, React.ReactNode> = {
       <rect x="148" y="300" width="104" height="36" rx="18" className="fill-deep" />
     </>
   ),
-  foundations: <Tree />,
+  foundations: <Search />,
   office: <Sheet />,
 };
 
