@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="180 432 440 705" role="img" aria-label="The Prime Step mark"><defs>
+<linearGradient id="d-m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#66B2B2"/><stop offset="1" stop-color="#4FA3A3"/></linearGradient>
+<linearGradient id="d-s" x1="592" y1="0" x2="1232" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#66B2B2"/><stop offset="1" stop-color="#B2D8D8"/></linearGradient>
+<mask id="d-n" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="1200"><rect width="1600" height="1200" fill="#fff"/><path d="M1132 950L1192 904L1204 904L1204 950Z" fill="#000"/></mask>
+</defs><g><path d="M240 758L385 680L390 1096L360 1119L222 1033L218 1024L238 1008Z" fill="url(#d-m)"/><path d="M207 550L250 575L241 604L208 607Z" fill="#B2D8D8"/><path d="M215 548L360 458L570 575L572 772L586 779L574 800L442 890L418 884L418 668L250 578Z" fill="#FAFCFC"/></g></svg>
