@@ -3,7 +3,7 @@
 import { Suspense, useMemo, useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Lightformer, ContactShadows, Text } from "@react-three/drei";
-import { EffectComposer, N8AO, Bloom, Vignette, SMAA } from "@react-three/postprocessing";
+import { EffectComposer, Bloom, Vignette, SMAA } from "@react-three/postprocessing";
 import * as THREE from "three";
 import { easing } from "maath";
 import { sceneState } from "@/lib/scroll";
@@ -465,7 +465,6 @@ export default function HeroScene({ active = true }: { active?: boolean }) {
 
         {/* Subtle Cinematic Post-Processing */}
         <EffectComposer multisampling={0}>
-          <N8AO halfRes distanceFalloff={0.25} aoRadius={1.2} intensity={2.0} color="#051212" />
           <Bloom luminanceThreshold={0.88} luminanceSmoothing={0.2} intensity={0.35} />
           <Vignette eskil={false} offset={0.15} darkness={0.3} />
           <SMAA />
