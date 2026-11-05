@@ -24,16 +24,14 @@ export default function NextStep() {
         .timeline({
           scrollTrigger: {
             trigger: sec,
-            pin: true,
-            scrub: 0.6,
-            start: "top top",
-            end: "+=150%",
-            anticipatePin: 1,
+            start: "top 80%",
+            end: "bottom bottom",
+            scrub: 1,
           },
         })
-        .from(steps, { yPercent: 105, stagger: 0.14, ease: "power3.out", duration: 1 }, 0)
-        .from("[data-sun]", { yPercent: 60, opacity: 0, ease: "power2.out", duration: 2.2 }, 0.4)
-        .from("[data-cta]", { opacity: 0, y: 30, ease: "power2.out", duration: 1 }, ">-0.6");
+        .from(steps, { yPercent: 90, stagger: 0.1, ease: "power2.out" }, 0)
+        .from("[data-sun]", { yPercent: 45, opacity: 0.2, ease: "power2.out" }, 0.2)
+        .from("[data-cta]", { opacity: 0, y: 24, ease: "power2.out" }, 0.4);
       return () => {
         tl.kill();
       };

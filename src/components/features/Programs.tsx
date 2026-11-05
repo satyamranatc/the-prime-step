@@ -79,7 +79,6 @@ export default function Programs() {
           start: "top top",
           end: () => `+=${dist()}`,
           invalidateOnRefresh: true,
-          anticipatePin: 1,
           onUpdate: (self) => {
             if (bar.current) bar.current.style.transform = `scaleX(${self.progress})`;
             if (count.current) {

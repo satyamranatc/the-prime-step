@@ -84,8 +84,7 @@ export default function Build() {
           pin: true,
           scrub: true,
           start: "top top",
-          end: "+=240%",
-          anticipatePin: 1,
+          end: "+=200%",
           onUpdate: (self) => setActive(Math.min(LAST, Math.floor(self.progress * (LAST + 1)))),
         },
       });

@@ -28,7 +28,7 @@ export default function Experience({ children }: { children: ReactNode }) {
       lenis.on("scroll", ScrollTrigger.update);
       tick = (t: number) => lenis?.raf(t * 1000);
       gsap.ticker.add(tick);
-      gsap.ticker.lagSmoothing(0);
+      gsap.ticker.lagSmoothing(500, 33);
     }
 
     const mm = gsap.matchMedia();
@@ -64,18 +64,6 @@ export default function Experience({ children }: { children: ReactNode }) {
             ease: "none",
             stagger: 0.12,
             scrollTrigger: { trigger: el, start: "top 80%", end: "bottom 45%", scrub: true },
-          },
-        );
-      });
-      // Chapter boundaries: each scene opens like an aperture
-      gsap.utils.toArray<HTMLElement>("[data-aperture]").forEach((el) => {
-        gsap.fromTo(
-          el,
-          { clipPath: "inset(7% 4% 0% 4% round 56px)" },
-          {
-            clipPath: "inset(0% 0% 0% 0% round 0px)",
-            ease: "none",
-            scrollTrigger: { trigger: el, start: "top 100%", end: "top 25%", scrub: true },
           },
         );
       });

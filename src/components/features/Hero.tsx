@@ -38,6 +38,7 @@ function FallbackStairs() {
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
+  const heroStage = useRef<HTMLDivElement>(null);
   const [gl, setGl] = useState<boolean | null>(null);
   const [inView, setInView] = useState(true);
   const [personaId, setPersonaId] = useState<PersonaId>("student");
@@ -58,8 +59,8 @@ export default function Hero() {
   }, []);
 
   useEffect(() => {
-    const el = root.current;
-    if (!el) return;
+    const stage = heroStage.current;
+    if (!stage) return;
     const mm = gsap.matchMedia();
     let off: (() => void) | undefined;
 
@@ -77,12 +78,14 @@ export default function Hero() {
       else window.addEventListener("pps-ready", play, { once: true });
       off = () => window.removeEventListener("pps-ready", play);
 
-      // Hero 3D emblem smoothly tracks scroll through the hero viewport
+      // Hero pinned scroll: Locks the hero, smoothly opens & deconstructs the 3D logo,
+      // and only then releases to scroll down the rest of the site!
       ScrollTrigger.create({
-        trigger: el,
+        trigger: stage,
         start: "top top",
-        end: "bottom top",
-        scrub: 0.6,
+        end: "+=120%",
+        pin: true,
+        scrub: 0.8,
         onUpdate: (self) => {
           sceneState.progress = self.progress;
         },
@@ -104,9 +107,12 @@ export default function Hero() {
       aria-labelledby="hero-title"
     >
       {/* ========================================================
-          SCENE 01: HERO PRODUCT REVEAL (One idea, zero clutter)
+          SCENE 01: HERO PRODUCT REVEAL (Pinned to open 3D logo first)
           ======================================================== */}
-      <div className="relative min-h-[100svh] flex flex-col justify-between px-6 pt-28 pb-8 md:px-12 md:pt-36 md:pb-12 max-w-[1520px] mx-auto">
+      <div
+        ref={heroStage}
+        className="relative min-h-[100svh] flex flex-col justify-between px-6 pt-28 pb-8 md:px-12 md:pt-36 md:pb-12 max-w-[1520px] mx-auto bg-paper"
+      >
         {/* 3D Architectural Monument Canvas */}
         <div
           data-scene
