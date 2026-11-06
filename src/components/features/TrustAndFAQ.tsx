@@ -63,14 +63,14 @@ export default function TrustAndFAQ() {
                   <h3 className="display mt-3 text-2xl font-bold text-deep">
                     {b.name} Campus
                   </h3>
-                  <p className="mt-1 text-xs font-semibold text-brand">
-                    📍 {b.landmark}
+                  <p className="mt-1.5 text-xs font-semibold text-brand">
+                    {b.landmark}
                   </p>
                   <p className="mt-3 text-xs md:text-sm leading-relaxed text-deep/80">
                     {b.address}
                   </p>
                   <p className="mt-3 text-xs font-mono text-deep/70">
-                    🕒 {b.hours}
+                    {b.hours}
                   </p>
                 </div>
 
@@ -152,3 +152,4 @@ export default function TrustAndFAQ() {
     </section>
   );
 }
+
