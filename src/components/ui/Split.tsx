@@ -28,7 +28,9 @@ export default function Split({
               return (
                 <span
                   key={wi}
-                  className="mr-[0.22em] inline-block overflow-hidden pb-[0.38em] align-bottom"
+                  className={`inline-block overflow-hidden pb-[0.38em] align-bottom ${
+                    em ? "pr-[0.18em] mr-[0.12em]" : "pr-[0.04em] mr-[0.22em]"
+                  }`}
                 >
                   <span
                     data-w
