@@ -8,7 +8,6 @@ import * as THREE from "three";
 import { ROADMAP_COURSES } from "@/lib/roadmapCourses";
 import { generateRoadCurve } from "@/components/roadmap/curve";
 import Scene from "@/components/roadmap/Scene";
-import HtmlOverlay from "@/components/roadmap/HtmlOverlay";
 import { useRoadmapStore } from "@/lib/roadmapStore";
 import Logo from "@/components/ui/Logo";
 
@@ -26,28 +25,27 @@ function LoadingScreen() {
 
   return (
     <div
-      className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-paper transition-opacity duration-700"
+      className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white transition-opacity duration-700"
       style={{ opacity: isComplete ? 0 : 1, pointerEvents: isComplete ? "none" : "auto" }}
     >
       <div className="mb-6 flex flex-col items-center">
         <Logo height={48} />
       </div>
 
-      <div className="relative mb-6 flex h-20 w-20 items-center justify-center">
-        <div className="absolute inset-0 animate-spin rounded-full border-4 border-pale border-t-brand" />
-        <span className="text-3xl animate-pulse">🏎️</span>
+      <div className="relative mb-6 flex h-16 w-16 items-center justify-center">
+        <div className="absolute inset-0 animate-spin rounded-full border-4 border-zinc-200 border-t-[#1AAB95]" />
       </div>
 
-      <div className="display text-2xl text-deep">
-        Preparing 3D Interactive Highway
+      <div className="text-xl font-bold text-zinc-900">
+        Loading Interactive 3D Highway
       </div>
-      <p className="mt-2 text-xs font-mono uppercase tracking-widest text-brand">
-        Tuning shaders & road curves &bull; {Math.round(progress)}%
+      <p className="mt-2 text-xs font-mono uppercase tracking-widest text-[#1AAB95]">
+        {Math.round(progress)}%
       </p>
 
-      <div className="mt-5 h-1.5 w-64 overflow-hidden rounded-full bg-soft">
+      <div className="mt-5 h-1.5 w-56 overflow-hidden rounded-full bg-zinc-100">
         <div
-          className="h-full rounded-full bg-brand transition-all duration-300"
+          className="h-full rounded-full bg-[#1AAB95] transition-all duration-300"
           style={{ width: `${Math.max(5, progress)}%` }}
         />
       </div>
@@ -56,9 +54,8 @@ function LoadingScreen() {
 }
 
 export default function RoadmapClient({ courseId }: { courseId: string }) {
-  const activeNode = useRoadmapStore((state) => state.activeNode);
   const setActiveNode = useRoadmapStore((state) => state.setActiveNode);
-  const course = ROADMAP_COURSES[courseId] || ROADMAP_COURSES["mern"];
+  const course = ROADMAP_COURSES[courseId] || ROADMAP_COURSES["python"] || ROADMAP_COURSES["mern"];
 
   useEffect(() => {
     setActiveNode(-1);
@@ -82,7 +79,6 @@ export default function RoadmapClient({ courseId }: { courseId: string }) {
       );
     };
 
-    // Global wheel forwarder ensuring the 3D highway never gets stuck in the middle
     const handleWheel = (e: WheelEvent) => {
       const scrollEl = getScrollEl();
       if (scrollEl) {
@@ -90,7 +86,6 @@ export default function RoadmapClient({ courseId }: { courseId: string }) {
       }
     };
 
-    // Keyboard driving controls (ArrowDown / ArrowUp / Space / PageDown)
     const handleKeyDown = (e: KeyboardEvent) => {
       const scrollEl = getScrollEl();
       if (!scrollEl) return;
@@ -101,7 +96,6 @@ export default function RoadmapClient({ courseId }: { courseId: string }) {
       }
     };
 
-    // Touch swipe controls for mobile
     let touchStartY = 0;
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
@@ -133,87 +127,33 @@ export default function RoadmapClient({ courseId }: { courseId: string }) {
   const numSteps = course.steps.length;
   const totalPages = numSteps + 2;
   const roadCurve = useMemo(() => generateRoadCurve(numSteps), [numSteps]);
-  const isFinished = activeNode >= numSteps;
 
   return (
-    <main className="relative h-screen w-screen overflow-hidden bg-paper select-none">
-      {/* 1. Frosted Top Navigation Bar — Solid Protection Barrier */}
-      <nav
-        aria-label="Roadmap navigation"
-        className="pointer-events-none fixed inset-x-0 top-0 z-50 flex items-center justify-between border-b border-deep/10 bg-paper/90 px-4 py-3 shadow-xs backdrop-blur-md md:px-8 md:py-3.5"
+    <main className="relative h-screen w-screen overflow-hidden bg-white select-none">
+      {/* 1. Sleek "Back to Home" Pill Button (Matches Reference Screenshot) */}
+      <Link
+        href="/#programs"
+        className="absolute top-4 left-4 md:top-6 md:left-6 z-50 px-4 py-2 md:px-6 md:py-2.5 bg-zinc-900/10 hover:bg-zinc-900/20 text-zinc-900 rounded-full font-semibold text-xs md:text-sm backdrop-blur-md transition-colors flex items-center gap-2 pointer-events-auto shadow-sm"
       >
-        <Link
-          href="/#programs"
-          className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-deep/15 bg-paper px-4 py-2 text-xs font-semibold text-deep shadow-xs transition-colors hover:bg-soft md:text-sm"
-        >
-          <span>←</span> Back to Programs
-        </Link>
+        <span>←</span> Back to Home
+      </Link>
 
-        {/* Center Course Badge */}
-        <div className="pointer-events-auto flex items-center gap-3">
-          <Logo height={34} className="hidden md:block" />
-          <div className="h-4 w-px bg-deep/20 hidden md:block" />
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-deep md:text-sm">
-              {course.title}
-            </span>
-            <span className="rounded-full bg-brand/10 px-2 py-0.5 text-[11px] font-semibold text-brand border border-brand/20">
-              3D Highway
-            </span>
-          </div>
-        </div>
-
-        <Link
-          href="/#admission"
-          className="pointer-events-auto rounded-full bg-brand px-5 py-2 text-xs font-semibold text-white shadow-md transition-colors hover:bg-deep md:text-sm"
-        >
-          Enroll Now
-        </Link>
-      </nav>
-
-      {/* 2. Interactive Stage Card HUD (Zero Overlap, Zero Collision) */}
-      <HtmlOverlay course={course} />
-
-      {/* 3. Floating Bottom Driving Hint / Milestone Status */}
-      <div className="pointer-events-none fixed bottom-5 inset-x-0 z-40 flex justify-center">
-        <div className="inline-flex items-center gap-2.5 rounded-full border border-brand/20 bg-paper/95 px-4 py-1.5 text-xs font-medium text-deep shadow-md backdrop-blur-md transition-all">
-          {isFinished ? (
-            <>
-              <span>🏁</span>
-              <span className="font-semibold text-brand">Destination Reached — Placement Ready</span>
-            </>
-          ) : activeNode >= 0 ? (
-            <>
-              <span className="inline-block animate-pulse text-brand">⚡</span>
-              <span>Milestone {activeNode + 1} of {numSteps} Cleared</span>
-              <span className="font-mono text-brand text-[11px]">↓ Scroll to drive ahead</span>
-            </>
-          ) : (
-            <>
-              <span className="inline-block animate-bounce text-brand">↓</span>
-              <span>Scroll mouse wheel or touch to drive</span>
-              <span className="font-mono text-brand">• {numSteps} Milestones</span>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* 4. Loading Screen Overlay */}
+      {/* 2. Loading Screen */}
       <LoadingScreen />
 
-      {/* 5. 3D Driveable Roadmap Canvas */}
+      {/* 3. 3D Driveable Roadmap Canvas with Synchronised HTML Overlay */}
       <Canvas
-        camera={{ position: [0, 5, 10], fov: 58 }}
+        camera={{ position: [0, 5, 10], fov: 60 }}
         shadows={{ type: THREE.PCFShadowMap }}
         gl={{
           antialias: true,
           powerPreference: "high-performance",
           toneMapping: THREE.ACESFilmicToneMapping,
         }}
-        dpr={[1, 1.8]}
+        dpr={[1, 2]}
       >
         <Suspense fallback={null}>
-          <ScrollControls pages={totalPages} damping={0.16}>
+          <ScrollControls pages={totalPages} damping={0.25}>
             <Scene course={course} roadCurve={roadCurve} />
           </ScrollControls>
         </Suspense>

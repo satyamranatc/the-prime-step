@@ -9,52 +9,41 @@ import type { RoadmapCourse } from "@/lib/roadmapCourses";
 function Node({ position, index }: { position: THREE.Vector3; index: number }) {
   const activeNode = useRoadmapStore((state) => state.activeNode);
   const isReached = index <= activeNode;
-  const color = isReached ? "#00E5D8" : "#66B2B2";
+  const color = isReached ? "#ff7b00" : "#1AAB95";
   const floatSpeed = isReached ? 5 : 2;
 
   return (
     <group position={position}>
       {/* Waypoint Base Pedestal */}
-      <mesh receiveShadow castShadow position={[0, 0.2, 0]}>
-        <cylinderGeometry args={[2.5, 3.0, 0.4, 32]} />
-        <meshStandardMaterial
-          color={isReached ? "#FFFFFF" : "#DDE6E6"}
-          roughness={0.2}
+      <mesh receiveShadow castShadow position={[0, 0.25, 0]}>
+        <cylinderGeometry args={[2.5, 3.0, 0.5, 32]} />
+        <meshPhysicalMaterial
+          color={isReached ? "#FFFFFF" : "#E4E4E7"}
+          roughness={0.1}
           metalness={0.1}
+          clearcoat={1}
         />
       </mesh>
 
       {/* Luminous Waypoint Ring */}
-      <mesh position={[0, 0.42, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh position={[0, 0.51, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[1.5, 2.2, 32]} />
         <meshBasicMaterial color={color} side={THREE.DoubleSide} />
       </mesh>
 
-      {/* Floating Holographic Crystal Core */}
-      <Float floatIntensity={isReached ? 3 : 1.5} speed={floatSpeed}>
+      {/* Floating Core Sphere */}
+      <Float floatIntensity={isReached ? 4 : 2} speed={floatSpeed}>
         <mesh position={[0, 1.8, 0]} castShadow>
-          <sphereGeometry args={[0.55, 32, 32]} />
+          <sphereGeometry args={[0.6, 32, 32]} />
           <meshPhysicalMaterial
             color="#FFFFFF"
             emissive={color}
-            emissiveIntensity={isReached ? 2.0 : 0.6}
-            roughness={0.1}
-            transmission={0.85}
+            emissiveIntensity={isReached ? 1.5 : 0.5}
+            roughness={0.2}
+            transmission={0.8}
             thickness={1}
           />
         </mesh>
-
-        <Text
-          position={[0, 3.2, 0]}
-          fontSize={1.2}
-          color={isReached ? "#008080" : "#66B2B2"}
-          anchorX="center"
-          anchorY="middle"
-          outlineWidth={0.05}
-          outlineColor="#FFFFFF"
-        >
-          {String(index + 1).padStart(2, "0")}
-        </Text>
       </Float>
     </group>
   );
@@ -118,8 +107,8 @@ function GrandFinale({
       <Float floatIntensity={2} speed={2}>
         <Text
           position={[0, 16, -14]}
-          fontSize={7}
-          color={isReached ? "#008080" : "#80A8A8"}
+          fontSize={6}
+          color={isReached ? "#1AAB95" : "#A1A1AA"}
           anchorX="center"
           anchorY="middle"
           outlineWidth={0.06}
@@ -128,20 +117,20 @@ function GrandFinale({
           {courseTitle.toUpperCase()}
         </Text>
 
-        <Text position={[0, 11, -14]} fontSize={2.2} color="#008080" anchorX="center" anchorY="middle">
+        <Text position={[0, 11, -14]} fontSize={2.2} color="#1AAB95" anchorX="center" anchorY="middle">
           {isReached ? "You are Placement Ready!" : "Your Journey Awaits"}
         </Text>
       </Float>
 
-      <mesh receiveShadow castShadow position={[0, 0.2, 0]}>
-        <cylinderGeometry args={[7.5, 8.5, 0.45, 64]} />
-        <meshPhysicalMaterial color="#FFFFFF" roughness={0.05} metalness={0.2} clearcoat={1} />
+      <mesh receiveShadow castShadow position={[0, 0.25, 0]}>
+        <cylinderGeometry args={[7.5, 8.5, 0.5, 64]} />
+        <meshPhysicalMaterial color="#FFFFFF" roughness={0.05} metalness={0.1} clearcoat={1} />
       </mesh>
 
-      <mesh position={[0, 0.22, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh position={[0, 0.27, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[5.5, 7.2, 64]} />
         <meshBasicMaterial
-          color="#008080"
+          color="#1AAB95"
           transparent
           opacity={isReached ? 0.9 : 0.3}
           side={THREE.DoubleSide}
@@ -160,19 +149,19 @@ export default function RoadPath({
 }) {
   const numSteps = course.steps.length;
 
-  // Realistic highway width
+  // 1. Pristine Light Road Geometry
   const roadGeometry = useMemo(
-    () => createFlatRoadGeometry(roadCurve, 7.4, Math.max(300, numSteps * 40)),
+    () => createFlatRoadGeometry(roadCurve, 8.0, Math.max(300, numSteps * 40)),
     [roadCurve, numSteps]
   );
-  // Outer road curb edge
+  // 2. Soft Mint/Teal Road Border
   const borderGeo = useMemo(
-    () => createFlatRoadGeometry(roadCurve, 7.8, Math.max(300, numSteps * 40)),
+    () => createFlatRoadGeometry(roadCurve, 8.4, Math.max(300, numSteps * 40)),
     [roadCurve, numSteps]
   );
-  // Center lane marking
+  // 3. Center lane dividing line
   const centerLineGeo = useMemo(
-    () => createFlatRoadGeometry(roadCurve, 0.24, Math.max(300, numSteps * 40)),
+    () => createFlatRoadGeometry(roadCurve, 0.22, Math.max(300, numSteps * 40)),
     [roadCurve, numSteps]
   );
 
@@ -192,31 +181,31 @@ export default function RoadPath({
 
   return (
     <group>
-      {/* 1. Outer Road Curb Strip */}
-      <mesh geometry={borderGeo} position={[0, -0.015, 0]}>
-        <meshStandardMaterial color="#005A5A" roughness={0.4} />
-      </mesh>
-
-      {/* 2. Main Highway Surface — Reflective Asphalt with Studio Sheen */}
+      {/* 1. Pristine Highway Surface — Light Reflective Pearl Sheen */}
       <mesh geometry={roadGeometry} receiveShadow castShadow position={[0, 0, 0]}>
         <MeshReflectorMaterial
-          blur={[60, 60]}
+          blur={[100, 100]}
           resolution={512}
-          mixBlur={0.8}
-          mixStrength={14}
-          roughness={0.25}
+          mixBlur={1}
+          mixStrength={20}
+          roughness={0.4}
           depthScale={1}
           minDepthThreshold={0.4}
           maxDepthThreshold={1.2}
-          color="#182226"
-          metalness={0.2}
-          mirror={0.65}
+          color="#F4F4F5"
+          metalness={0.1}
+          mirror={0.8}
         />
       </mesh>
 
-      {/* 3. Glowing Neon Center Lane Line */}
-      <mesh geometry={centerLineGeo} position={[0, 0.012, 0]}>
-        <meshBasicMaterial color="#00E5D8" transparent opacity={0.95} side={THREE.DoubleSide} />
+      {/* 2. Soft Mint Teal Curb Glow */}
+      <mesh geometry={borderGeo} position={[0, -0.01, 0]}>
+        <meshBasicMaterial color="#1AAB95" transparent opacity={0.15} side={THREE.DoubleSide} />
+      </mesh>
+
+      {/* 3. Luminous Center Dividing Line */}
+      <mesh geometry={centerLineGeo} position={[0, 0.01, 0]}>
+        <meshBasicMaterial color="#1AAB95" transparent opacity={0.55} side={THREE.DoubleSide} />
       </mesh>
 
       {/* 4. Milestones along Highway */}

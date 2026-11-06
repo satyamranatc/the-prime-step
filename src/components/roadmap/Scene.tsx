@@ -1,11 +1,11 @@
 "use client";
 
-import { Environment, ContactShadows } from "@react-three/drei";
+import { Environment, ContactShadows, Scroll } from "@react-three/drei";
 import * as THREE from "three";
 import CameraRig from "./CameraRig";
 import RoadPath from "./RoadPath";
 import Car from "./Car";
-import ParticleBackground from "./ParticleBackground";
+import HtmlOverlay from "./HtmlOverlay";
 import type { RoadmapCourse } from "@/lib/roadmapCourses";
 
 export default function Scene({
@@ -17,58 +17,59 @@ export default function Scene({
 }) {
   return (
     <>
-      {/* 1. Atmospheric Horizon Fog — Gives vast spatial depth so road smoothly recedes */}
-      <fog attach="fog" args={["#E4EDEE", 35, 190]} />
-      <color attach="background" args={["#E8EFF0"]} />
+      {/* 1. Pure White Architectural Horizon Fog */}
+      <fog attach="fog" args={["#FFFFFF", 45, 175]} />
+      <color attach="background" args={["#FFFFFF"]} />
 
-      {/* 2. Studio Lighting */}
+      {/* 2. Studio Lighting matching Reference */}
       <ambientLight intensity={0.65} color="#FFFFFF" />
 
-      {/* Main Studio Key Light casting sharp shadows */}
+      {/* Main Studio Key Light */}
       <directionalLight
-        position={[22, 38, 18]}
-        intensity={2.4}
+        position={[10, 20, 5]}
+        intensity={1.5}
         color="#FFFFFF"
         castShadow
         shadow-mapSize={[2048, 2048]}
         shadow-bias={-0.0001}
       />
 
-      {/* Vibrant Cyan Rim Softbox highlighting ceramic white car edges */}
-      <directionalLight position={[-18, 14, -12]} intensity={1.5} color="#1E9C99" />
-      <directionalLight position={[0, -10, 0]} intensity={0.4} color="#D8E8E8" />
+      {/* Signature Teal Rim Light */}
+      <directionalLight position={[-10, 5, -5]} intensity={0.8} color="#1AAB95" />
 
-      {/* 3. Studio Reflections */}
+      {/* 3. Reflections */}
       <Environment preset="city" />
 
-      {/* 4. Ambient Cybernetic Starfield / Particle Horizon */}
-      <ParticleBackground />
-
-      {/* 5. Vast Architectural Ground Terrain Plane */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.08, -100]} receiveShadow>
+      {/* 4. Pure White Ground Terrain Plane */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0]} receiveShadow>
         <planeGeometry args={[1200, 1200]} />
-        <meshStandardMaterial color="#E2ECEE" roughness={0.8} metalness={0.05} />
+        <meshStandardMaterial color="#FFFFFF" roughness={0.9} metalness={0} />
       </mesh>
 
-      {/* 6. Soft Road Contact Shadow */}
+      {/* 5. Soft Ground Contact Shadows */}
       <ContactShadows
-        position={[0, -0.06, 0]}
+        position={[0, -0.1, 0]}
         resolution={1024}
-        scale={260}
-        blur={2.8}
-        opacity={0.35}
-        far={12}
-        color="#001C1C"
+        scale={200}
+        blur={2.2}
+        opacity={0.4}
+        far={10}
+        color="#000000"
       />
 
-      {/* 7. Continuous 3D Road Highway */}
+      {/* 6. Continuous 3D Road Highway */}
       <RoadPath course={course} roadCurve={roadCurve} />
 
-      {/* 8. The Driving Hypercar */}
+      {/* 7. The Driving Sports Car */}
       <Car course={course} roadCurve={roadCurve} />
 
-      {/* 9. Cinematic Camera Rig Tracking Car */}
+      {/* 8. Cinematic Tracking Camera */}
       <CameraRig roadCurve={roadCurve} />
+
+      {/* 9. HTML Overlay synchronised with Drei Scroll */}
+      <Scroll html style={{ width: "100vw" }}>
+        <HtmlOverlay course={course} />
+      </Scroll>
     </>
   );
 }
