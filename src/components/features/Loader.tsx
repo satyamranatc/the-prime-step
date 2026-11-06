@@ -186,15 +186,6 @@ export default function Loader() {
         ref={shutterTop}
         className="absolute inset-x-0 top-0 h-[50.5vh] bg-white border-b border-pale/70 shadow-sm z-20 flex flex-col justify-between p-6 md:p-10"
       >
-        {/* Subtle Architectural Drafting Grid */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.035]"
-          style={{
-            backgroundImage: `radial-gradient(#1F9D9A 1px, transparent 1px), linear-gradient(to right, #004d4d 1px, transparent 1px), linear-gradient(to bottom, #004d4d 1px, transparent 1px)`,
-            backgroundSize: "28px 28px, 56px 56px, 56px 56px",
-          }}
-        />
-
         {/* Top HUD Bar */}
         <div data-hud className="relative z-10 flex items-center justify-between text-xs font-mono">
           <div className="flex items-center gap-3">
@@ -224,15 +215,6 @@ export default function Loader() {
         ref={shutterBottom}
         className="absolute inset-x-0 bottom-0 h-[50.5vh] bg-white border-t border-pale/70 shadow-sm z-20 flex flex-col justify-end p-6 md:p-10"
       >
-        {/* Subtle Architectural Drafting Grid */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.035]"
-          style={{
-            backgroundImage: `radial-gradient(#1F9D9A 1px, transparent 1px), linear-gradient(to right, #004d4d 1px, transparent 1px), linear-gradient(to bottom, #004d4d 1px, transparent 1px)`,
-            backgroundSize: "28px 28px, 56px 56px, 56px 56px",
-          }}
-        />
-
         {/* Bottom HUD: Telemetry & Tabular Progress */}
         <div data-hud className="relative z-10 space-y-4 pl-12 md:pl-14">
           {/* Laser Track */}

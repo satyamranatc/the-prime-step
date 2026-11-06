@@ -113,15 +113,6 @@ export default function Hero() {
         ref={heroStage}
         className="relative min-h-[100svh] flex flex-col justify-between px-6 pt-20 pb-6 md:px-12 md:pt-28 md:pb-8 max-w-[1520px] mx-auto bg-paper"
       >
-        {/* Subtle Architectural Drafting Grid */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.022]"
-          style={{
-            backgroundImage: `radial-gradient(#1F9D9A 1px, transparent 1px), linear-gradient(to right, #004d4d 1px, transparent 1px), linear-gradient(to bottom, #004d4d 1px, transparent 1px)`,
-            backgroundSize: "32px 32px, 64px 64px, 64px 64px",
-          }}
-        />
-
         {/* 3D Architectural Monument Canvas & Contextual Cards */}
         <div
           data-scene
