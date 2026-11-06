@@ -71,19 +71,62 @@ export default function RoadmapClient({ courseId }: { courseId: string }) {
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
 
+    const getScrollEl = (): HTMLDivElement | null => {
+      return (
+        document.querySelector<HTMLDivElement>("div[style*='overflow: hidden auto']") ||
+        document.querySelector<HTMLDivElement>("div[style*='overflow-y: auto']") ||
+        Array.from(document.querySelectorAll<HTMLDivElement>("div")).find(
+          (d) => d.scrollHeight > d.clientHeight + 10
+        ) ||
+        null
+      );
+    };
+
     // Global wheel forwarder ensuring the 3D highway never gets stuck in the middle
     const handleWheel = (e: WheelEvent) => {
-      const scrollEl = document.querySelector<HTMLDivElement>("main div[style*='overflow']");
+      const scrollEl = getScrollEl();
       if (scrollEl) {
         scrollEl.scrollTop += e.deltaY;
       }
     };
+
+    // Keyboard driving controls (ArrowDown / ArrowUp / Space / PageDown)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const scrollEl = getScrollEl();
+      if (!scrollEl) return;
+      if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
+        scrollEl.scrollTop += 320;
+      } else if (e.key === "ArrowUp" || e.key === "PageUp") {
+        scrollEl.scrollTop -= 320;
+      }
+    };
+
+    // Touch swipe controls for mobile
+    let touchStartY = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+    const handleTouchMove = (e: TouchEvent) => {
+      const scrollEl = getScrollEl();
+      if (!scrollEl) return;
+      const currentY = e.touches[0].clientY;
+      const diffY = touchStartY - currentY;
+      scrollEl.scrollTop += diffY * 1.5;
+      touchStartY = currentY;
+    };
+
     window.addEventListener("wheel", handleWheel, { passive: true });
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
 
     return () => {
       document.body.style.overflow = origBodyOverflow;
       document.documentElement.style.overflow = origHtmlOverflow;
       window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
     };
   }, []);
 

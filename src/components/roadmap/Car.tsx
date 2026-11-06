@@ -117,25 +117,26 @@ export default function Car({
             metalness: 0.25,
           });
         }
-        // 6. Side Mirrors
+        // 6. Side Mirrors — Pure White Housing
         else if (matName.includes("MIRRORS") || name.includes("mirror")) {
           mesh.material = new THREE.MeshStandardMaterial({
-            color: new THREE.Color("#002828"),
+            color: new THREE.Color("#FFFFFF"),
             roughness: 0.1,
-            metalness: 0.8,
+            metalness: 0.1,
           });
         }
-        // 7. Sports Car Main Body Panels (Deep Metallic Jewel Teal Lacquer)
+        // 7. Sports Car Main Body Panels — PURE PORCELAIN CERAMIC WHITE LACQUER
         else {
           mesh.material = new THREE.MeshPhysicalMaterial({
-            color: new THREE.Color("#008080"),
-            emissive: new THREE.Color("#003838"),
-            emissiveIntensity: 0.15,
-            roughness: 0.1,
-            metalness: 0.65,
+            color: new THREE.Color("#FFFFFF"),
+            emissive: new THREE.Color("#000000"),
+            emissiveIntensity: 0,
+            roughness: 0.06,
+            metalness: 0.08,
             clearcoat: 1.0,
             clearcoatRoughness: 0.02,
-            reflectivity: 0.98,
+            reflectivity: 1.0,
+            envMapIntensity: 1.5,
           });
         }
       }

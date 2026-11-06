@@ -43,6 +43,18 @@ function Node({ position, index }: { position: THREE.Vector3; index: number }) {
             thickness={1}
           />
         </mesh>
+
+        <Text
+          position={[0, 3.2, 0]}
+          fontSize={1.2}
+          color={isReached ? "#008080" : "#66B2B2"}
+          anchorX="center"
+          anchorY="middle"
+          outlineWidth={0.05}
+          outlineColor="#FFFFFF"
+        >
+          {String(index + 1).padStart(2, "0")}
+        </Text>
       </Float>
     </group>
   );

@@ -22,20 +22,20 @@ export default function Scene({
       <color attach="background" args={["#E8EFF0"]} />
 
       {/* 2. Studio Lighting */}
-      <ambientLight intensity={0.85} color="#FFFFFF" />
+      <ambientLight intensity={0.65} color="#FFFFFF" />
 
-      {/* Sunlight casting sharp, clean shadows */}
+      {/* Main Studio Key Light casting sharp shadows */}
       <directionalLight
-        position={[25, 40, 15]}
-        intensity={2.2}
+        position={[22, 38, 18]}
+        intensity={2.4}
         color="#FFFFFF"
         castShadow
         shadow-mapSize={[2048, 2048]}
         shadow-bias={-0.0001}
       />
 
-      {/* Cyan Rim & Sky Bounce */}
-      <directionalLight position={[-18, 12, -10]} intensity={1.2} color="#66B2B2" />
+      {/* Vibrant Cyan Rim Softbox highlighting ceramic white car edges */}
+      <directionalLight position={[-18, 14, -12]} intensity={1.5} color="#1E9C99" />
       <directionalLight position={[0, -10, 0]} intensity={0.4} color="#D8E8E8" />
 
       {/* 3. Studio Reflections */}
