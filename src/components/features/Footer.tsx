@@ -65,9 +65,9 @@ export default function Footer() {
 
         <p
           aria-hidden="true"
-          className="display mt-16 text-[19vw] leading-[0.95] text-brand select-none md:mt-24"
+          className="display mt-16 text-[15vw] leading-[0.92] text-brand select-none md:mt-24 md:text-[11.2vw] tracking-tight"
         >
-          Prime Step
+          The Prime Step
         </p>
       </div>
       <div className="relative bg-brand/40">
