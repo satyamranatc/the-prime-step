@@ -2,7 +2,7 @@
 
 import { Suspense, useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, ContactShadows, Text } from "@react-three/drei";
+import { Float, ContactShadows } from "@react-three/drei";
 import * as THREE from "three";
 import { sceneState } from "@/lib/scroll";
 
@@ -274,21 +274,6 @@ function OfficialLogoMonument() {
               envMapIntensity={1.4}
             />
           </mesh>
-
-          {/* Official "THE" Lettering Perched on Roof Ridge (Exact Vector #1E9C99) */}
-          <Text
-            position={[-0.64, 1.74, 0.76]}
-            rotation={[0, 0, 0.56]}
-            fontSize={0.15}
-            letterSpacing={0.22}
-            color="#1E9C99"
-            anchorX="center"
-            anchorY="bottom"
-            outlineWidth={0.012}
-            outlineColor="#1B1B1B"
-          >
-            THE
-          </Text>
         </group>
 
         {/* ========================================================

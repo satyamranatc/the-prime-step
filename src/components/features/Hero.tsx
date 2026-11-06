@@ -111,12 +111,21 @@ export default function Hero() {
           ======================================================== */}
       <div
         ref={heroStage}
-        className="relative min-h-[100svh] flex flex-col justify-between px-6 pt-28 pb-8 md:px-12 md:pt-36 md:pb-12 max-w-[1520px] mx-auto bg-paper"
+        className="relative min-h-[100svh] flex flex-col justify-between px-6 pt-20 pb-6 md:px-12 md:pt-28 md:pb-8 max-w-[1520px] mx-auto bg-paper"
       >
-        {/* 3D Architectural Monument Canvas */}
+        {/* Subtle Architectural Drafting Grid */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.022]"
+          style={{
+            backgroundImage: `radial-gradient(#1F9D9A 1px, transparent 1px), linear-gradient(to right, #004d4d 1px, transparent 1px), linear-gradient(to bottom, #004d4d 1px, transparent 1px)`,
+            backgroundSize: "32px 32px, 64px 64px, 64px 64px",
+          }}
+        />
+
+        {/* 3D Architectural Monument Canvas & Contextual Cards */}
         <div
           data-scene
-          className="pointer-events-none absolute inset-x-0 top-[12svh] h-[40svh] md:pointer-events-auto md:top-[8svh] md:right-[3%] md:left-[46%] md:h-[82svh] md:max-w-[760px] md:ml-auto z-10"
+          className="pointer-events-none absolute inset-x-0 top-[6svh] h-[48svh] md:pointer-events-auto md:top-[4svh] md:right-[2%] md:left-[44%] md:h-[84svh] md:max-w-[800px] md:ml-auto z-10"
         >
           {gl === true && <HeroScene active={inView} />}
           {gl === false && (
@@ -124,46 +133,105 @@ export default function Hero() {
               <FallbackStairs />
             </div>
           )}
+
+          {/* Floating Context Card 1: Production Engineering & Code */}
+          <div
+            data-hero-sub
+            className="pointer-events-auto absolute top-2 md:top-8 left-2 md:-left-8 z-20 hidden sm:flex items-center gap-3 rounded-2xl border border-white/90 bg-white/80 p-3 shadow-[0_12px_28px_rgba(0,77,77,0.08)] backdrop-blur-md transition-transform duration-500 hover:scale-[1.02]"
+          >
+            <div className="flex size-8 items-center justify-center rounded-xl bg-deep text-white font-mono text-xs font-bold">
+              &gt;_
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-[11px] font-semibold text-deep">production.build</span>
+                <span className="inline-flex items-center rounded-full bg-brand/10 px-1.5 py-0.5 text-[9px] font-medium text-brand">
+                  ● live
+                </span>
+              </div>
+              <p className="font-mono text-[11px] text-deep/70">
+                Docker · Spring Boot · React · AWS
+              </p>
+            </div>
+          </div>
+
+          {/* Floating Context Card 2: Student Placement & Outcome */}
+          <div
+            data-hero-sub
+            className="pointer-events-auto absolute bottom-4 md:bottom-12 right-2 md:right-6 z-20 flex items-center gap-3 rounded-2xl border border-white/90 bg-white/80 p-3 shadow-[0_12px_28px_rgba(0,77,77,0.08)] backdrop-blur-md transition-transform duration-500 hover:scale-[1.02]"
+          >
+            <div className="flex size-9 items-center justify-center rounded-full bg-brand/10 text-brand font-bold text-xs border border-brand/20">
+              4.9★
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-deep">8,500+ Alumni Placed</span>
+              </div>
+              <p className="text-[11px] text-deep/70">
+                In product firms &amp; high-growth startups
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* Hero Typography & Single Action Focus */}
-        <div className="my-auto max-w-2xl py-6 md:py-12 z-20">
-          <p className="eyebrow text-brand mb-4" data-hero-sub>
-            Software Architecture &amp; Technology · Indore
+        {/* Hero Typography & Focused Value Proposition */}
+        <div className="my-auto max-w-2xl py-4 md:py-8 z-20">
+          <p className="eyebrow text-brand mb-3" data-hero-sub>
+            Software Architecture &amp; Applied Technology · Indore
           </p>
 
           <h1
             id="hero-title"
             data-hero-headline
-            className="display text-[12.5vw] font-bold tracking-tight text-deep sm:text-[9.2vw] md:text-[6.2vw] leading-[0.94]"
+            className="display text-[12vw] font-bold tracking-tight text-deep sm:text-[9vw] md:text-[5.6vw] leading-[0.96]"
           >
             Every career begins with a single step.
           </h1>
 
           <p
             data-hero-sub
-            className="mt-6 max-w-lg text-base md:text-xl leading-relaxed text-deep/80 font-normal"
+            className="mt-5 text-base md:text-xl font-semibold text-brand tracking-tight"
           >
-            Master modern full stack development, cloud microservices, and applied AI. Built on practical product development and placement excellence.
+            Build real products. Master modern engineering. Become industry-ready.
           </p>
 
-          <div data-hero-cta className="mt-8 flex flex-wrap items-center gap-4">
+          <p
+            data-hero-sub
+            className="mt-3 max-w-xl text-sm md:text-base leading-relaxed text-deep/75 font-normal"
+          >
+            From foundational logic to distributed full stack systems, cloud microservices, and applied AI. Built on practical project labs with dedicated 1-on-1 industry mentorship.
+          </p>
+
+          <div data-hero-cta className="mt-7 flex flex-wrap items-center gap-4">
             <CTA href="#programs" label="Explore Programs" />
-            <CTA href="#admission" label="Campus Tour" variant="ghost" />
+            <CTA href="#admission" label="Book Campus Tour" variant="ghost" />
           </div>
         </div>
 
-        {/* Minimal Bottom Editorial Bar */}
-        <div data-rule className="border-t border-pale/70 pt-5 z-20">
-          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-xs md:text-sm text-deep/70">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-deep">Campuses:</span>
-              <span>{BRANCHES.map((b) => b.name).join("  ·  ")}</span>
+        {/* Intentional Bottom Credibility & Campus Strip */}
+        <div data-rule className="border-t border-pale/80 pt-5 mt-auto z-20">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 items-center text-xs md:text-sm">
+            <div>
+              <span className="eyebrow text-brand block text-[10px] tracking-wider">Indore Infrastructure</span>
+              <span className="font-bold text-deep block mt-0.5">03 Physical Campuses</span>
+              <span className="text-deep/60 text-xs truncate block">Vijay Nagar · Bhawarkua · Annapurna</span>
             </div>
 
-            <div className="flex items-center gap-2 text-brand font-medium">
-              <span>Scroll to deconstruct</span>
-              <span className="text-base">↓</span>
+            <div>
+              <span className="eyebrow text-brand block text-[10px] tracking-wider">Learning Pedagogy</span>
+              <span className="font-bold text-deep block mt-0.5">100% Practical Labs</span>
+              <span className="text-deep/60 text-xs truncate block">Live production code from day one</span>
+            </div>
+
+            <div>
+              <span className="eyebrow text-brand block text-[10px] tracking-wider">Placement Track Record</span>
+              <span className="font-bold text-deep block mt-0.5">8,500+ Engineers</span>
+              <span className="text-deep/60 text-xs truncate block">4.9★ rating from 500+ graduates</span>
+            </div>
+
+            <div className="flex items-center justify-start md:justify-end gap-2 text-brand font-semibold">
+              <span className="text-xs uppercase tracking-wider font-mono">Scroll to explore</span>
+              <span className="text-base animate-bounce">↓</span>
             </div>
           </div>
         </div>
