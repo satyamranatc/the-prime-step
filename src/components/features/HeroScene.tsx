@@ -82,7 +82,6 @@ if (typeof window !== "undefined") {
     { passive: true }
   );
 
-  // Fallback for touch devices using orientation if available
   window.addEventListener(
     "deviceorientation",
     (e) => {
@@ -95,6 +94,376 @@ if (typeof window !== "undefined") {
   );
 }
 
+// Generate high-resolution, vector-crisp 2D canvas textures for orbiting technology icons
+function createTechIconTexture(type: "react" | "python" | "java" | "database" | "cloud" | "ai"): THREE.CanvasTexture {
+  if (typeof document === "undefined") {
+    return new THREE.CanvasTexture(null as unknown as HTMLCanvasElement);
+  }
+  const size = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return new THREE.CanvasTexture(canvas);
+
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = size * 0.44;
+
+  // 1. Sleek drop shadow
+  ctx.save();
+  ctx.shadowColor = "rgba(0, 77, 77, 0.22)";
+  ctx.shadowBlur = 18;
+  ctx.shadowOffsetY = 6;
+
+  // 2. Pure porcelain ceramic disc face
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fill();
+  ctx.restore();
+
+  // 3. Subtle translucent border
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.lineWidth = 5;
+  ctx.strokeStyle = "rgba(31, 157, 154, 0.35)";
+  ctx.stroke();
+
+  // 4. Vector Icon Art
+  ctx.save();
+  ctx.translate(cx, cy);
+
+  if (type === "react") {
+    ctx.strokeStyle = "#00D8FF";
+    ctx.lineWidth = 6.5;
+    for (let i = 0; i < 3; i++) {
+      ctx.save();
+      ctx.rotate((i * Math.PI) / 3);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 68, 25, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.fillStyle = "#00D8FF";
+    ctx.beginPath();
+    ctx.arc(0, 0, 14, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (type === "python") {
+    ctx.lineWidth = 13;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    // Blue top serpent
+    ctx.strokeStyle = "#387EB8";
+    ctx.beginPath();
+    ctx.moveTo(10, -42);
+    ctx.lineTo(-18, -42);
+    ctx.arcTo(-42, -42, -42, -18, 24);
+    ctx.lineTo(-42, -2);
+    ctx.arcTo(-42, 8, -32, 8, 14);
+    ctx.lineTo(8, 8);
+    ctx.stroke();
+
+    ctx.fillStyle = "#387EB8";
+    ctx.beginPath();
+    ctx.arc(-20, -26, 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Yellow bottom serpent
+    ctx.strokeStyle = "#F5B041";
+    ctx.beginPath();
+    ctx.moveTo(-10, 42);
+    ctx.lineTo(18, 42);
+    ctx.arcTo(42, 42, 42, 18, 24);
+    ctx.lineTo(42, 2);
+    ctx.arcTo(42, -8, 32, -8, 14);
+    ctx.lineTo(-8, -8);
+    ctx.stroke();
+
+    ctx.fillStyle = "#F5B041";
+    ctx.beginPath();
+    ctx.arc(20, 26, 5, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (type === "java") {
+    // Steam plumes
+    ctx.strokeStyle = "#E76F00";
+    ctx.lineWidth = 5;
+    ctx.lineCap = "round";
+
+    ctx.beginPath();
+    ctx.moveTo(-14, -44);
+    ctx.bezierCurveTo(-24, -26, 0, -26, -10, -6);
+    ctx.stroke();
+
+    ctx.strokeStyle = "#5382A1";
+    ctx.beginPath();
+    ctx.moveTo(6, -48);
+    ctx.bezierCurveTo(-4, -30, 18, -30, 8, -6);
+    ctx.stroke();
+
+    // Cup body
+    ctx.fillStyle = "#5382A1";
+    ctx.beginPath();
+    ctx.moveTo(-34, 4);
+    ctx.lineTo(34, 4);
+    ctx.lineTo(24, 36);
+    ctx.arcTo(24, 46, 14, 46, 10);
+    ctx.lineTo(-14, 46);
+    ctx.arcTo(-24, 46, -24, 36, 10);
+    ctx.closePath();
+    ctx.fill();
+
+    // Saucer
+    ctx.strokeStyle = "#E76F00";
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.arc(0, 44, 40, 0.2, Math.PI - 0.2);
+    ctx.stroke();
+  } else if (type === "database") {
+    ctx.lineWidth = 6.5;
+    ctx.strokeStyle = "#1AAB95";
+    ctx.fillStyle = "#E6F7F5";
+
+    // Top ellipse
+    ctx.beginPath();
+    ctx.ellipse(0, -30, 44, 15, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Middle segment
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 44, 15, 0, 0, Math.PI);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(-44, -30);
+    ctx.lineTo(-44, 0);
+    ctx.moveTo(44, -30);
+    ctx.lineTo(44, 0);
+    ctx.stroke();
+
+    // Bottom segment
+    ctx.beginPath();
+    ctx.ellipse(0, 30, 44, 15, 0, 0, Math.PI);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(-44, 0);
+    ctx.lineTo(-44, 30);
+    ctx.moveTo(44, 0);
+    ctx.lineTo(44, 30);
+    ctx.stroke();
+  } else if (type === "cloud") {
+    ctx.fillStyle = "#0284C7";
+    ctx.beginPath();
+    ctx.arc(-20, 8, 22, 0, Math.PI * 2);
+    ctx.arc(8, -6, 30, 0, Math.PI * 2);
+    ctx.arc(32, 10, 18, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillRect(-20, 12, 52, 16);
+  } else if (type === "ai") {
+    // 4-point sparkle star
+    ctx.fillStyle = "#8B5CF6";
+    ctx.beginPath();
+    ctx.moveTo(0, -48);
+    ctx.quadraticCurveTo(0, 0, 48, 0);
+    ctx.quadraticCurveTo(0, 0, 0, 48);
+    ctx.quadraticCurveTo(0, 0, -48, 0);
+    ctx.quadraticCurveTo(0, 0, 0, -48);
+    ctx.fill();
+
+    // Secondary sparkle
+    ctx.fillStyle = "#1AAB95";
+    ctx.beginPath();
+    ctx.arc(30, -28, 8, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.generateMipmaps = true;
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.needsUpdate = true;
+  return texture;
+}
+
+interface OrbitConfig {
+  radius: number;
+  rotation: [number, number, number];
+  speed: number;
+  iconA: {
+    type: "react" | "python" | "java" | "database" | "cloud" | "ai";
+    accent: string;
+    offset: number;
+  };
+  iconB: {
+    type: "react" | "python" | "java" | "database" | "cloud" | "ai";
+    accent: string;
+    offset: number;
+  };
+}
+
+const ORBITS: OrbitConfig[] = [
+  {
+    radius: 2.65,
+    rotation: [Math.PI * 0.35, Math.PI * 0.12, Math.PI * 0.22],
+    speed: 0.85,
+    iconA: { type: "react", accent: "#00D8FF", offset: 0 },
+    iconB: { type: "cloud", accent: "#0284C7", offset: Math.PI },
+  },
+  {
+    radius: 2.95,
+    rotation: [-Math.PI * 0.32, -Math.PI * 0.1, -Math.PI * 0.25],
+    speed: 0.72,
+    iconA: { type: "python", accent: "#387EB8", offset: 1.2 },
+    iconB: { type: "ai", accent: "#8B5CF6", offset: 1.2 + Math.PI },
+  },
+  {
+    radius: 2.45,
+    rotation: [Math.PI * 0.15, Math.PI * 0.45, -Math.PI * 0.12],
+    speed: 0.95,
+    iconA: { type: "java", accent: "#E76F00", offset: 2.4 },
+    iconB: { type: "database", accent: "#1AAB95", offset: 2.4 + Math.PI },
+  },
+];
+
+function SingleAtomicOrbit({
+  config,
+  textures,
+}: {
+  config: OrbitConfig;
+  textures: Record<string, THREE.CanvasTexture>;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+  const nodeARef = useRef<THREE.Group>(null);
+  const nodeBRef = useRef<THREE.Group>(null);
+  const ringRef = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    const p = sceneState.progress;
+    // Slight expansion on scroll
+    const expansion = 1 + p * 0.35;
+    const currentRadius = config.radius * expansion;
+
+    if (ringRef.current) {
+      ringRef.current.scale.set(expansion, expansion, 1);
+    }
+
+    // Orbit angle
+    const angleA = t * config.speed + config.iconA.offset;
+    const angleB = t * config.speed + config.iconB.offset;
+
+    if (nodeARef.current) {
+      nodeARef.current.position.set(
+        Math.cos(angleA) * currentRadius,
+        Math.sin(angleA) * currentRadius,
+        0
+      );
+      nodeARef.current.lookAt(state.camera.position);
+    }
+
+    if (nodeBRef.current) {
+      nodeBRef.current.position.set(
+        Math.cos(angleB) * currentRadius,
+        Math.sin(angleB) * currentRadius,
+        0
+      );
+      nodeBRef.current.lookAt(state.camera.position);
+    }
+
+    // Gentle gyroscopic precession
+    if (groupRef.current) {
+      groupRef.current.rotation.z = config.rotation[2] + Math.sin(t * 0.4) * 0.05;
+    }
+  });
+
+  return (
+    <group ref={groupRef} rotation={config.rotation}>
+      {/* 1. Glowing Atomic Orbital Track Ring */}
+      <mesh ref={ringRef}>
+        <ringGeometry args={[config.radius - 0.007, config.radius + 0.007, 128]} />
+        <meshBasicMaterial
+          color="#1F9D9A"
+          transparent
+          opacity={0.22}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* 2. Orbiting Tech Icon A ("Electron 1") */}
+      <group ref={nodeARef}>
+        {/* Front Icon Disc Face */}
+        <mesh>
+          <circleGeometry args={[0.26, 32]} />
+          <meshBasicMaterial
+            map={textures[config.iconA.type]}
+            transparent
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+        {/* Luminous Colored Rim Ring */}
+        <mesh position={[0, 0, -0.003]}>
+          <ringGeometry args={[0.25, 0.27, 32]} />
+          <meshBasicMaterial
+            color={config.iconA.accent}
+            transparent
+            opacity={0.85}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+        <pointLight color={config.iconA.accent} intensity={0.4} distance={1.2} />
+      </group>
+
+      {/* 3. Orbiting Tech Icon B ("Electron 2") */}
+      <group ref={nodeBRef}>
+        {/* Front Icon Disc Face */}
+        <mesh>
+          <circleGeometry args={[0.26, 32]} />
+          <meshBasicMaterial
+            map={textures[config.iconB.type]}
+            transparent
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+        {/* Luminous Colored Rim Ring */}
+        <mesh position={[0, 0, -0.003]}>
+          <ringGeometry args={[0.25, 0.27, 32]} />
+          <meshBasicMaterial
+            color={config.iconB.accent}
+            transparent
+            opacity={0.85}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+        <pointLight color={config.iconB.accent} intensity={0.4} distance={1.2} />
+      </group>
+    </group>
+  );
+}
+
+function AtomicTechOrbits() {
+  const textures = useMemo(() => {
+    return {
+      react: createTechIconTexture("react"),
+      python: createTechIconTexture("python"),
+      java: createTechIconTexture("java"),
+      database: createTechIconTexture("database"),
+      cloud: createTechIconTexture("cloud"),
+      ai: createTechIconTexture("ai"),
+    };
+  }, []);
+
+  return (
+    <group position={[0, 0.05, 0]}>
+      {ORBITS.map((orbit, index) => (
+        <SingleAtomicOrbit key={index} config={orbit} textures={textures} />
+      ))}
+    </group>
+  );
+}
+
 /**
  * Hyper-Realistic 3D Prime Step Architectural Monument
  *
@@ -102,8 +471,8 @@ if (typeof window !== "undefined") {
  * - Roof Canopy: Architectural Graphite Black (#1B1B1B) with physical clearcoat
  * - Vertical Pillar: Official Prime Step Teal (#1F9D9A) with satin metallic depth
  * - Eaves Flap: Vibrant Cyan (#1E9C99) with light transmission
- * - "THE" Typography: Official Teal (#1E9C99) perched on the roof ridge
  * - Optical Inner Core: Refractive crystal glass revealed on scroll
+ * - Atomic Tech Orbits: Floating technology icons orbiting the nucleus
  *
  * Silky-Smooth Organic Perspective Follow:
  * - Damped, spring-weighted tilt and camera parallax that gently tracks cursor movement.
@@ -338,6 +707,11 @@ function OfficialLogoMonument() {
             />
           </mesh>
         </group>
+
+        {/* ========================================================
+            PART 05: ATOMIC TECH ORBITS ("Electrons" Orbiting Nucleus)
+            ======================================================== */}
+        <AtomicTechOrbits />
 
         {/* SOFT STUDIO GROUND CONTACT SHADOW */}
         <group position={[0, -2.0, 0]}>
