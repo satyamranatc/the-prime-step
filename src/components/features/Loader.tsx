@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap";
+import Logo from "@/components/ui/Logo";
 
 const STAGES = [
   "INITIALIZING ARCHITECTURE",
@@ -65,7 +66,7 @@ export default function Loader() {
         0.1
       );
 
-      // 2. Emblem Assembly: Architectural layer reveals
+      // 2. Emblem Reveal: Smooth scale, rise-up and ambient glow
       tl.fromTo(
         "[data-emblem-bg]",
         { scale: 0.7, opacity: 0 },
@@ -74,31 +75,10 @@ export default function Loader() {
       );
 
       tl.fromTo(
-        "[data-pillar]",
-        { y: 55, opacity: 0, scaleY: 0.2 },
-        { y: 0, opacity: 1, scaleY: 1, duration: 1.0, ease: "expo.out", transformOrigin: "bottom" },
+        "[data-emblem]",
+        { scale: 0.88, y: 24, opacity: 0 },
+        { scale: 1, y: 0, opacity: 1, duration: 1.2, ease: "expo.out" },
         0.2
-      );
-
-      tl.fromTo(
-        "[data-flap]",
-        { x: -28, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
-        0.4
-      );
-
-      tl.fromTo(
-        "[data-canopy]",
-        { y: -36, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.1, ease: "expo.out" },
-        0.35
-      );
-
-      tl.fromTo(
-        "[data-the]",
-        { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" },
-        0.7
       );
 
       // 3. Counter & Progress Bar Scrub
@@ -286,82 +266,22 @@ export default function Loader() {
         </div>
       </div>
 
-      {/* CENTER STAGE: ARCHITECTURAL EMBLEM ASSEMBLY */}
+      {/* CENTER STAGE: ARCHITECTURAL EMBLEM */}
       <div
         data-loader-content
         className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none"
       >
-        <div className="relative">
+        <div data-emblem className="relative flex flex-col items-center">
           {/* Soft Ground Contact Shadow */}
-          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-48 h-8 rounded-full bg-deep/15 blur-xl" />
+          <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 w-48 h-8 rounded-full bg-deep/15 blur-lg" />
 
           {/* Precision Official Prime Step Monument Vector */}
-          <svg
-            viewBox="180 432 440 705"
-            className="relative w-32 sm:w-40 md:w-48 drop-shadow-[0_15px_30px_rgba(0,77,77,0.12)] overflow-visible"
-            aria-hidden="true"
-          >
-            <defs>
-              <linearGradient id="loader-pillar-grad-light" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#1F9D9A" />
-                <stop offset="100%" stopColor="#157B78" />
-              </linearGradient>
-              <linearGradient id="loader-canopy-grad-light" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#282828" />
-                <stop offset="100%" stopColor="#181818" />
-              </linearGradient>
-            </defs>
-
-            {/* Accent Eaves Flap */}
-            <path
-              data-flap
-              d="M207 550L250 575L241 604L208 607Z"
-              fill="#1E9C99"
-              stroke="#1A8F8C"
-              strokeWidth="1.5"
-              strokeLinejoin="round"
-            />
-
-            {/* Rising Pillar */}
-            <path
-              data-pillar
-              d="M240 758L385 680L390 1096L360 1119L222 1033L218 1024L238 1008Z"
-              fill="url(#loader-pillar-grad-light)"
-              stroke="#157B78"
-              strokeWidth="1.5"
-              strokeLinejoin="round"
-            />
-
-            {/* Architectural Graphite Roof Canopy */}
-            <path
-              data-canopy
-              d="M215 548L360 458L570 575L572 772L586 779L574 800L442 890L418 884L418 668L250 578Z"
-              fill="url(#loader-canopy-grad-light)"
-              stroke="#101010"
-              strokeWidth="1.5"
-              strokeLinejoin="round"
-            />
-
-            {/* "THE" Ridge Typography */}
-            <g data-the transform="translate(424 436) rotate(33)">
-              <text
-                x="0"
-                y="0"
-                fill="#1E9C99"
-                fontSize="42"
-                fontWeight="800"
-                fontFamily="system-ui, sans-serif"
-                letterSpacing="4"
-              >
-                THE
-              </text>
-            </g>
-          </svg>
+          <Logo mark height={170} className="relative select-none drop-shadow-[0_20px_40px_rgba(0,77,77,0.16)]" />
 
           {/* Light Glint Sheen */}
           <div
             data-glint
-            className="pointer-events-none absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-white/50 to-transparent w-full h-full"
+            className="pointer-events-none absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-white/60 to-transparent w-full h-full"
           />
         </div>
 
