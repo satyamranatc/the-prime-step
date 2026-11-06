@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useMemo, useRef, useEffect } from "react";
+import { Suspense, useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, ContactShadows, Text } from "@react-three/drei";
 import * as THREE from "three";
@@ -77,7 +77,19 @@ if (typeof window !== "undefined") {
     "mousemove",
     (e) => {
       globalMouse.targetX = (e.clientX / window.innerWidth) * 2 - 1;
-      globalMouse.targetY = (e.clientY / window.innerHeight) * 2 - 1;
+      globalMouse.targetY = -(e.clientY / window.innerHeight) * 2 + 1; // standard Cartesian Y
+    },
+    { passive: true }
+  );
+
+  // Fallback for touch devices using orientation if available
+  window.addEventListener(
+    "deviceorientation",
+    (e) => {
+      if (e.gamma !== null && e.beta !== null) {
+        globalMouse.targetX = Math.min(1, Math.max(-1, e.gamma / 28));
+        globalMouse.targetY = Math.min(1, Math.max(-1, (e.beta - 40) / 28));
+      }
     },
     { passive: true }
   );
@@ -86,15 +98,15 @@ if (typeof window !== "undefined") {
 /**
  * Hyper-Realistic 3D Prime Step Architectural Monument
  *
- * Exact Logo Color Scheme:
- * - Roof Canopy: Deep Satin Obsidian Black (#1A1C1E) with diamond-cut chamfer highlights
- * - Eaves Flap: Vibrant Electric Cyan/Teal (#1EA896) matching logo underside
- * - Vertical Pillar: Official Prime Step Teal (#008080) with satin metallic depth
- * - "THE" Lettering: Perched in teal on the roof ridge
+ * Exact Brand Vector Colors (matching public/brand/logo-mark.svg):
+ * - Roof Canopy: Architectural Graphite Black (#1B1B1B) with physical clearcoat
+ * - Vertical Pillar: Official Prime Step Teal (#1F9D9A) with satin metallic depth
+ * - Eaves Flap: Vibrant Cyan (#1E9C99) with light transmission
+ * - "THE" Typography: Official Teal (#1E9C99) perched on the roof ridge
  * - Optical Inner Core: Refractive crystal glass revealed on scroll
  *
- * Interactive Mouse & Perspective Tracking:
- * - Fluidly tilts and shifts perspective as the mouse moves anywhere on screen.
+ * Silky-Smooth Organic Perspective Follow:
+ * - Damped, spring-weighted tilt and camera parallax that gently tracks cursor movement.
  */
 function OfficialLogoMonument() {
   const groupRef = useRef<THREE.Group>(null);
@@ -113,13 +125,13 @@ function OfficialLogoMonument() {
     };
   }, []);
 
-  // Premium CNC diamond-cut chamfer bevel configurations
+  // Premium diamond-cut chamfer extrusions
   const ribbonExtrude = useMemo(
     () => ({
       depth: 0.72,
       bevelEnabled: true,
-      bevelThickness: 0.045,
-      bevelSize: 0.035,
+      bevelThickness: 0.048,
+      bevelSize: 0.036,
       bevelSegments: 10,
     }),
     []
@@ -162,35 +174,44 @@ function OfficialLogoMonument() {
     const g = groupRef.current;
     if (!g) return;
 
-    // Smoothly interpolate mouse coordinates for buttery motion
-    globalMouse.x = THREE.MathUtils.damp(globalMouse.x, globalMouse.targetX, 4.0, dt);
-    globalMouse.y = THREE.MathUtils.damp(globalMouse.y, globalMouse.targetY, 4.0, dt);
+    // Organic weighted damping for buttery, gentle mouse response
+    globalMouse.x = THREE.MathUtils.damp(globalMouse.x, globalMouse.targetX, 2.8, dt);
+    globalMouse.y = THREE.MathUtils.damp(globalMouse.y, globalMouse.targetY, 2.8, dt);
 
     const mx = globalMouse.x;
     const my = globalMouse.y;
     const p = sceneState.progress;
+    const t = state.clock.elapsedTime;
 
-    // RESPONSIVE PERSPECTIVE & TILT:
-    // Moving the mouse across the screen dynamically changes the 3D perspective angle
-    const targetRotY = 0.06 + mx * 0.58 + p * 0.85;
-    const targetRotX = -0.04 - my * 0.42 + p * 0.15;
-    const targetPosX = mx * 0.32;
-    const targetPosY = 0.08 - my * 0.22 - p * 0.18;
+    // Subtle breathing float when idle
+    const idleFloat = Math.sin(t * 1.3) * 0.035;
+    const idleRot = Math.sin(t * 0.5) * 0.02;
 
-    g.rotation.y = THREE.MathUtils.damp(g.rotation.y, targetRotY, 3.8, dt);
-    g.rotation.x = THREE.MathUtils.damp(g.rotation.x, targetRotX, 3.8, dt);
-    g.position.x = THREE.MathUtils.damp(g.position.x, targetPosX, 3.8, dt);
-    g.position.y = THREE.MathUtils.damp(g.position.y, targetPosY, 3.8, dt);
+    // GENTLE PERSPECTIVE TILT:
+    // When the cursor moves, the logo gently rotates to follow the user's line of sight
+    const targetRotY = 0.05 + mx * 0.38 + idleRot + p * 0.85;
+    const targetRotX = -0.03 - my * 0.28 + p * 0.15;
+    const targetRotZ = -mx * 0.035;
 
-    // Dynamic specular light tracking cursor position for tangible physical depth
+    // Subtle lateral and vertical translation
+    const targetPosX = mx * 0.18;
+    const targetPosY = 0.08 + my * 0.12 + idleFloat - p * 0.18;
+
+    g.rotation.y = THREE.MathUtils.damp(g.rotation.y, targetRotY, 3.0, dt);
+    g.rotation.x = THREE.MathUtils.damp(g.rotation.x, targetRotX, 3.0, dt);
+    g.rotation.z = THREE.MathUtils.damp(g.rotation.z, targetRotZ, 3.0, dt);
+    g.position.x = THREE.MathUtils.damp(g.position.x, targetPosX, 3.0, dt);
+    g.position.y = THREE.MathUtils.damp(g.position.y, targetPosY, 3.0, dt);
+
+    // Dynamic specular key light softly sweeping chamfer highlights with cursor
     if (dynamicLightRef.current) {
-      dynamicLightRef.current.position.x = 6 + mx * 5;
-      dynamicLightRef.current.position.y = 8 - my * 4;
+      dynamicLightRef.current.position.x = 5 + mx * 4;
+      dynamicLightRef.current.position.y = 8 + my * 3;
     }
 
-    // Camera subtle parallax perspective shift
-    state.camera.position.x = THREE.MathUtils.damp(state.camera.position.x, mx * 0.45, 3.0, dt);
-    state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, -my * 0.35, 3.0, dt);
+    // Camera perspective tracking for spatial parallax
+    state.camera.position.x = THREE.MathUtils.damp(state.camera.position.x, mx * 0.35, 2.4, dt);
+    state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, my * 0.25, 2.4, dt);
     state.camera.lookAt(0, 0, 0);
 
     // SCROLL-ACTIVATED ARCHITECTURAL EXPLODED DECONSTRUCTION
@@ -228,7 +249,7 @@ function OfficialLogoMonument() {
       {/* Specular Key Light following cursor */}
       <directionalLight
         ref={dynamicLightRef}
-        position={[6, 9, 7]}
+        position={[5, 8, 7]}
         intensity={2.8}
         color="#FFFFFF"
         castShadow
@@ -238,50 +259,50 @@ function OfficialLogoMonument() {
 
       <group ref={groupRef} position={[0, 0.08, 0]}>
         {/* ========================================================
-            PART 01: LOGO BLACK CANOPY ARCH (Exact Logo Black #1A1C1E)
+            PART 01: LOGO BLACK CANOPY ARCH (Exact Vector Black #1B1B1B)
             ======================================================== */}
         <group ref={canopyRef} position={[0, 0, 0.04]}>
           <mesh castShadow receiveShadow>
             <extrudeGeometry args={[ribbonShape, ribbonExtrude]} />
             <meshPhysicalMaterial
-              color="#1A1C1E"
-              roughness={0.08}
-              metalness={0.4}
+              color="#1B1B1B"
+              roughness={0.12}
+              metalness={0.15}
               clearcoat={1.0}
-              clearcoatRoughness={0.03}
+              clearcoatRoughness={0.04}
               reflectivity={0.95}
               envMapIntensity={1.4}
             />
           </mesh>
 
-          {/* Official "THE" Lettering Perched on Roof Ridge */}
+          {/* Official "THE" Lettering Perched on Roof Ridge (Exact Vector #1E9C99) */}
           <Text
             position={[-0.64, 1.74, 0.76]}
             rotation={[0, 0, 0.56]}
             fontSize={0.15}
             letterSpacing={0.22}
-            color="#1EA896"
+            color="#1E9C99"
             anchorX="center"
             anchorY="bottom"
             outlineWidth={0.012}
-            outlineColor="#003D3D"
+            outlineColor="#1B1B1B"
           >
             THE
           </Text>
         </group>
 
         {/* ========================================================
-            PART 02: LOGO VERTICAL PILLAR (Exact Logo Teal #008080)
+            PART 02: LOGO VERTICAL PILLAR (Exact Vector Teal #1F9D9A)
             ======================================================== */}
         <group ref={pillarRef} position={[0, 0, -0.02]}>
           <mesh castShadow receiveShadow>
             <extrudeGeometry args={[pillarShape, pillarExtrude]} />
             <meshPhysicalMaterial
-              color="#008080"
-              emissive="#003D3D"
+              color="#1F9D9A"
+              emissive="#0C5C5A"
               emissiveIntensity={0.25}
               roughness={0.14}
-              metalness={0.76}
+              metalness={0.45}
               clearcoat={0.95}
               clearcoatRoughness={0.04}
               reflectivity={0.96}
@@ -291,17 +312,17 @@ function OfficialLogoMonument() {
         </group>
 
         {/* ========================================================
-            PART 03: LOGO FRONT EAVES FLAP (Exact Logo Cyan #1EA896)
+            PART 03: LOGO FRONT EAVES FLAP (Exact Vector Cyan #1E9C99)
             ======================================================== */}
         <group ref={flapRef} position={[0, 0, 0.08]}>
           <mesh castShadow receiveShadow>
             <extrudeGeometry args={[flapShape, flapExtrude]} />
             <meshPhysicalMaterial
-              color="#1EA896"
-              emissive="#128A7A"
-              emissiveIntensity={0.55}
-              roughness={0.06}
-              metalness={0.2}
+              color="#1E9C99"
+              emissive="#127875"
+              emissiveIntensity={0.45}
+              roughness={0.08}
+              metalness={0.15}
               transmission={0.45}
               thickness={0.65}
               clearcoat={1.0}
@@ -318,12 +339,12 @@ function OfficialLogoMonument() {
           <mesh castShadow receiveShadow>
             <extrudeGeometry args={[coreShape, coreExtrude]} />
             <meshPhysicalMaterial
-              color="#E6FBFB"
-              emissive="#008080"
-              emissiveIntensity={0.16}
-              roughness={0.03}
+              color="#E8FBFB"
+              emissive="#1F9D9A"
+              emissiveIntensity={0.15}
+              roughness={0.04}
               metalness={0.05}
-              transmission={0.95}
+              transmission={0.94}
               thickness={1.1}
               ior={1.54}
               clearcoat={1.0}
@@ -341,7 +362,7 @@ function OfficialLogoMonument() {
             scale={7.2}
             blur={2.8}
             far={4.2}
-            color="#001C1C"
+            color="#051515"
           />
         </group>
       </group>
@@ -367,16 +388,16 @@ export default function HeroScene({ active }: { active: boolean }) {
       <Suspense fallback={null}>
         {/* Soft, warm studio fill */}
         <ambientLight intensity={0.7} color="#FFFFFF" />
-        <hemisphereLight args={["#FFFFFF", "#003D3D", 0.65]} />
+        <hemisphereLight args={["#FFFFFF", "#0C5C5A", 0.65]} />
 
         {/* Cool Cyan Rim Light — accentuating the architectural silhouette */}
-        <directionalLight position={[-8, 4, 3]} intensity={2.2} color="#66B2B2" />
+        <directionalLight position={[-8, 4, 3]} intensity={2.2} color="#1E9C99" />
 
         {/* Soft Uplight bounce */}
         <directionalLight position={[0, -5, -2]} intensity={0.45} color="#F4F8F8" />
 
         {/* Float subtly in studio atmosphere */}
-        <Float speed={1.4} rotationIntensity={0.08} floatIntensity={0.12}>
+        <Float speed={1.3} rotationIntensity={0.06} floatIntensity={0.1}>
           <OfficialLogoMonument />
         </Float>
       </Suspense>

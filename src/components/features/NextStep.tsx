@@ -75,7 +75,7 @@ export default function NextStep() {
       </svg>
 
       <div className="relative mx-auto flex min-h-[100svh] max-w-[1480px] flex-col justify-start px-6 pt-32 pb-12 md:px-10 md:pt-36">
-        <Chapter n="06" title="The next step" dark />
+        <Chapter n="07" title="The next step" dark />
         <h2 id="admission-title" className="display mt-8 text-[17vw] text-paper md:text-[9vw]">
           <Split text="The next step|is *yours.*" dark />
         </h2>

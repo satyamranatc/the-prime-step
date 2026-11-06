@@ -20,20 +20,26 @@ export const NAV = [
 export const BRANCHES = [
   {
     name: "Vijay Nagar",
-    tag: "Head office",
+    tag: "Head Office",
+    hours: "Mon – Sat: 8:00 AM – 8:00 PM",
+    landmark: "Above Apna Sweets, AB Road",
     address:
       "123, 210 & 303, 1st–3rd Floor, Shagun Tower, Above Apna Sweets, Vijay Nagar Square, Indore, MP 452010",
   },
   {
     name: "Bhawarkua",
-    tag: "Branch",
+    tag: "Student Tech Hub",
+    hours: "Mon – Sat: 8:00 AM – 8:00 PM",
+    landmark: "Above Canara Bank, Indrapuri",
     address:
-      "Plot 3, Ground Floor, Indrapuri Main Road, Above Canara Bank, Bhawarkua, Indore, MP 452001",
+      "Plot 3, Ground Floor, Indrapuri Main Road, Above Canara Bank, Bhawarkua Square, Indore, MP 452001",
   },
   {
     name: "Annapurna",
-    tag: "Branch",
-    address: "Annapurna Road, Indore, MP",
+    tag: "Western Indore",
+    hours: "Mon – Sat: 9:00 AM – 7:00 PM",
+    landmark: "Annapurna Road Main Market",
+    address: "Annapurna Road, Near Mandir Square, Indore, MP 452009",
   },
 ] as const;
 
@@ -242,4 +248,41 @@ export const CAREER_STAGES = [
   { n: "03", t: "Mock technical & HR interviews" },
   { n: "04", t: "Placement assistance with recruiters" },
 ];
+
+/** Verified institute stats & credentials from public reviews */
+export const INSTITUTE_STATS = [
+  { value: "4.9★", label: "Average Review Rating", note: "500+ Google & Justdial Reviews" },
+  { value: "8,500+", label: "Students Trained", note: "Across MP & Central India" },
+  { value: "100%", label: "Hands-on Practical Labs", note: "3–5 Deployed Live Projects per Stack" },
+  { value: "0% EMI", label: "Interest-Free Installments", note: "Affordable Student Fee Support" },
+] as const;
+
+/** Frequently Asked Questions studied from prospective students in Indore */
+export const FAQS = [
+  {
+    q: "Do I need a prior computer science or engineering background to join?",
+    a: "No prior technical or coding experience is required. Courses start from absolute bedrock fundamentals (typing your first line of code, understanding logic step by step). Many of our most successful alumni switched from non-IT backgrounds like B.Com, B.Sc, BA, or 12th pass.",
+  },
+  {
+    q: "Can I attend a free demo class before enrolling?",
+    a: "Yes! The Prime Step offers 2-day free demo sessions at our Vijay Nagar (Shagun Tower) and Bhawarkua (Indrapuri) campuses. You can sit with the mentors, experience the practical lab teaching method, and then decide.",
+  },
+  {
+    q: "Are interest-free monthly installment (EMI) options available?",
+    a: "Yes. We provide 0% interest flexible installment options so students and families can comfortably pay fees across the course duration without financial stress.",
+  },
+  {
+    q: "How does 1-on-1 doubt clearing work during lab sessions?",
+    a: "Unlike large lecture halls where students get left behind, our trainers stay in the computer labs with you. If you get a bug, syntax error, or logical roadblock, mentors sit right beside your screen to debug and explain why the error happened.",
+  },
+  {
+    q: "What batch timings are available for college students and working professionals?",
+    a: "We offer flexible batch schedules across the day from 8:00 AM to 8:00 PM, including dedicated early morning batches, afternoon lab slots, and evening / weekend batches tailored for working professionals and college goers.",
+  },
+  {
+    q: "How does placement assistance work after course completion?",
+    a: "Placement readiness is integrated into the curriculum: building an industry-standard portfolio on GitHub, optimizing your LinkedIn profile, participating in mock technical & HR interview rounds, and direct referral connections with hiring tech firms across Indore (Crystal IT Park, Super Corridor), Pune, and Bangalore.",
+  },
+] as const;
+
 

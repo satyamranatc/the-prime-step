@@ -4,6 +4,7 @@ import Programs from "@/components/features/Programs";
 import Learning from "@/components/features/Learning";
 import Build from "@/components/features/Build";
 import Careers from "@/components/features/Careers";
+import TrustAndFAQ from "@/components/features/TrustAndFAQ";
 import NextStep from "@/components/features/NextStep";
 import Footer from "@/components/features/Footer";
 
@@ -16,6 +17,7 @@ export default function Home() {
         <Learning />
         <Build />
         <Careers />
+        <TrustAndFAQ />
         <NextStep />
       </main>
       <Footer />
