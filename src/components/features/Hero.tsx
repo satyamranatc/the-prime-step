@@ -116,7 +116,7 @@ export default function Hero() {
         {/* 3D Architectural Monument Canvas */}
         <div
           data-scene
-          className="pointer-events-none absolute inset-x-0 top-[12svh] h-[40svh] md:pointer-events-auto md:top-[8svh] md:right-[3%] md:left-[46%] md:h-[82svh] md:max-w-[760px] md:ml-auto z-10"
+          className="pointer-events-none absolute inset-x-0 top-[12svh] h-[40svh] md:pointer-events-auto md:top-[8svh] md:right-0 md:left-[48%] md:h-[84svh] md:max-w-[800px] md:ml-auto z-10 overflow-visible"
         >
           {gl === true && <HeroScene active={inView} />}
           {gl === false && (
