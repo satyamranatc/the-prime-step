@@ -42,6 +42,12 @@ const jsonLd = {
   telephone: SITE.phone,
   email: SITE.email,
   description,
+  sameAs: [
+    SITE.social.instagram,
+    SITE.social.linkedin,
+    SITE.social.youtube,
+    SITE.social.facebook,
+  ],
   address: {
     "@type": "PostalAddress",
     streetAddress: BRANCHES[0].address.replace(/, Indore.*$/, ""),

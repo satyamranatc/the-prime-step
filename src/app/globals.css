@@ -114,9 +114,22 @@ html.lenis body {
   animation: caret 1s steps(1) infinite;
 }
 
+@keyframes caret-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+.animate-caret-blink {
+  animation: caret-blink 0.95s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .glyph-float,
-  .caret {
+  .caret,
+  .animate-caret-blink {
     animation: none;
   }
   * {

@@ -223,8 +223,8 @@ interface OrbitConfig {
 const ORBITS: OrbitConfig[] = [
   // Orbit 1: Diagonal Right loop with React & AWS
   {
-    radius: 2.85,
-    rotation: [Math.PI * 0.35, Math.PI * 0.08, Math.PI * 0.12],
+    radius: 2.65,
+    rotation: [Math.PI * 0.35, Math.PI * 0.12, Math.PI * 0.22],
     speed: 0.85,
     icons: [
       { tech: TECH_ITEMS.react, offset: 0 },
@@ -233,8 +233,8 @@ const ORBITS: OrbitConfig[] = [
   },
   // Orbit 2: Diagonal Left loop with Python & TensorFlow
   {
-    radius: 3.05,
-    rotation: [-Math.PI * 0.32, -Math.PI * 0.08, -Math.PI * 0.12],
+    radius: 2.95,
+    rotation: [-Math.PI * 0.32, -Math.PI * 0.1, -Math.PI * 0.25],
     speed: 0.72,
     icons: [
       { tech: TECH_ITEMS.python, offset: 1.2 },
@@ -243,8 +243,8 @@ const ORBITS: OrbitConfig[] = [
   },
   // Orbit 3: Polar Loop with Java
   {
-    radius: 2.75,
-    rotation: [Math.PI * 0.10, Math.PI * 0.40, 0.0],
+    radius: 2.45,
+    rotation: [Math.PI * 0.15, Math.PI * 0.45, -Math.PI * 0.12],
     speed: 0.95,
     icons: [
       { tech: TECH_ITEMS.java, offset: 2.4 },
@@ -302,7 +302,6 @@ function SingleAtomicOrbit({
           transparent
           opacity={0.22}
           side={THREE.DoubleSide}
-          depthWrite={false}
         />
       </mesh>
 
@@ -352,7 +351,7 @@ function AtomicTechOrbits() {
   }, []);
 
   return (
-    <group position={[0.2, 0.05, 0.15]}>
+    <group position={[0, 0.05, 0]}>
       {ORBITS.map((orbit, index) => (
         <SingleAtomicOrbit key={index} config={orbit} textures={textures} />
       ))}
@@ -630,7 +629,7 @@ export default function HeroScene({ active }: { active: boolean }) {
     <Canvas
       dpr={[1, 2]}
       frameloop={active ? "always" : "never"}
-      camera={{ position: [0, 0, 8.6], fov: 36 }}
+      camera={{ position: [0, 0, 8.0], fov: 36 }}
       gl={{
         antialias: true,
         alpha: true,

@@ -2,12 +2,64 @@
 
 export const SITE = {
   name: "The Prime Step",
+  tagline: "Academy of Computing & Professional IT Training",
   url: "https://www.theprimestep.com",
   phone: "+91-9479611441",
   phoneHref: "tel:+919479611441",
+  phoneDisplay: "+91 94796 11441",
+  phoneSecondary: "+91-9109183932",
+  phoneSecondaryHref: "tel:+919109183932",
+  phoneSecondaryDisplay: "+91 91091 83932",
+  whatsappHref: "https://wa.me/919479611441",
+  whatsappDisplay: "+91 94796 11441",
   email: "TheprimestepEdu@gmail.com",
+  adminEmail: "webmaster@theprimestep.com",
   city: "Indore, Madhya Pradesh",
+  established: "2019",
+  rating: "4.9★",
+  reviewCount: "2,390+",
+  hours: "Mon – Sat: 8:00 AM – 8:00 PM (Labs 24/7 Access)",
+  social: {
+    instagram: "https://www.instagram.com/theprimestep/",
+    linkedin: "https://in.linkedin.com/company/the-prime-step",
+    youtube: "https://www.youtube.com/@theprimestepinfo",
+    facebook: "https://www.facebook.com/theprimestep",
+    whatsapp: "https://wa.me/919479611441",
+  },
 } as const;
+
+export const SOCIAL_LINKS = [
+  {
+    id: "instagram",
+    name: "Instagram",
+    handle: "@theprimestep",
+    href: "https://www.instagram.com/theprimestep/",
+  },
+  {
+    id: "linkedin",
+    name: "LinkedIn",
+    handle: "the-prime-step",
+    href: "https://in.linkedin.com/company/the-prime-step",
+  },
+  {
+    id: "youtube",
+    name: "YouTube",
+    handle: "@theprimestepinfo",
+    href: "https://www.youtube.com/@theprimestepinfo",
+  },
+  {
+    id: "facebook",
+    name: "Facebook",
+    handle: "theprimestep",
+    href: "https://www.facebook.com/theprimestep",
+  },
+  {
+    id: "whatsapp",
+    name: "WhatsApp",
+    handle: "+91 94796 11441",
+    href: "https://wa.me/919479611441",
+  },
+] as const;
 
 export const NAV = [
   { id: "programs", label: "Programs" },
@@ -20,26 +72,33 @@ export const NAV = [
 export const BRANCHES = [
   {
     name: "Vijay Nagar",
-    tag: "Head Office",
+    tag: "Head Office & Main Hub",
     hours: "Mon – Sat: 8:00 AM – 8:00 PM",
-    landmark: "Above Apna Sweets, AB Road",
+    landmark: "Above Apna Sweets, Vijay Nagar Square",
     address:
-      "123, 210 & 303, 1st–3rd Floor, Shagun Tower, Above Apna Sweets, Vijay Nagar Square, Indore, MP 452010",
+      "123, 210 & 303, Shagun Tower, Above Apna Sweets, Vijay Nagar Square, AB Road, Indore, MP 452010",
+    phone: "+91 94796 11441",
+    phoneHref: "tel:+919479611441",
   },
   {
     name: "Bhawarkua",
     tag: "Student Tech Hub",
     hours: "Mon – Sat: 8:00 AM – 8:00 PM",
-    landmark: "Above Canara Bank, Indrapuri",
+    landmark: "Near Holkar Science College & Indrapuri",
     address:
-      "Plot 3, Ground Floor, Indrapuri Main Road, Above Canara Bank, Bhawarkua Square, Indore, MP 452001",
+      "Bhawarkuan Main Road, Above Canara Bank, Indrapuri, Bhawarkua Square, Indore, MP 452001",
+    phone: "+91 91091 83932",
+    phoneHref: "tel:+919109183932",
   },
   {
     name: "Annapurna",
-    tag: "Western Indore",
+    tag: "Western Indore Campus",
     hours: "Mon – Sat: 9:00 AM – 7:00 PM",
-    landmark: "Annapurna Road Main Market",
-    address: "Annapurna Road, Near Mandir Square, Indore, MP 452009",
+    landmark: "Above Surbhi Sweets, Annapurna Mandir Road",
+    address:
+      "Office No. 6, Kalyan Tower, Above Surbhi Sweets, Annapurna Mandir Road, Indore, MP 452009",
+    phone: "+91 94796 11441",
+    phoneHref: "tel:+919479611441",
   },
 ] as const;
 
@@ -251,10 +310,10 @@ export const CAREER_STAGES = [
 
 /** Verified institute stats & credentials from public reviews */
 export const INSTITUTE_STATS = [
-  { value: "4.9★", label: "Average Review Rating", note: "500+ Google & Justdial Reviews" },
+  { value: "4.9★", label: "Google Review Rating", note: "2,390+ Verified Reviews" },
   { value: "8,500+", label: "Students Trained", note: "Across MP & Central India" },
+  { value: "03", label: "Indore Campuses", note: "Vijay Nagar · Bhawarkua · Annapurna" },
   { value: "100%", label: "Hands-on Practical Labs", note: "3–5 Deployed Live Projects per Stack" },
-  { value: "0% EMI", label: "Interest-Free Installments", note: "Affordable Student Fee Support" },
 ] as const;
 
 /** Frequently Asked Questions studied from prospective students in Indore */

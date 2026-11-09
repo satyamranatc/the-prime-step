@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BRANCHES, FAQS, INSTITUTE_STATS, SITE, mapsLink } from "@/lib/content";
 import Chapter from "@/components/ui/Chapter";
 import CTA from "@/components/ui/CTA";
+import { WhatsAppIcon } from "@/components/ui/SocialIcons";
 
 export default function TrustAndFAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -38,7 +39,7 @@ export default function TrustAndFAQ() {
         </div>
 
         {/* 2. Comprehensive Indore Campuses */}
-        <div className="mt-16 md:mt-24">
+        <div id="campuses" className="mt-16 md:mt-24 scroll-mt-28">
           <div className="max-w-2xl">
             <p className="eyebrow text-brand">Central India Learning Infrastructure</p>
             <h2 className="display mt-2 text-3xl md:text-5xl font-bold text-deep">
@@ -74,7 +75,7 @@ export default function TrustAndFAQ() {
                   </p>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-pale/60 flex items-center justify-between">
+                <div className="mt-6 pt-4 border-t border-pale/60 flex flex-wrap items-center justify-between gap-3">
                   <a
                     href={mapsLink(b.address)}
                     target="_blank"
@@ -84,12 +85,23 @@ export default function TrustAndFAQ() {
                     <span>View on Google Maps</span>
                     <span>↗</span>
                   </a>
-                  <a
-                    href={SITE.phoneHref}
-                    className="rounded-full bg-paper px-3 py-1.5 text-xs font-medium text-deep border border-deep/15 hover:border-brand"
-                  >
-                    Call Campus
-                  </a>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={SITE.whatsappHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Chat on WhatsApp"
+                      className="rounded-full bg-paper p-1.5 text-brand border border-deep/15 hover:border-brand hover:bg-brand hover:text-paper transition-colors"
+                    >
+                      <WhatsAppIcon className="size-3.5 fill-current" />
+                    </a>
+                    <a
+                      href={b.phoneHref}
+                      className="rounded-full bg-paper px-3 py-1.5 text-xs font-medium text-deep border border-deep/15 hover:border-brand transition-colors"
+                    >
+                      Call {b.phone}
+                    </a>
+                  </div>
                 </div>
               </div>
             ))}
@@ -144,7 +156,16 @@ export default function TrustAndFAQ() {
           </div>
 
           <div className="mt-12 flex flex-wrap items-center gap-4">
-            <CTA href={SITE.phoneHref} label="Call Admissions Counselor" />
+            <CTA href={SITE.phoneHref} label={`Call ${SITE.phoneDisplay}`} />
+            <a
+              href={SITE.whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-paper px-6 py-3.5 text-sm font-semibold text-brand transition-all hover:bg-brand hover:text-paper hover:border-brand"
+            >
+              <WhatsAppIcon className="size-4 fill-current" />
+              <span>WhatsApp Counselor</span>
+            </a>
             <CTA href="#admission" label="Book Free 2-Day Demo" variant="ghost" />
           </div>
         </div>

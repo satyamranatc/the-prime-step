@@ -6,6 +6,7 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { sceneState } from "@/lib/scroll";
 import { BRANCHES, PERSONAS, type PersonaId } from "@/lib/content";
 import CTA from "@/components/ui/CTA";
+import TypingHeadline from "./TypingHeadline";
 
 const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
 
@@ -116,7 +117,7 @@ export default function Hero() {
         {/* 3D Architectural Monument Canvas */}
         <div
           data-scene
-          className="pointer-events-none absolute inset-x-0 top-[12svh] h-[40svh] md:pointer-events-auto md:top-[8svh] md:right-0 md:left-[48%] md:h-[84svh] md:max-w-[800px] md:ml-auto z-10 overflow-visible"
+          className="pointer-events-none absolute inset-x-0 top-[12svh] h-[40svh] md:pointer-events-auto md:top-[8svh] md:right-[3%] md:left-[46%] md:h-[82svh] md:max-w-[760px] md:ml-auto z-10"
         >
           {gl === true && <HeroScene active={inView} />}
           {gl === false && (
@@ -135,9 +136,9 @@ export default function Hero() {
           <h1
             id="hero-title"
             data-hero-headline
-            className="display text-[12.5vw] font-bold tracking-tight text-deep sm:text-[9.2vw] md:text-[6.2vw] leading-[0.94]"
+            className="display text-[12.5vw] font-bold tracking-tight text-deep sm:text-[9.2vw] md:text-[6.2vw] leading-[0.94] min-h-[3em] sm:min-h-[2.85em]"
           >
-            Every career begins with a single step.
+            <TypingHeadline />
           </h1>
 
           <p
@@ -149,7 +150,7 @@ export default function Hero() {
 
           <div data-hero-cta className="mt-8 flex flex-wrap items-center gap-4">
             <CTA href="#programs" label="Explore Programs" />
-            <CTA href="#admission" label="Campus Tour" variant="ghost" />
+            <CTA href="#campuses" label="Campus Tour" variant="ghost" />
           </div>
         </div>
 

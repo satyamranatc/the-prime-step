@@ -2,10 +2,17 @@
 
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { NAV, SITE } from "@/lib/content";
+import { NAV, SITE, SOCIAL_LINKS } from "@/lib/content";
 import { getLenis, scrollToId } from "@/lib/scroll";
 import CTA from "@/components/ui/CTA";
 import Logo from "@/components/ui/Logo";
+import {
+  InstagramIcon,
+  LinkedInIcon,
+  YouTubeIcon,
+  FacebookIcon,
+  WhatsAppIcon,
+} from "@/components/ui/SocialIcons";
 
 export default function Nav() {
   const bar = useRef<HTMLElement>(null);
@@ -125,13 +132,36 @@ export default function Nav() {
             </li>
           ))}
         </ul>
-        <div className="space-y-1 text-pale">
-          <a href={SITE.phoneHref} className="block text-lg text-paper">
-            {SITE.phone}
-          </a>
-          <a href={`mailto:${SITE.email}`} className="block text-sm">
-            {SITE.email}
-          </a>
+        <div className="space-y-4 border-t border-pale/20 pt-6 text-pale">
+          <div className="space-y-1">
+            <a href={SITE.phoneHref} className="block text-xl font-medium text-paper">
+              {SITE.phoneDisplay}
+            </a>
+            <p className="text-xs text-pale/80">Counseling: {SITE.phoneSecondaryDisplay}</p>
+            <a href={`mailto:${SITE.email}`} className="block text-sm text-pale hover:underline">
+              {SITE.email}
+            </a>
+          </div>
+
+          {/* Mobile Socials */}
+          <div className="flex items-center gap-3 pt-2">
+            {SOCIAL_LINKS.map((s) => (
+              <a
+                key={s.id}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.name}
+                className="flex size-9 items-center justify-center rounded-full border border-pale/30 bg-paper/10 text-paper transition-all hover:bg-brand"
+              >
+                {s.id === "instagram" && <InstagramIcon className="size-4" />}
+                {s.id === "linkedin" && <LinkedInIcon className="size-4" />}
+                {s.id === "youtube" && <YouTubeIcon className="size-4" />}
+                {s.id === "facebook" && <FacebookIcon className="size-4" />}
+                {s.id === "whatsapp" && <WhatsAppIcon className="size-4" />}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </>
