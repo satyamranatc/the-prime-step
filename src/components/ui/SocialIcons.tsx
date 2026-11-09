@@ -41,3 +41,4 @@ export function WhatsAppIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
