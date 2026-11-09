@@ -2,20 +2,16 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
-import { SITE, SOCIAL_LINKS } from "@/lib/content";
+import { SITE } from "@/lib/content";
 import Chapter from "@/components/ui/Chapter";
 import Split from "@/components/ui/Split";
 import CTA from "@/components/ui/CTA";
-import {
-  InstagramIcon,
-  LinkedInIcon,
-  YouTubeIcon,
-  FacebookIcon,
-  WhatsAppIcon,
-} from "@/components/ui/SocialIcons";
+import { WhatsAppIcon } from "@/components/ui/SocialIcons";
 
 const N = 8;
 const fills = ["fill-soft", "fill-pale", "fill-pale", "fill-light", "fill-light", "fill-light", "fill-paper", "fill-brand"];
+const desktopHeights = [20, 42, 70, 108, 156, 214, 280, 350];
+const mobileHeights = [10, 20, 34, 52, 74, 100, 130, 164];
 
 /** Chapter 06 — the stairs assemble as you scroll; the last step is yours. */
 export default function NextStep() {
@@ -53,24 +49,24 @@ export default function NextStep() {
       aria-labelledby="admission-title"
       className="relative min-h-[100svh] overflow-hidden bg-deep text-paper"
     >
-      {/* Horizon + sun */}
+      {/* Desktop Horizon + sun + stairs (exponential curve keeps left side open) */}
       <svg
         viewBox="0 0 1200 700"
         preserveAspectRatio="xMaxYMax slice"
-        className="pointer-events-none absolute inset-0 h-full w-full"
+        className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
         aria-hidden="true"
       >
-        <circle data-sun cx="930" cy="250" r="190" className="fill-brand" />
-        <line x1="0" y1="620" x2="1200" y2="620" className="stroke-light/50" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        <circle data-sun cx="930" cy="240" r="190" className="fill-brand" />
+        <line x1="0" y1="670" x2="1200" y2="670" className="stroke-light/50" strokeWidth="1" vectorEffect="non-scaling-stroke" />
         {Array.from({ length: N }).map((_, i) => {
           const w = 150;
-          const h = 30 + i * 48;
+          const h = desktopHeights[i];
           return (
             <rect
               key={i}
               data-step
               x={i * w}
-              y={620 - h + 80}
+              y={670 - h}
               width={w}
               height={h}
               className={`${fills[i]} stroke-deep`}
@@ -81,55 +77,52 @@ export default function NextStep() {
         })}
       </svg>
 
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1480px] flex-col justify-start px-6 pt-32 pb-12 md:px-10 md:pt-36">
+      {/* Mobile Horizon + sun + stairs (proportional for mobile viewports) */}
+      <svg
+        viewBox="0 0 400 700"
+        preserveAspectRatio="xMidYMax slice"
+        className="pointer-events-none absolute inset-0 block h-full w-full md:hidden"
+        aria-hidden="true"
+      >
+        <circle data-sun cx="330" cy="200" r="130" className="fill-brand" />
+        <line x1="0" y1="660" x2="400" y2="660" className="stroke-light/50" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        {Array.from({ length: N }).map((_, i) => {
+          const w = 50;
+          const h = mobileHeights[i];
+          return (
+            <rect
+              key={`m-${i}`}
+              data-step
+              x={i * w}
+              y={660 - h}
+              width={w}
+              height={h}
+              className={`${fills[i]} stroke-deep`}
+              strokeWidth="1"
+              vectorEffect="non-scaling-stroke"
+            />
+          );
+        })}
+      </svg>
+
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1480px] flex-col justify-start px-6 pt-16 pb-12 md:px-10 md:pt-20 lg:pt-24">
         <Chapter n="07" title="The next step" dark />
-        <h2 id="admission-title" className="display mt-8 text-[17vw] text-paper md:text-[9vw]">
+        <h2 id="admission-title" className="display mt-5 text-[15vw] leading-[0.92] text-paper md:mt-6 md:text-[7.5vw] lg:text-[6.5vw]">
           <Split text="The next step|is *yours.*" dark />
         </h2>
-        <p className="mt-6 max-w-md text-lg leading-relaxed text-pale" data-fade>
+        <p className="mt-4 max-w-md text-base leading-relaxed text-pale md:text-lg" data-fade>
           Speak with our admissions team about the right program for you.
         </p>
 
-        <div data-cta className="mt-8 flex flex-wrap items-center gap-4">
+        <div data-cta className="mt-6 flex max-w-xl flex-wrap items-center gap-3.5 sm:gap-4">
           <CTA href={SITE.phoneHref} label={`Call ${SITE.phoneDisplay}`} variant="light" />
-          <a
+          <CTA
             href={SITE.whatsappHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-pale/40 bg-paper/10 px-6 py-3.5 text-sm font-semibold text-paper transition-all hover:border-brand hover:bg-brand hover:text-paper"
-          >
-            <WhatsAppIcon className="size-4 fill-current text-light" />
-            <span>WhatsApp Admissions</span>
-          </a>
-          <CTA href={`mailto:${SITE.email}`} label="Email admissions" variant="primary" />
-        </div>
-
-        {/* Quick Contacts & Social Presence Strip */}
-        <div className="mt-10 max-w-xl rounded-2xl border border-pale/25 bg-deep/90 backdrop-blur-md p-4 text-xs md:text-sm text-pale shadow-lg">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
-              <span>Main: <strong className="text-paper font-medium">{SITE.phoneDisplay}</strong></span>
-              <span>Counseling: <strong className="text-paper font-medium">{SITE.phoneSecondaryDisplay}</strong></span>
-            </div>
-            <div className="flex items-center gap-2">
-              {SOCIAL_LINKS.map((s) => (
-                <a
-                  key={s.id}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.name}
-                  className="flex size-7 items-center justify-center rounded-full border border-pale/30 bg-paper/10 text-pale hover:border-brand hover:bg-brand hover:text-paper transition-all"
-                >
-                  {s.id === "instagram" && <InstagramIcon className="size-3.5" />}
-                  {s.id === "linkedin" && <LinkedInIcon className="size-3.5" />}
-                  {s.id === "youtube" && <YouTubeIcon className="size-3.5" />}
-                  {s.id === "facebook" && <FacebookIcon className="size-3.5" />}
-                  {s.id === "whatsapp" && <WhatsAppIcon className="size-3.5" />}
-                </a>
-              ))}
-            </div>
-          </div>
+            label="WhatsApp Admissions"
+            variant="primary"
+            icon={<WhatsAppIcon className="size-4 fill-current text-white" />}
+          />
+          <CTA href={`mailto:${SITE.email}`} label="Email admissions" variant="ghost-light" />
         </div>
       </div>
     </section>
