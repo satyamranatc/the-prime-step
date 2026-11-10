@@ -1,26 +1,38 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/content";
 import { ROADMAP_COURSES } from "@/lib/roadmapCourses";
+import { COURSE_PAGES } from "@/lib/seoPages";
+
+const STATIC_SEO_ROUTES = [
+  { path: "", priority: 1.0 },
+  { path: "/about-us", priority: 0.9 },
+  { path: "/career-courses", priority: 0.95 },
+  { path: "/contact-us", priority: 0.9 },
+  { path: "/corporate-training", priority: 0.9 },
+  { path: "/courses", priority: 0.95 },
+  { path: "/roadmap", priority: 0.85 },
+] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = SITE.url; // "https://www.theprimestep.com"
   const now = new Date();
 
-  // Root Homepage
-  const routes: MetadataRoute.Sitemap = [
-    {
-      url: baseUrl,
+  const routes: MetadataRoute.Sitemap = STATIC_SEO_ROUTES.map((r) => ({
+    url: `${baseUrl}${r.path}`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: r.priority,
+  }));
+
+  // All 14 Dedicated Course Pages
+  Object.keys(COURSE_PAGES).forEach((slug) => {
+    routes.push({
+      url: `${baseUrl}/${slug}`,
       lastModified: now,
       changeFrequency: "weekly",
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/roadmap`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-  ];
+      priority: 0.95,
+    });
+  });
 
   // Dynamic Course Roadmap Pages
   Object.keys(ROADMAP_COURSES).forEach((courseId) => {
@@ -28,10 +40,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/roadmap/${courseId}`,
       lastModified: now,
       changeFrequency: "weekly",
-      priority: 0.9,
+      priority: 0.85,
     });
   });
 
   return routes;
 }
-

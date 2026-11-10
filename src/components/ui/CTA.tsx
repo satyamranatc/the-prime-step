@@ -56,7 +56,7 @@ export default function CTA({
           </span>
           <span
             aria-hidden="true"
-            className="absolute inset-0 translate-y-full transition-transform duration-500 [transition-timing-function:var(--ease-out)] group-hover:translate-y-0"
+            className="select-none absolute inset-0 translate-y-full transition-transform duration-500 [transition-timing-function:var(--ease-out)] group-hover:translate-y-0"
           >
             {label}
           </span>

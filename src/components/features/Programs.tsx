@@ -52,6 +52,17 @@ const ROADMAP_MAP: Record<string, string> = {
   ai: "python",
 };
 
+const COURSE_PAGE_MAP: Record<string, string> = {
+  python: "/python-programming-classes",
+  java: "/java-full-stack-developer",
+  fullstack: "/mern-stack-developer-course",
+  data: "/data-analytics-course-in-indore",
+  ai: "/artificial-intelligence-and-machine-learning-course",
+  mobile: "/android-app-development",
+  foundations: "/c-and-cpp-programming-classes",
+  office: "/tally-gst-mastery-course",
+};
+
 /** Chapter 02 — pinned horizontal journey. Plain language first; technical detail on demand. */
 export default function Programs() {
   const section = useRef<HTMLElement>(null);
@@ -231,13 +242,22 @@ export default function Programs() {
                     </>
                   )}
 
-                  {/* 3D Syllabus Interactive Drive Link */}
-                  <div className="mt-8" data-ptxt>
+                  {/* 3D Syllabus Interactive Drive Link & Course Page Link */}
+                  <div className="mt-8 flex flex-wrap items-center gap-3" data-ptxt>
                     <Link
-                      href={`/roadmap/${roadmapKey}`}
+                      href={COURSE_PAGE_MAP[d.id] || "/courses"}
                       className="group inline-flex items-center gap-2.5 rounded-full bg-deep text-paper px-6 py-3 text-xs md:text-sm font-semibold transition-all duration-300 hover:bg-brand shadow-sm"
                     >
-                      <span>Drive 3D Syllabus Roadmap</span>
+                      <span>Explore {d.title} Course</span>
+                      <span className="transition-transform duration-300 group-hover:translate-x-1">
+                        →
+                      </span>
+                    </Link>
+                    <Link
+                      href={`/roadmap/${roadmapKey}`}
+                      className="group inline-flex items-center gap-2 rounded-full border border-deep/30 bg-paper/70 px-5 py-3 text-xs md:text-sm font-semibold text-deep transition-all duration-300 hover:border-brand hover:text-brand"
+                    >
+                      <span>Drive 3D Roadmap</span>
                       <span className="transition-transform duration-300 group-hover:translate-x-1">
                         →
                       </span>

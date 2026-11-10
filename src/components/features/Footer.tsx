@@ -1,5 +1,6 @@
+import Link from "next/link";
 import Logo from "@/components/ui/Logo";
-import { BRANCHES, DISCIPLINES, SITE, SOCIAL_LINKS, mapsLink } from "@/lib/content";
+import { BRANCHES, SITE, SOCIAL_LINKS, mapsLink } from "@/lib/content";
 import {
   InstagramIcon,
   LinkedInIcon,
@@ -7,6 +8,33 @@ import {
   FacebookIcon,
   WhatsAppIcon,
 } from "@/components/ui/SocialIcons";
+
+const FOOTER_PAGES = [
+  { href: "/", label: "Home" },
+  { href: "/about-us", label: "About Us" },
+  { href: "/courses", label: "Courses" },
+  { href: "/career-courses", label: "Career Courses" },
+  { href: "/corporate-training", label: "Corporate Training" },
+  { href: "/english-courses", label: "English Courses" },
+  { href: "/contact-us", label: "Contact Us" },
+] as const;
+
+const FOOTER_COURSES = [
+  { href: "/java-full-stack-developer", label: "Java Full Stack Developer" },
+  { href: "/mern-stack-developer-course", label: "MERN Stack Developer Course" },
+  { href: "/python-programming-classes", label: "Python Programming Classes" },
+  { href: "/data-science-and-analytics-courses-in-indore", label: "Data Science & Applied AI" },
+  { href: "/data-analytics-course-in-indore", label: "Data Analytics & SQL" },
+  { href: "/artificial-intelligence-and-machine-learning-course", label: "AI & Machine Learning" },
+  { href: "/power-bi-course-in-indore", label: "Power BI Mastery" },
+  { href: "/c-and-cpp-programming-classes", label: "C, C++ & Data Structures" },
+  { href: "/android-app-development", label: "Android & Flutter App Dev" },
+  { href: "/web-design-and-php-full-stack-course", label: "Web Design & Full Stack PHP" },
+  { href: "/devops-and-cloud-computing-course", label: "AWS Cloud & DevOps" },
+  { href: "/digital-marketing-course-in-indore", label: "Digital Marketing & SEO" },
+  { href: "/tally-gst-mastery-course", label: "Tally Prime, GST & Excel" },
+  { href: "/english-courses", label: "Spoken English & Soft Skills" },
+] as const;
 
 function getSocialIcon(id: string) {
   switch (id) {
@@ -30,10 +58,12 @@ export default function Footer() {
   return (
     <footer className="bg-deep text-paper" aria-label="Site footer">
       <div className="mx-auto max-w-[1480px] overflow-hidden px-6 pt-20 md:px-10 md:pt-28">
-        <div className="grid gap-12 border-t border-pale/30 pt-14 md:grid-cols-[1.3fr_1.1fr_1.1fr_0.9fr]">
+        <div className="grid gap-10 border-t border-pale/30 pt-14 md:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1.15fr_0.85fr_0.95fr]">
           {/* Brand & Socials */}
           <div>
-            <Logo height={110} variant="light" />
+            <Link href="/" aria-label={`${SITE.name} — Home`}>
+              <Logo height={110} variant="light" />
+            </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-pale">
               Premier computer academy and professional IT training institute in {SITE.city}. Est. {SITE.established}.
             </p>
@@ -131,15 +161,29 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Academic Programs */}
+          {/* Quick Navigation */}
           <div>
-            <h2 className="eyebrow text-pale">Programs</h2>
+            <h2 className="eyebrow text-pale">Explore</h2>
             <ul className="mt-5 space-y-2.5 text-sm text-pale/90">
-              {DISCIPLINES.slice(0, 6).map((d) => (
-                <li key={d.id} className="hover:text-paper transition-colors">
-                  <a href="#programs" className="hover:underline">
-                    {d.title}
-                  </a>
+              {FOOTER_PAGES.map((p) => (
+                <li key={p.href} className="hover:text-paper transition-colors">
+                  <Link href={p.href} className="hover:underline underline-offset-4">
+                    {p.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Flagship Courses */}
+          <div>
+            <h2 className="eyebrow text-pale">Flagship Courses</h2>
+            <ul className="mt-5 space-y-2.5 text-sm text-pale/90">
+              {FOOTER_COURSES.map((c) => (
+                <li key={c.href} className="hover:text-paper transition-colors">
+                  <Link href={c.href} className="hover:underline underline-offset-4">
+                    {c.label}
+                  </Link>
                 </li>
               ))}
             </ul>

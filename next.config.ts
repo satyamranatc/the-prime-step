@@ -78,75 +78,30 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
-      // 301 Permanent Redirects to preserve existing SEO equity & historical rankings
+      // 301 Permanent Redirects from legacy WordPress aliases to dedicated V2 SEO pages
       {
-        source: "/courses",
-        destination: "/#programs",
-        permanent: true,
-      },
-      {
-        source: "/courses/:slug",
-        destination: "/#programs",
+        source: "/about",
+        destination: "/about-us",
         permanent: true,
       },
       {
         source: "/contact",
-        destination: "/#admission",
-        permanent: true,
-      },
-      {
-        source: "/contact-us",
-        destination: "/#admission",
-        permanent: true,
-      },
-      {
-        source: "/about",
-        destination: "/#learning",
-        permanent: true,
-      },
-      {
-        source: "/about-us",
-        destination: "/#learning",
+        destination: "/contact-us",
         permanent: true,
       },
       {
         source: "/placement",
-        destination: "/#careers",
+        destination: "/career-courses",
         permanent: true,
       },
       {
-        source: "/java-full-stack-developer",
-        destination: "/roadmap/java",
+        source: "/spoken-english-classes-in-indore",
+        destination: "/english-courses",
         permanent: true,
       },
       {
-        source: "/python-programming-classes",
-        destination: "/roadmap/python",
-        permanent: true,
-      },
-      {
-        source: "/mern-stack-developer-course",
-        destination: "/roadmap/mern",
-        permanent: true,
-      },
-      {
-        source: "/android-app-development",
-        destination: "/#programs",
-        permanent: true,
-      },
-      {
-        source: "/data-science-and-analytics-courses-in-indore",
-        destination: "/#programs",
-        permanent: true,
-      },
-      {
-        source: "/power-bi-course-in-indore",
-        destination: "/#programs",
-        permanent: true,
-      },
-      {
-        source: "/tally-gst-mastery-course",
-        destination: "/#programs",
+        source: "/courses/:slug",
+        destination: "/courses",
         permanent: true,
       },
     ];

@@ -18,7 +18,7 @@ export default function Split({
   const plain = text.replace(/\*/g, "").replace(/\|/g, " ");
   return (
     <Tag className={className} data-split>
-      <span className="sr-only">{plain}</span>
+      <span className="sr-only select-none">{plain}</span>
       <span aria-hidden="true">
         {text.split("|").map((line, li) => (
           <span key={li} className="block">
