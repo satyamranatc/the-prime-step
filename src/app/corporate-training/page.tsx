@@ -114,7 +114,7 @@ export default function CorporateTrainingPage() {
       <section className="mx-auto max-w-[1480px] px-6 pt-8 pb-20 md:px-10 md:pt-12 md:pb-28">
         <p className="eyebrow text-brand">Enterprise &amp; Institutional Upskilling</p>
         <h1 className="display mt-4 max-w-4xl text-[11.5vw] text-deep sm:text-[7.5vw] md:text-[5.4vw] leading-[0.95]">
-          Corporate Training engineered for measurable impact.
+          Corporate Training engineered for <span className="italic text-brand">measurable impact.</span>
         </h1>
         <p className="mt-6 max-w-2xl text-lg md:text-xl leading-relaxed text-deep/85">
           We partner with IT companies, growing enterprises, and colleges across Indore and Central India to upskill teams through customized, project-driven workshops in Full Stack Engineering, Data Analytics, Python AI, and Business Communication.

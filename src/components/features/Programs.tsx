@@ -48,8 +48,11 @@ const ROADMAP_MAP: Record<string, string> = {
   fullstack: "mern",
   python: "python",
   java: "java",
-  data: "python",
-  ai: "python",
+  data: "data-analytics",
+  ai: "ai-ml",
+  mobile: "flutter-android",
+  foundations: "cpp-dsa",
+  office: "tally-excel",
 };
 
 const COURSE_PAGE_MAP: Record<string, string> = {
@@ -242,7 +245,7 @@ export default function Programs() {
                     </>
                   )}
 
-                  {/* 3D Syllabus Interactive Drive Link & Course Page Link */}
+                  {/* Primary SEO Course Page Link & Secondary 3D Roadmap Link */}
                   <div className="mt-8 flex flex-wrap items-center gap-3" data-ptxt>
                     <Link
                       href={COURSE_PAGE_MAP[d.id] || "/courses"}
@@ -255,11 +258,11 @@ export default function Programs() {
                     </Link>
                     <Link
                       href={`/roadmap/${roadmapKey}`}
-                      className="group inline-flex items-center gap-2 rounded-full border border-deep/30 bg-paper/70 px-5 py-3 text-xs md:text-sm font-semibold text-deep transition-all duration-300 hover:border-brand hover:text-brand"
+                      className="group inline-flex items-center gap-2 rounded-full border border-deep/30 bg-paper/80 px-5 py-3 text-xs md:text-sm font-semibold text-deep transition-all duration-300 hover:border-brand hover:text-brand"
                     >
-                      <span>Drive 3D Roadmap</span>
+                      <span>Explore in 3D</span>
                       <span className="transition-transform duration-300 group-hover:translate-x-1">
-                        →
+                        ↗
                       </span>
                     </Link>
                   </div>

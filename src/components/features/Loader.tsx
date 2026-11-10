@@ -38,10 +38,23 @@ export default function Loader() {
 
     const finish = () => {
       html.dataset.ready = "1";
+      try {
+        sessionStorage.setItem("tps_visited", "1");
+      } catch {
+        // ignore storage errors
+      }
       window.dispatchEvent(new Event("pps-ready"));
     };
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const alreadyVisited = (() => {
+      try {
+        return sessionStorage.getItem("tps_visited") === "1";
+      } catch {
+        return false;
+      }
+    })();
+
+    if (alreadyVisited || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       el.style.display = "none";
       finish();
       return;
@@ -61,32 +74,32 @@ export default function Loader() {
       // 1. Initial fade-in of HUD and Ambient Core
       tl.fromTo(
         "[data-hud]",
-        { opacity: 0, y: (i) => (i === 0 ? -12 : 12) },
-        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
-        0.1
+        { opacity: 0, y: (i) => (i === 0 ? -10 : 10) },
+        { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" },
+        0
       );
 
-      // 2. Emblem Reveal: Smooth scale, rise-up and ambient glow
+      // 2. Emblem Reveal
       tl.fromTo(
         "[data-emblem-bg]",
-        { scale: 0.7, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 1.4, ease: "power2.out" },
+        { scale: 0.8, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.6, ease: "power2.out" },
         0
       );
 
       tl.fromTo(
         "[data-emblem]",
-        { scale: 0.88, y: 24, opacity: 0 },
-        { scale: 1, y: 0, opacity: 1, duration: 1.2, ease: "expo.out" },
-        0.2
+        { scale: 0.92, y: 14, opacity: 0 },
+        { scale: 1, y: 0, opacity: 1, duration: 0.55, ease: "expo.out" },
+        0.05
       );
 
-      // 3. Counter & Progress Bar Scrub
+      // 3. Fast 0.85s Counter Scrub (capped under 1.3s total for fast LCP)
       tl.to(
         counterObj,
         {
           v: 100,
-          duration: 2.1,
+          duration: 0.85,
           ease: "power2.inOut",
           onUpdate: () => {
             const val = Math.round(counterObj.v);
@@ -96,60 +109,60 @@ export default function Loader() {
             if (barRef.current) {
               barRef.current.style.width = `${val}%`;
             }
-            if (val < 28) setStatusText(STAGES[0]);
-            else if (val < 62) setStatusText(STAGES[1]);
+            if (val < 30) setStatusText(STAGES[0]);
+            else if (val < 65) setStatusText(STAGES[1]);
             else if (val < 92) setStatusText(STAGES[2]);
             else setStatusText(STAGES[3]);
           },
         },
-        0.1
+        0.05
       );
 
-      // 4. Subtle crystal sheen sweep across emblem
+      // 4. Sheen sweep
       tl.fromTo(
         "[data-glint]",
         { xPercent: -120, opacity: 0 },
-        { xPercent: 120, opacity: 0.85, duration: 0.8, ease: "power2.inOut" },
-        1.65
+        { xPercent: 120, opacity: 0.85, duration: 0.45, ease: "power2.inOut" },
+        0.55
       );
 
       // 5. Fade out center emblem content slightly before shutters part
       tl.to(
         "[data-loader-content]",
-        { opacity: 0, scale: 0.97, duration: 0.45, ease: "power2.in" },
-        2.2
+        { opacity: 0, scale: 0.97, duration: 0.25, ease: "power2.in" },
+        0.9
       );
 
       // 6. Laser seam flash
       tl.fromTo(
         flareRef.current,
         { opacity: 0, scaleX: 0 },
-        { opacity: 1, scaleX: 1, duration: 0.35, ease: "expo.out" },
-        2.25
+        { opacity: 1, scaleX: 1, duration: 0.2, ease: "expo.out" },
+        0.92
       );
 
-      // 7. Dispatch ready event so 3D Hero starts underneath
-      tl.call(finish, [], 2.4);
+      // 7. Dispatch ready event at ~0.95s so Hero starts immediately
+      tl.call(finish, [], 0.95);
 
       // 8. Dual White Shutter Aperture Parting
       tl.to(
         shutterTop.current,
         {
           yPercent: -100,
-          duration: 1.15,
+          duration: 0.65,
           ease: "expo.inOut",
         },
-        2.35
+        0.95
       );
 
       tl.to(
         shutterBottom.current,
         {
           yPercent: 100,
-          duration: 1.15,
+          duration: 0.65,
           ease: "expo.inOut",
         },
-        2.35
+        0.95
       );
 
       tl.to(
@@ -157,10 +170,10 @@ export default function Loader() {
         {
           opacity: 0,
           scaleY: 0,
-          duration: 0.6,
+          duration: 0.35,
           ease: "power2.out",
         },
-        2.45
+        1.0
       );
     }, el);
 

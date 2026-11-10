@@ -29,7 +29,7 @@ export interface CoursePageData {
   level: string;
   format: string;
   projectsCount: string;
-  roadmapId?: "java" | "mern" | "python";
+  roadmapId: string;
   overviewHeadline: string;
   overviewBody: string[];
   highlights: { label: string; value: string; detail: string }[];
@@ -43,7 +43,7 @@ export interface CoursePageData {
 export const COURSE_PAGES: Record<string, CoursePageData> = {
   "java-full-stack-developer": {
     slug: "java-full-stack-developer",
-    title: "Java Full Stack Developer Course",
+    title: "Java Full Stack Developer",
     metaTitle: "Java Full Stack Developer Course in Indore — Spring Boot, React & Microservices",
     metaDescription:
       "Master Core & Advanced Java, Spring Boot, Hibernate, Microservices, React, and SQL at The Prime Step Indore. 100% practical training with live enterprise projects and placement assistance at Vijay Nagar, Bhawarkua & Annapurna campuses.",
@@ -625,7 +625,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
 
   "data-science-and-analytics-courses-in-indore": {
     slug: "data-science-and-analytics-courses-in-indore",
-    title: "Data Science & AI / Machine Learning Course",
+    title: "Data Science and Analytics Courses in Indore",
     metaTitle: "Data Science Course in Indore — Python, Machine Learning, SQL & Applied AI",
     metaDescription:
       "Master Data Science, Python, Pandas, NumPy, SQL, Statistical Modeling, Scikit-Learn & Machine Learning at The Prime Step Indore. 100% practical project training across Vijay Nagar, Bhawarkua & Annapurna campuses.",
@@ -644,7 +644,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
     level: "Beginner to Advanced Career Track",
     format: "In-Campus Practical Labs (Indore)",
     projectsCount: "5 End-to-End Data & ML Capstones",
-    roadmapId: "python",
+    roadmapId: "data-science",
     overviewHeadline: "From raw numbers to predictive intelligence — taught with real datasets.",
     overviewBody: [
       "Every modern organization—from fintech and e-commerce to healthcare and retail—relies on Data Scientists to uncover patterns and predict future outcomes. At The Prime Step in Indore, our Data Science & Applied AI program takes you step by step from Python and SQL foundations to training, evaluating, and deploying real Machine Learning models.",
@@ -806,7 +806,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
 
   "data-analytics-course-in-indore": {
     slug: "data-analytics-course-in-indore",
-    title: "Data Analytics, SQL, Power BI & Tableau Course",
+    title: "Data Analytics Course in Indore",
     metaTitle: "Data Analytics Course in Indore — SQL, Power BI, Tableau, Excel & Python",
     metaDescription:
       "Become a job-ready Data Analyst in Indore at The Prime Step. Master Advanced Excel, SQL, Power BI, Tableau & Python Pandas with real business dashboards and placement support.",
@@ -825,7 +825,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
     level: "Beginner Friendly (IT & Non-IT)",
     format: "In-Campus Practical Labs (Indore)",
     projectsCount: "5 Interactive Executive Dashboards",
-    roadmapId: "python",
+    roadmapId: "data-analytics",
     overviewHeadline: "The highest-demand career path for both IT and non-technical graduates.",
     overviewBody: [
       "Every company collects data, but very few people know how to clean it, query it, and explain what it means in plain business language. Data Analytics is one of the fastest-growing and most accessible tech careers for graduates from B.Com, BBA, MBA, B.Sc, BCA, and B.Tech backgrounds alike.",
@@ -987,7 +987,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
 
   "power-bi-course-in-indore": {
     slug: "power-bi-course-in-indore",
-    title: "Power BI & Business Intelligence Course",
+    title: "Power BI Course in Indore",
     metaTitle: "Power BI Course in Indore — DAX, Data Modeling, Power Query & SQL",
     metaDescription:
       "Learn Microsoft Power BI, DAX, Power Query ETL, Star Schema Modeling & SQL at The Prime Step Indore. Build interactive corporate BI dashboards with 100% hands-on lab training.",
@@ -1006,6 +1006,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
     level: "Beginner to Advanced BI",
     format: "In-Campus Practical Labs (Indore)",
     projectsCount: "4 Corporate BI Dashboards",
+    roadmapId: "power-bi",
     overviewHeadline: "Transform static spreadsheets into live, interactive decision engines.",
     overviewBody: [
       "Microsoft Power BI is the #1 Business Intelligence platform used by Fortune 500 enterprises, consulting firms, and fast-growing Indian businesses. Knowing how to connect multi-source data, model clean relationships, and write accurate DAX measures makes you indispensable to any analytics, finance, or operations team.",
@@ -1152,7 +1153,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
 
   "artificial-intelligence-and-machine-learning-course": {
     slug: "artificial-intelligence-and-machine-learning-course",
-    title: "Artificial Intelligence & Machine Learning Course",
+    title: "Artificial Intelligence and Machine Learning Course",
     metaTitle: "AI & Machine Learning Course in Indore — Deep Learning, NLP & Generative AI",
     metaDescription:
       "Learn Artificial Intelligence, Machine Learning, Deep Learning, NLP, Computer Vision & Generative AI (LLMs/RAG) with Python at The Prime Step Indore. Hands-on AI engineering labs.",
@@ -1171,7 +1172,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
     level: "Beginner to Applied AI Engineer",
     format: "In-Campus Practical Labs (Indore)",
     projectsCount: "4 Deployed AI & LLM Systems",
-    roadmapId: "python",
+    roadmapId: "ai-ml",
     overviewHeadline: "Go beyond using AI tools — learn how to engineer and integrate them.",
     overviewBody: [
       "Artificial Intelligence is transforming how every software product is built. Companies today need engineers who not only understand classical Machine Learning (regression, classification, tree ensembles) but can also work with neural networks, computer vision, Natural Language Processing, and modern Large Language Model (LLM) APIs.",
@@ -1321,7 +1322,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
 
   "c-and-cpp-programming-classes": {
     slug: "c-and-cpp-programming-classes",
-    title: "C, C++ & Data Structures (DSA) Course",
+    title: "C and C++ Programming Classes",
     metaTitle: "C, C++ & Data Structures (DSA) Classes in Indore | The Prime Step",
     metaDescription:
       "Build unshakeable programming foundations with C, Object-Oriented C++ & Data Structures and Algorithms (DSA) at The Prime Step Indore. Ideal for B.Tech, BCA, MCA, and 12th pass students.",
@@ -1340,6 +1341,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
     level: "Absolute Beginner to Interview Ready",
     format: "In-Campus Practical Labs (Indore)",
     projectsCount: "150+ Solved Coding Problems + 3 Systems Projects",
+    roadmapId: "cpp-dsa",
     overviewHeadline: "The bedrock of every great software engineer.",
     overviewBody: [
       "Frameworks change every few years, but core programming logic, memory architecture, Object-Oriented design, and Data Structures & Algorithms (DSA) remain the permanent foundation of computer science. Product companies and campus recruiters test these exact fundamentals in their very first coding round.",
@@ -1481,7 +1483,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
 
   "android-app-development": {
     slug: "android-app-development",
-    title: "Android & Flutter Mobile App Development",
+    title: "Android App Development",
     metaTitle: "Android & Flutter App Development Course in Indore | The Prime Step",
     metaDescription:
       "Learn Mobile App Development with Dart, Flutter, Android, Firebase & REST APIs at The Prime Step Indore. Build and publish cross-platform iOS & Android apps in our practical labs.",
@@ -1499,6 +1501,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
     level: "Beginner to App Publisher",
     format: "In-Campus Practical Labs (Indore)",
     projectsCount: "4 Complete Mobile Apps",
+    roadmapId: "flutter-android",
     overviewHeadline: "Build the apps that live in people's pockets.",
     overviewBody: [
       "Mobile apps are the primary touchpoint for e-commerce, fintech, food delivery, and consumer startups. With Google's Flutter framework and Dart language, developers can build smooth, 60/120fps Android and iOS apps simultaneously without maintaining two separate codebases.",
@@ -1636,7 +1639,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
 
   "web-design-and-php-full-stack-course": {
     slug: "web-design-and-php-full-stack-course",
-    title: "Web Designing, MEAN Stack & Full Stack PHP Course",
+    title: "Web Design and PHP Full Stack Course",
     metaTitle: "Web Designing & Full Stack PHP / MEAN Course in Indore | The Prime Step",
     metaDescription:
       "Learn Responsive Web Designing (HTML5, CSS3, Tailwind, JavaScript, Bootstrap) and Full Stack PHP / Laravel / MySQL or Angular (MEAN) at The Prime Step Indore.",
@@ -1655,6 +1658,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
     level: "Beginner to Full Stack Web Developer",
     format: "In-Campus Practical Labs (Indore)",
     projectsCount: "4 Live Websites & Web Apps",
+    roadmapId: "web-php",
     overviewHeadline: "Design beautiful interfaces and power them with dynamic databases.",
     overviewBody: [
       "Over 75% of the web—including content platforms, e-commerce stores, and enterprise portals—relies on rock-solid HTML/CSS/JavaScript frontends paired with PHP/MySQL or Angular (MEAN) backends. Mastering both responsive UI design and server-side database logic opens doors to web agencies, IT firms, and freelance careers alike.",
@@ -1788,7 +1792,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
 
   "tally-gst-mastery-course": {
     slug: "tally-gst-mastery-course",
-    title: "Tally Prime with GST, MS Office & Advanced Excel",
+    title: "Tally GST Mastery Course",
     metaTitle: "Tally Prime with GST & Advanced Excel Course in Indore | The Prime Step",
     metaDescription:
       "Learn practical Computerized Accounting in Tally Prime with GST, Payroll, Banking, MS Office & Advanced Excel MIS Reporting at The Prime Step Indore (Vijay Nagar, Bhawarkua & Annapurna).",
@@ -1807,6 +1811,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
     level: "Beginner Friendly (Commerce & Non-Commerce)",
     format: "In-Campus Practical Labs (Indore)",
     projectsCount: "Real Company Vouchers, GST Returns & MIS Workbooks",
+    roadmapId: "tally-excel",
     overviewHeadline: "Practical accounting and office automation taught on real business data.",
     overviewBody: [
       "Every trading firm, manufacturing unit, CA practice, and corporate office in Indore requires professionals who can manage accounts accurately in Tally Prime, file GST returns without errors, and prepare crisp MIS reports in Microsoft Excel.",
@@ -1935,7 +1940,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
 
   "digital-marketing-course-in-indore": {
     slug: "digital-marketing-course-in-indore",
-    title: "Digital Marketing, SEO & Performance Marketing Course",
+    title: "Digital Marketing Course in Indore",
     metaTitle: "Digital Marketing Course in Indore — SEO, Google Ads, Meta Ads & Analytics",
     metaDescription:
       "Master Practical Digital Marketing in Indore at The Prime Step. Learn Technical SEO, Google Ads (PPC), Meta/Instagram Ads, Social Media Marketing, GA4 Analytics & AI Content Strategy.",
@@ -1953,6 +1958,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
     level: "Beginner to Growth Marketer",
     format: "In-Campus Practical Labs (Indore)",
     projectsCount: "Live Website SEO Audit & Ad Campaigns",
+    roadmapId: "digital-marketing",
     overviewHeadline: "Learn digital marketing by ranking real pages and optimizing real campaigns.",
     overviewBody: [
       "Every business—from local Indore brands and real estate developers to global SaaS startups and e-commerce stores—needs skilled digital marketers who can generate qualified traffic, leads, and sales. Slides alone don't teach marketing; working inside Google Search Console, Google Ads Manager, Meta Business Suite, and GA4 does.",
@@ -2092,7 +2098,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
 
   "devops-and-cloud-computing-course": {
     slug: "devops-and-cloud-computing-course",
-    title: "Cloud Computing (AWS) & DevOps Engineering Course",
+    title: "DevOps and Cloud Computing Course",
     metaTitle: "AWS Cloud & DevOps Course in Indore — Docker, Kubernetes, CI/CD & Linux",
     metaDescription:
       "Master AWS Cloud Computing & DevOps Engineering at The Prime Step Indore. Hands-on lab training in Linux, Git, Docker, Kubernetes, Jenkins/GitHub Actions CI/CD, Terraform & AWS.",
@@ -2110,6 +2116,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
     level: "Beginner to Cloud / DevOps Engineer",
     format: "In-Campus Practical Labs (Indore)",
     projectsCount: "4 Automated Cloud & CI/CD Pipelines",
+    roadmapId: "devops-cloud",
     overviewHeadline: "Bridge code and cloud infrastructure with complete automation.",
     overviewBody: [
       "Modern software teams deploy code dozens of times a day. DevOps and Cloud Engineers build the automated pipelines, container clusters, and cloud infrastructure that keep applications fast, secure, and resilient at scale.",
@@ -2244,7 +2251,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
 
   "english-courses": {
     slug: "english-courses",
-    title: "English Courses & Personality Development",
+    title: "English Courses",
     metaTitle: "Spoken English Classes & Personality Development Course in Indore | The Prime Step",
     metaDescription:
       "Speak fluent, confident English for interviews, corporate jobs, and everyday life. Join Spoken English, Business Communication & Personality Development classes at The Prime Step Indore (Vijay Nagar, Bhawarkua & Annapurna).",
@@ -2264,6 +2271,7 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
     level: "Basic, Intermediate & Corporate Fluency",
     format: "Interactive Speaking Labs (Indore)",
     projectsCount: "Daily Live Speaking & GD/PI Sessions",
+    roadmapId: "spoken-english",
     overviewHeadline: "Don't just learn grammar rules. Speak with clarity and confidence every single day.",
     overviewBody: [
       "Many talented students and working professionals in Indore know the right technical answer in their head, but hesitate when speaking in English during HR interviews, client meetings, or group discussions. Our English Courses are designed to eliminate hesitation through daily active speaking practice.",
@@ -2432,6 +2440,7 @@ export interface CatalogCourseItem {
   description: string;
   tags: string[];
   href: string;
+  roadmapId: string;
   featured?: boolean;
 }
 
@@ -2444,6 +2453,7 @@ export const ALL_CATALOG_COURSES: CatalogCourseItem[] = [
     description: "Complete enterprise stack covering Core & Advanced Java, Spring Boot, Microservices, Hibernate, MySQL, and React.",
     tags: ["Core Java", "Spring Boot", "Hibernate", "React", "MySQL"],
     href: "/java-full-stack-developer",
+    roadmapId: "java",
     featured: true,
   },
   {
@@ -2454,135 +2464,146 @@ export const ALL_CATALOG_COURSES: CatalogCourseItem[] = [
     description: "End-to-end modern JavaScript web engineering with MongoDB, Express.js, React 19, Node.js, Next.js, and Tailwind CSS.",
     tags: ["MongoDB", "Express.js", "React", "Node.js", "Next.js"],
     href: "/mern-stack-developer-course",
+    roadmapId: "mern",
     featured: true,
   },
   {
-    title: "Python Programming & Full Stack",
+    title: "Python Programming Classes",
     category: "Programming & Core",
     duration: "3 – 5 Months",
     level: "Beginner to Advanced",
     description: "Master Python 3 from bedrock syntax and OOP to Django, FastAPI, SQL, automation, and backend workflows.",
     tags: ["Python 3", "Django", "FastAPI", "SQL", "Automation"],
     href: "/python-programming-classes",
+    roadmapId: "python",
     featured: true,
   },
   {
-    title: "Data Science & Applied AI",
+    title: "Data Science and Analytics Courses in Indore",
     category: "Data & AI",
     duration: "5 – 6 Months",
     level: "Beginner to Advanced Career Track",
     description: "Turn data into predictive models using Python, Pandas, NumPy, SQL, Statistical Analysis, Scikit-Learn, and Machine Learning.",
     tags: ["Python", "Pandas", "Machine Learning", "Statistics", "SQL"],
     href: "/data-science-and-analytics-courses-in-indore",
+    roadmapId: "data-science",
     featured: true,
   },
   {
-    title: "Data Analytics, SQL, Power BI & Tableau",
+    title: "Data Analytics Course in Indore",
     category: "Data & AI",
     duration: "3 – 4 Months",
     level: "Beginner Friendly (IT & Non-IT)",
     description: "Clean datasets, write analytical SQL queries, and build executive business intelligence dashboards in Power BI, Tableau, and Excel.",
     tags: ["Power BI", "SQL", "Tableau", "Advanced Excel", "Python Pandas"],
     href: "/data-analytics-course-in-indore",
+    roadmapId: "data-analytics",
     featured: true,
   },
   {
-    title: "Artificial Intelligence & Machine Learning",
+    title: "Artificial Intelligence and Machine Learning Course",
     category: "Data & AI",
     duration: "5 – 6 Months",
     level: "Beginner to Applied AI Engineer",
     description: "Build intelligent systems with Supervised/Unsupervised ML, Deep Learning Neural Networks, Computer Vision, NLP, and GenAI RAG.",
     tags: ["Machine Learning", "Deep Learning", "NLP", "LLMs & RAG", "FastAPI"],
     href: "/artificial-intelligence-and-machine-learning-course",
+    roadmapId: "ai-ml",
     featured: true,
   },
   {
-    title: "Power BI & Business Intelligence Mastery",
+    title: "Power BI Course in Indore",
     category: "Data & AI",
     duration: "6 – 8 Weeks",
     level: "Beginner to Advanced BI",
     description: "Master Power Query ETL, dimensional Star Schema modeling, advanced DAX formulas, Row-Level Security, and executive reporting.",
     tags: ["Power BI", "DAX", "Power Query", "Star Schema", "PL-300 Prep"],
     href: "/power-bi-course-in-indore",
+    roadmapId: "power-bi",
   },
   {
-    title: "C, C++ & Data Structures (DSA)",
+    title: "C and C++ Programming Classes",
     category: "Programming & Core",
     duration: "2.5 – 4 Months",
     level: "Foundational & Placement Prep",
     description: "Master pointers, memory management, object-oriented C++, STL, and 150+ Data Structures & Algorithms problems for interviews.",
     tags: ["C Programming", "C++ OOP", "STL", "Data Structures", "Algorithms"],
     href: "/c-and-cpp-programming-classes",
+    roadmapId: "cpp-dsa",
   },
   {
-    title: "Android & Flutter Mobile App Development",
+    title: "Android App Development",
     category: "Mobile & Business",
     duration: "4 – 5 Months",
     level: "Beginner to App Publisher",
     description: "Build cross-platform iOS and Android mobile apps from a single codebase with Dart, Flutter, Firebase, and REST APIs.",
     tags: ["Dart", "Flutter", "Android & iOS", "Firebase", "Play Store"],
     href: "/android-app-development",
+    roadmapId: "flutter-android",
   },
   {
-    title: "Web Designing, MEAN & Full Stack PHP",
+    title: "Web Design and PHP Full Stack Course",
     category: "Full Stack & Web",
     duration: "4 – 5 Months",
     level: "Beginner to Intermediate",
     description: "Responsive web design (HTML5, CSS3, Tailwind, Bootstrap, JS) paired with Angular (MEAN), PHP 8, Laravel, and MySQL.",
     tags: ["HTML5/CSS3", "Tailwind", "JavaScript", "PHP & Laravel", "MySQL"],
     href: "/web-design-and-php-full-stack-course",
+    roadmapId: "web-php",
   },
   {
-    title: "Cloud Computing (AWS) & DevOps Engineering",
+    title: "DevOps and Cloud Computing Course",
     category: "Full Stack & Web",
     duration: "4 – 5 Months",
     level: "Beginner to Cloud Engineer",
     description: "Automate cloud infrastructure and deployments with Linux, AWS (EC2, VPC, S3, RDS), Docker, Kubernetes, CI/CD, and Terraform.",
     tags: ["AWS Cloud", "Docker", "Kubernetes", "CI/CD", "Terraform"],
     href: "/devops-and-cloud-computing-course",
+    roadmapId: "devops-cloud",
   },
   {
-    title: "Digital Marketing, SEO & Performance Ads",
+    title: "Digital Marketing Course in Indore",
     category: "Mobile & Business",
     duration: "3 – 4 Months",
     level: "Beginner to Growth Marketer",
     description: "Drive organic rankings and paid ROI with Technical SEO, Google Search/Display Ads, Meta/Instagram Ads, GA4, and GTM.",
     tags: ["Technical SEO", "Google Ads", "Meta Ads", "GA4 & GTM", "Local SEO"],
     href: "/digital-marketing-course-in-indore",
+    roadmapId: "digital-marketing",
   },
   {
-    title: "Tally Prime with GST, MS Office & Advanced Excel",
+    title: "Tally GST Mastery Course",
     category: "Mobile & Business",
     duration: "2 – 3 Months",
     level: "Beginner Friendly",
     description: "Practical computerized accounting, GST return filing (GSTR-1/2B/3B), e-Invoicing, payroll, and Advanced Excel MIS automation.",
     tags: ["Tally Prime", "GST Filing", "Advanced Excel", "MS Office", "MIS"],
     href: "/tally-gst-mastery-course",
+    roadmapId: "tally-excel",
   },
   {
-    title: "Spoken English & Personality Development",
+    title: "English Courses",
     category: "Mobile & Business",
     duration: "2 – 4 Months",
     level: "All Levels",
     description: "Build fluent English speaking confidence, business communication, group discussion leadership, and HR interview presence.",
     tags: ["Spoken English", "GD & PI", "Business Communication", "Soft Skills"],
     href: "/english-courses",
+    roadmapId: "spoken-english",
     featured: true,
   },
 ];
 
 export const SITE_LINKS = [
   { href: "/", label: "Home" },
+  { href: "/about-us", label: "About Us" },
   { href: "/courses", label: "Courses" },
   { href: "/career-courses", label: "Career Courses" },
-  { href: "/java-full-stack-developer", label: "Java Full Stack" },
-  { href: "/mern-stack-developer-course", label: "MERN Stack" },
-  { href: "/python-programming-classes", label: "Python Classes" },
-  { href: "/data-science-and-analytics-courses-in-indore", label: "Data Science & AI" },
-  { href: "/data-analytics-course-in-indore", label: "Data Analytics" },
-  { href: "/english-courses", label: "English Courses" },
   { href: "/corporate-training", label: "Corporate Training" },
-  { href: "/about-us", label: "About Us" },
+  { href: "/english-courses", label: "English Courses" },
+  { href: "/java-full-stack-developer", label: "Java Full Stack Developer" },
+  { href: "/mern-stack-developer-course", label: "MERN Stack Developer Course" },
+  { href: "/python-programming-classes", label: "Python Programming Classes" },
   { href: "/contact-us", label: "Contact Us" },
 ] as const;
 

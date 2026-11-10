@@ -17,7 +17,7 @@ export default function Split({
 }) {
   const plain = text.replace(/\*/g, "").replace(/\|/g, " ");
   return (
-    <Tag className={className} data-split>
+    <Tag className={className} data-split aria-label={plain}>
       <span className="sr-only select-none">{plain}</span>
       <span aria-hidden="true">
         {text.split("|").map((line, li) => (
@@ -35,7 +35,7 @@ export default function Split({
                   <span
                     data-w
                     className={`inline-block will-change-transform ${
-                      em ? (dark ? "italic text-pale" : "italic text-brand") : ""
+                      em ? (dark ? "text-pale" : "text-brand") : ""
                     }`}
                   >
                     {word}

@@ -23,7 +23,7 @@ const instrument = Instrument_Serif({
   weight: "400",
   style: ["normal", "italic"],
   display: "swap",
-  preload: false,
+  preload: true,
 });
 
 const siteTitle = "The Prime Step | IT & Skill Training Institute — Indore";
@@ -114,7 +114,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
-    { media: "(prefers-color-scheme: dark)", color: "#004D4D" },
+    { media: "(prefers-color-scheme: dark)", color: "#1E9C99" },
   ],
 };
 

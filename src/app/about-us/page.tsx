@@ -105,7 +105,7 @@ export default function AboutUsPage() {
       <section className="mx-auto max-w-[1480px] px-6 pt-8 pb-20 md:px-10 md:pt-12 md:pb-28">
         <p className="eyebrow text-brand">Est. {SITE.established} · {SITE.city}</p>
         <h1 className="display mt-4 max-w-4xl text-[11.5vw] text-deep sm:text-[7.5vw] md:text-[5.4vw] leading-[0.95]">
-          A classroom isn&apos;t a place you sit. It&apos;s a place you build.
+          A classroom isn&apos;t a place you sit. <span className="italic text-brand">It&apos;s a place you build.</span>
         </h1>
         <p className="mt-6 max-w-2xl text-lg md:text-xl leading-relaxed text-deep/85">
           Founded in {SITE.established} in Indore, The Prime Step was built on a single conviction: bridge the gap between academic theory and what software companies actually expect on day one of the job.

@@ -6,6 +6,41 @@ import Chapter from "@/components/ui/Chapter";
 import CTA from "@/components/ui/CTA";
 import { WhatsAppIcon } from "@/components/ui/SocialIcons";
 
+const STUDENT_REVIEWS = [
+  {
+    name: "Aayush Patidar",
+    program: "Java Full Stack Developer",
+    transition: "BCA Graduate → Backend Engineer (Indore)",
+    campus: "Vijay Nagar",
+    quote:
+      "I joined with zero confidence in coding. Sitting in the lab every day and building Spring Boot + React projects from scratch with mentors debugging beside me helped me crack my technical rounds.",
+  },
+  {
+    name: "Sakshi Sharma",
+    program: "Data Analytics & Power BI",
+    transition: "B.Com (Non-IT) → Data & MIS Analyst",
+    campus: "Bhawarkua",
+    quote:
+      "Coming from commerce, I was nervous about SQL and Python. The faculty explained every query in plain language, and my Power BI portfolio dashboards became the main talking point in my interview.",
+  },
+  {
+    name: "Rohan Verma",
+    program: "MERN Stack Developer",
+    transition: "B.Tech CS → Full Stack Developer",
+    campus: "Vijay Nagar",
+    quote:
+      "College only taught theory. At The Prime Step, I deployed 4 full-stack apps with React, Node.js, and MongoDB, and the mock interview rounds prepared me for live machine-coding tests.",
+  },
+  {
+    name: "Priyanshi Joshi",
+    program: "Python & Applied AI",
+    transition: "B.Sc Graduate → Junior Python Developer",
+    campus: "Annapurna",
+    quote:
+      "The 1-on-1 doubt clearing in the Annapurna lab made all the difference. Whenever my Django or Pandas code failed, a mentor sat right next to me until I understood the logic.",
+  },
+] as const;
+
 export default function TrustAndFAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
@@ -25,17 +60,60 @@ export default function TrustAndFAQ() {
               key={s.label}
               className="rounded-3xl border border-pale/80 bg-soft p-6 md:p-8 transition-transform duration-300 hover:-translate-y-1"
             >
-              <div className="display text-3xl md:text-5xl font-bold text-brand">
+              <div className="display text-4xl md:text-6xl text-brand">
                 {s.value}
               </div>
               <div className="mt-2 text-sm md:text-base font-semibold text-deep">
                 {s.label}
               </div>
-              <div className="mt-1 text-xs text-deep/70">
+              <div className="mt-1 text-xs text-deep/75">
                 {s.note}
               </div>
             </div>
           ))}
+        </div>
+
+        {/* 1B. Verified Student Reviews & Alumni Outcomes */}
+        <div className="mt-16 md:mt-24">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="eyebrow text-brand">Student Voices · 4.9★ on Google</p>
+              <h2 className="display mt-2 text-3xl md:text-5xl text-deep">
+                Real outcomes from <span className="text-brand">our Indore labs.</span>
+              </h2>
+            </div>
+          </div>
+
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            {STUDENT_REVIEWS.map((r) => (
+              <article
+                key={r.name}
+                className="flex flex-col justify-between rounded-3xl border border-pale/90 bg-soft/50 p-7 md:p-8"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="eyebrow text-brand">{r.program}</span>
+                    <span className="rounded-full bg-paper px-3 py-1 font-mono text-[11px] font-semibold text-deep border border-pale/70">
+                      {r.campus} Campus
+                    </span>
+                  </div>
+                  <p className="mt-4 text-sm md:text-base leading-relaxed text-deep/90">
+                    &ldquo;{r.quote}&rdquo;
+                  </p>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-pale/60 flex items-center justify-between gap-3">
+                  <div>
+                    <div className="text-sm font-semibold text-deep">{r.name}</div>
+                    <div className="text-xs font-mono text-brand">{r.transition}</div>
+                  </div>
+                  <span className="font-mono text-xs font-semibold text-brand" aria-label="5 out of 5 stars">
+                    ★★★★★
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
 
         {/* 2. Comprehensive Indore Campuses */}
@@ -43,7 +121,7 @@ export default function TrustAndFAQ() {
           <div className="max-w-2xl">
             <p className="eyebrow text-brand">Central India Learning Infrastructure</p>
             <h2 className="display mt-2 text-3xl md:text-5xl font-bold text-deep">
-              Visit our classrooms in Indore.
+              Visit our classrooms <span className="text-brand">in Indore.</span>
             </h2>
             <p className="mt-4 text-sm md:text-base text-deep/80 leading-relaxed">
               Equipped with high-performance development workstations, dedicated lab faculty, and air-conditioned discussion rooms. Drop by for a free counseling session or 2-day demo class.
@@ -113,7 +191,7 @@ export default function TrustAndFAQ() {
           <div className="max-w-2xl">
             <p className="eyebrow text-brand">Common Queries &amp; Guidance</p>
             <h2 className="display mt-2 text-3xl md:text-5xl font-bold text-deep">
-              Everything you need to know.
+              Everything you <span className="text-brand">need to know.</span>
             </h2>
             <p className="mt-4 text-sm md:text-base text-deep/80 leading-relaxed">
               Clear, transparent answers about eligibility, zero-interest installment options, mentorship, and career assistance.

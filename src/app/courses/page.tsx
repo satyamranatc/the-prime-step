@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { DISCIPLINES, FAQS, SITE } from "@/lib/content";
+import { FAQS, SITE } from "@/lib/content";
 import { ALL_CATALOG_COURSES, buildBreadcrumbJsonLd } from "@/lib/seoPages";
 import Chapter from "@/components/ui/Chapter";
 import CTA from "@/components/ui/CTA";
-import Glyph from "@/components/ui/Glyph";
+import Split from "@/components/ui/Split";
 import PageShell from "@/components/pages/PageShell";
 
-const pageTitle = "IT & Computer Courses in Indore — Java, Python, MERN, Data Science & AI";
+const pageTitle = "IT & Computer Courses in Indore — Interactive 3D Car Roadmaps & Full Catalog";
 const pageDescription =
-  "Explore all practical IT, programming, data science, and business skill courses at The Prime Step Indore. 100% hands-on lab training in Java Full Stack, MERN Stack, Python, Data Analytics, AI/ML, Spoken English & Tally GST across Vijay Nagar, Bhawarkua & Annapurna.";
+  "Explore all 14 practical IT, programming, data science, AI, and business skill courses at The Prime Step Indore. Click any course card to drive through its 3D Car Roadmap covering syllabus overview, 1-on-1 personal lab training, and placement support.";
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -40,16 +40,12 @@ export const metadata: Metadata = {
   },
 };
 
-const DISCIPLINE_LINKS: Record<string, string> = {
-  python: "/python-programming-classes",
-  java: "/java-full-stack-developer",
-  fullstack: "/mern-stack-developer-course",
-  data: "/data-analytics-course-in-indore",
-  ai: "/artificial-intelligence-and-machine-learning-course",
-  mobile: "/android-app-development",
-  foundations: "/c-and-cpp-programming-classes",
-  office: "/tally-gst-mastery-course",
-};
+const CATEGORIES = [
+  { id: "Full Stack & Web", label: "01 · Full Stack, Web & Cloud" },
+  { id: "Data & AI", label: "02 · Data Science, Analytics & AI" },
+  { id: "Programming & Core", label: "03 · Core Programming & DSA" },
+  { id: "Mobile & Business", label: "04 · Mobile Apps, Business & Communication" },
+] as const;
 
 export default function CoursesPage() {
   const breadcrumbs = [
@@ -82,189 +78,137 @@ export default function CoursesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Hero */}
+      {/* 1. Editorial Hero */}
       <section className="mx-auto max-w-[1480px] px-6 pt-8 pb-20 md:px-10 md:pt-12 md:pb-28">
-        <p className="eyebrow text-brand">Complete Course Directory · Indore</p>
-        <h1 className="display mt-4 max-w-4xl text-[11.5vw] text-deep sm:text-[7.5vw] md:text-[5.4vw] leading-[0.95]">
-          Eight technology worlds. Taught by building.
+        <p className="eyebrow text-brand" data-fade>
+          14 Industry-Aligned Programs · Indore
+        </p>
+        <h1 className="display mt-4 max-w-4xl text-[11vw] text-deep sm:text-[7.2vw] md:text-[5.2vw] leading-[0.95]">
+          <Split text="Every course we teach.|*Taught* *by* *building.*" as="span" />
         </h1>
-        <p className="mt-6 max-w-2xl text-lg md:text-xl leading-relaxed text-deep/85">
-          Whether you are writing your very first line of code after 12th, preparing for campus placements, or switching into a high-growth IT career, every program at The Prime Step is taught hands-on in our Indore computer labs.
+        <p
+          className="mt-6 max-w-2xl text-base md:text-xl leading-relaxed text-deep/80"
+          data-fade
+        >
+          Select any program below to launch its interactive <strong>3D Car Roadmap</strong> — a clear visual walkthrough of the syllabus, live projects, 1-on-1 lab training, and placement support.
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center gap-4">
-          <CTA href="#catalog" label="Browse All Courses" />
-          <CTA href="/career-courses" label="Explore Career Tracks" variant="ghost" />
+        {/* Quick Category Jump Pills */}
+        <div className="mt-10 flex flex-wrap items-center gap-2.5" data-fade>
+          {CATEGORIES.map((cat) => (
+            <a
+              key={cat.id}
+              href={`#${cat.id.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+              className="rounded-full border border-deep/15 bg-soft/70 px-4 py-2 text-xs font-semibold text-deep transition-all duration-300 hover:border-brand hover:bg-paper hover:text-brand"
+            >
+              {cat.label}
+            </a>
+          ))}
         </div>
       </section>
 
-      {/* Flagship Course Spotlights */}
-      <section id="catalog" className="border-t border-pale/60 bg-soft py-20 md:py-28 scroll-mt-24">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
-          <Chapter n="01" title="Flagship Programs & Catalog" />
-          <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
-            <div className="max-w-2xl">
-              <h2 className="display text-4xl md:text-6xl text-deep">
-                Industry-aligned courses in Indore.
-              </h2>
-              <p className="mt-4 text-base md:text-lg text-deep/80">
-                Choose a specialized program below to view module-by-module syllabi, live projects, and career outcomes.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {ALL_CATALOG_COURSES.map((course) => (
-              <article
-                key={course.title}
-                className={`flex flex-col justify-between rounded-3xl border p-7 md:p-8 transition-all duration-300 hover:-translate-y-1 ${
-                  course.featured
-                    ? "border-brand/45 bg-paper shadow-sm"
-                    : "border-pale/90 bg-paper/80"
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="eyebrow text-brand">{course.category}</span>
-                    <span className="rounded-full bg-soft px-3 py-1 font-mono text-[11px] text-deep/80">
-                      {course.duration}
-                    </span>
-                  </div>
-                  <h3 className="display mt-4 text-2xl md:text-3xl text-deep">
-                    <Link href={course.href} className="hover:text-brand transition-colors">
-                      {course.title}
-                    </Link>
-                  </h3>
-                  <p className="mt-1 text-xs font-mono text-deep/65">{course.level}</p>
-                  <p className="mt-4 text-sm md:text-base leading-relaxed text-deep/80">
-                    {course.description}
-                  </p>
+      {/* 2. Structured Course Directory by Track */}
+      <section id="catalog" className="border-t border-pale/60 bg-soft/60 py-20 md:py-28">
+        <div className="mx-auto max-w-[1480px] px-6 md:px-10 space-y-24">
+          {CATEGORIES.map((cat) => {
+            const items = ALL_CATALOG_COURSES.filter((c) => c.category === cat.id);
+            const sectionId = cat.id.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+            return (
+              <div key={cat.id} id={sectionId} className="scroll-mt-28">
+                <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-deep/15 pb-5">
+                  <h2 className="display text-3xl md:text-5xl text-deep">{cat.label}</h2>
+                  <span className="eyebrow text-brand">{items.length} Programs</span>
                 </div>
 
-                <div className="mt-6 pt-5 border-t border-pale/60">
-                  <ul className="flex flex-wrap gap-1.5 mb-5">
-                    {course.tags.map((t) => (
-                      <li
-                        key={t}
-                        className="rounded-full border border-pale bg-soft px-3 py-1 text-xs text-deep/85"
+                <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {items.map((course) => {
+                    const roadmapUrl = `/roadmap/${course.roadmapId}`;
+                    return (
+                      <article
+                        key={course.title}
+                        data-fade
+                        className="group flex flex-col justify-between rounded-3xl border border-pale/90 bg-paper p-7 md:p-8 transition-all duration-500 [transition-timing-function:var(--ease-out)] hover:-translate-y-1 hover:border-brand hover:shadow-lg"
                       >
-                        {t}
-                      </li>
-                    ))}
-                  </ul>
+                        <div>
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="eyebrow text-brand">{course.duration}</span>
+                            <span className="rounded-full bg-soft px-3 py-1 font-mono text-[11px] text-deep/75">
+                              {course.level}
+                            </span>
+                          </div>
 
-                  <Link
-                    href={course.href}
-                    className="group inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-deep transition-colors"
-                  >
-                    <span>View Curriculum &amp; Projects</span>
-                    <span className="transition-transform group-hover:translate-x-1">→</span>
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+                          <h3 className="display mt-4 text-2xl md:text-3xl text-deep transition-colors group-hover:text-brand">
+                            <Link href={course.href}>{course.title}</Link>
+                          </h3>
 
-      {/* 8 Core Disciplines */}
-      <section className="bg-paper py-20 md:py-28">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
-          <Chapter n="02" title="Eight Core Disciplines" />
-          <h2 className="display mt-6 max-w-3xl text-4xl md:text-6xl text-deep">
-            Plain-language foundations to enterprise mastery.
-          </h2>
+                          <p className="mt-3 text-sm md:text-base leading-relaxed text-deep/80">
+                            {course.description}
+                          </p>
+                        </div>
 
-          <div className="mt-12 grid gap-8 md:grid-cols-2">
-            {DISCIPLINES.map((d, i) => (
-              <div
-                key={d.id}
-                className="grid items-center gap-6 rounded-3xl border border-pale/80 bg-soft p-7 md:grid-cols-[1fr_140px] md:p-9"
-              >
-                <div>
-                  <span className="eyebrow text-brand">
-                    0{i + 1} · {d.title}
-                  </span>
-                  <h3 className="display mt-2 text-2xl md:text-3xl text-deep">
-                    {d.plain}
-                  </h3>
-                  <p className="mt-2 text-sm text-deep/80">{d.line}</p>
-                  <ul className="mt-4 flex flex-wrap gap-2">
-                    {d.tags.map((tag) => (
-                      <li
-                        key={tag}
-                        className="rounded-full border border-deep/20 bg-paper px-3 py-1 text-xs text-deep"
-                      >
-                        {tag}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-5">
-                    <Link
-                      href={DISCIPLINE_LINKS[d.id] || "/contact-us"}
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-brand hover:underline"
-                    >
-                      <span>Explore {d.title} Track</span>
-                      <span>→</span>
-                    </Link>
-                  </div>
-                </div>
-                <div className="mx-auto hidden aspect-square w-32 md:block">
-                  <Glyph id={d.id} />
+                        <div className="mt-7 pt-5 border-t border-pale/60">
+                          <ul className="flex flex-wrap gap-1.5 mb-6">
+                            {course.tags.slice(0, 4).map((t) => (
+                              <li
+                                key={t}
+                                className="rounded-full bg-soft px-3 py-1 text-xs font-medium text-deep/85"
+                              >
+                                {t}
+                              </li>
+                            ))}
+                          </ul>
+
+                          <div className="flex items-center justify-between gap-3">
+                            <Link
+                              href={course.href}
+                              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-deep px-5 py-2.5 text-xs md:text-sm font-semibold text-paper transition-colors duration-300 group-hover:bg-brand"
+                            >
+                              <span>View Syllabus &amp; Details</span>
+                              <span className="transition-transform duration-300 group-hover:translate-x-1">
+                                →
+                              </span>
+                            </Link>
+                            <Link
+                              href={roadmapUrl}
+                              className="inline-flex items-center gap-1 rounded-full border border-deep/20 px-4 py-2.5 text-xs font-semibold text-deep transition-colors hover:border-brand hover:text-brand"
+                            >
+                              <span>Explore in 3D</span>
+                              <span>↗</span>
+                            </Link>
+                          </div>
+                        </div>
+                      </article>
+                    );
+                  })}
                 </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </section>
 
-      {/* Interactive 3D Roadmaps Banner */}
-      <section className="bg-deep py-20 text-paper md:py-24">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
-          <Chapter n="03" title="Interactive 3D Syllabus Roadmaps" dark />
-          <div className="mt-6 grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-            <div>
-              <h2 className="display text-4xl md:text-6xl text-paper">
-                Drive through your syllabus in 3D.
-              </h2>
-              <p className="mt-4 max-w-xl text-base md:text-lg text-pale leading-relaxed">
-                Explore every milestone, technology stack, and capstone deliverable inside our interactive 3D roadmap experience.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/roadmap/mern"
-                className="rounded-full bg-brand px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-paper hover:text-deep"
-              >
-                MERN Stack 3D Roadmap →
-              </Link>
-              <Link
-                href="/roadmap/java"
-                className="rounded-full border border-pale/40 bg-paper/10 px-6 py-3.5 text-sm font-semibold text-paper transition-colors hover:bg-paper hover:text-deep"
-              >
-                Java Full Stack 3D Roadmap →
-              </Link>
-              <Link
-                href="/roadmap/python"
-                className="rounded-full border border-pale/40 bg-paper/10 px-6 py-3.5 text-sm font-semibold text-paper transition-colors hover:bg-paper hover:text-deep"
-              >
-                Python &amp; AI 3D Roadmap →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQs */}
+      {/* 3. Concise Admission FAQs */}
       <section className="bg-paper py-20 md:py-28">
         <div className="mx-auto max-w-[1480px] px-6 md:px-10">
-          <Chapter n="04" title="Course & Admission FAQs" />
-          <h2 className="display mt-4 text-3xl md:text-5xl text-deep">
-            Questions before choosing a course.
-          </h2>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {FAQS.map((faq) => (
-              <div key={faq.q} className="rounded-2xl border border-pale bg-soft/60 p-6 md:p-7">
+          <Chapter n="02" title="Admission Essentials" />
+          <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
+            <h2 className="display max-w-2xl text-4xl md:text-6xl text-deep">
+              Common <span className="text-brand">questions.</span>
+            </h2>
+            <CTA
+              href={`${SITE.whatsappHref}?text=${encodeURIComponent("Hi The Prime Step! I would like to talk to a career counselor about your courses.")}`}
+              label="Talk to a Career Counselor"
+              variant="ghost"
+            />
+          </div>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {FAQS.slice(0, 4).map((faq) => (
+              <div
+                key={faq.q}
+                data-fade
+                className="rounded-2xl border border-pale/80 bg-soft/45 p-7"
+              >
                 <h3 className="text-base md:text-lg font-semibold text-deep">{faq.q}</h3>
                 <p className="mt-2.5 text-sm md:text-base leading-relaxed text-deep/80">{faq.a}</p>
               </div>
@@ -275,4 +219,3 @@ export default function CoursesPage() {
     </PageShell>
   );
 }
-

@@ -8,6 +8,7 @@ import { setLenis } from "@/lib/scroll";
 import Nav from "@/components/features/Nav";
 import NextStep from "@/components/features/NextStep";
 import Footer from "@/components/features/Footer";
+import StickyLeadBar from "@/components/ui/StickyLeadBar";
 
 export default function PageShell({
   children,
@@ -20,14 +21,14 @@ export default function PageShell({
 }) {
   useEffect(() => {
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
     let lenis: Lenis | null = null;
     let tick: ((t: number) => void) | null = null;
 
-    if (!calm) {
+    if (!calm && finePointer) {
       lenis = new Lenis({
         lerp: 0.1,
         wheelMultiplier: 0.85,
-        touchMultiplier: 1.2,
       });
       setLenis(lenis);
       lenis.on("scroll", ScrollTrigger.update);
@@ -107,6 +108,7 @@ export default function PageShell({
       <main>{children}</main>
       {!hideNextStep && <NextStep />}
       <Footer />
+      <StickyLeadBar />
     </div>
   );
 }

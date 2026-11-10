@@ -6,23 +6,24 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { setLenis } from "@/lib/scroll";
 import Loader from "./Loader";
 import Nav from "./Nav";
+import StickyLeadBar from "@/components/ui/StickyLeadBar";
 
 /**
- * Orchestrates the whole experience: smooth scroll (Lenis ↔ ScrollTrigger),
+ * Orchestrates the whole experience: smooth scroll (Lenis ↔ ScrollTrigger on fine-pointer desktop),
  * the loader/cursor/nav shell, and global reveal choreography.
  * Everything animated is gated behind prefers-reduced-motion.
  */
 export default function Experience({ children }: { children: ReactNode }) {
   useEffect(() => {
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
     let lenis: Lenis | null = null;
     let tick: ((t: number) => void) | null = null;
 
-    if (!calm) {
+    if (!calm && finePointer) {
       lenis = new Lenis({
         lerp: 0.1,
         wheelMultiplier: 0.85,
-        touchMultiplier: 1.2,
       });
       setLenis(lenis);
       lenis.on("scroll", ScrollTrigger.update);
@@ -90,6 +91,7 @@ export default function Experience({ children }: { children: ReactNode }) {
       <Loader />
       <Nav />
       {children}
+      <StickyLeadBar />
     </>
   );
 }

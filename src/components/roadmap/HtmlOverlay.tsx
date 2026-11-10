@@ -18,29 +18,54 @@ export default function HtmlOverlay({ course }: { course: RoadmapCourse }) {
         <div className="max-w-7xl w-full mx-auto pointer-events-auto">
           <div className="max-w-xl md:max-w-2xl text-left">
             {/* Institute Pill Badge */}
-            <div className="inline-block px-4 py-1.5 rounded-full border border-teal-500/25 bg-teal-500/10 text-[#1AAB95] font-semibold tracking-wide mb-4 md:mb-6 backdrop-blur-sm text-xs md:text-sm uppercase">
-              THE PRIME STEP INSTITUTE
+            <div className="flex flex-wrap items-center gap-2 mb-4 md:mb-6">
+              <span className="inline-block px-4 py-1.5 rounded-full border border-teal-500/25 bg-teal-500/10 text-[#1AAB95] font-semibold tracking-wide backdrop-blur-sm text-xs md:text-sm uppercase">
+                THE PRIME STEP · INDORE
+              </span>
+              <span className="inline-block px-3.5 py-1.5 rounded-full bg-zinc-900/5 text-zinc-700 font-mono text-xs">
+                {course.duration}
+              </span>
+              <span className="inline-block px-3.5 py-1.5 rounded-full bg-zinc-900/5 text-zinc-700 font-mono text-xs">
+                {course.level}
+              </span>
             </div>
 
             {/* Giant Bold Headline */}
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-black leading-tight md:leading-none tracking-tight text-zinc-900 mb-4 md:mb-6">
               {course.title}{" "}
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#1AAB95] to-[#2DD4BF]">
-                Roadmap
+                Car Roadmap
               </span>
             </h1>
 
             {/* Narrative Description */}
-            <p className="text-zinc-500 text-base sm:text-lg md:text-xl leading-relaxed max-w-xl mb-6 md:mb-8 font-normal">
+            <p className="text-zinc-600 text-base sm:text-lg md:text-xl leading-relaxed max-w-xl mb-5 font-normal">
               {course.description}
             </p>
+
+            {/* 4-Pillar Overview Strip */}
+            <div className="mb-6 flex flex-wrap gap-2">
+              {[
+                "1. Core Syllabus Overview",
+                "2. Hands-On Lab Projects",
+                "3. 1-on-1 Personal Training",
+                "4. Placement Support",
+              ].map((pill) => (
+                <span
+                  key={pill}
+                  className="rounded-lg border border-zinc-200/80 bg-white/85 px-3 py-1.5 text-xs font-semibold text-zinc-800 shadow-xs backdrop-blur-sm"
+                >
+                  {pill}
+                </span>
+              ))}
+            </div>
 
             {/* Scroll Indicator */}
             <div className="inline-flex items-center gap-2.5 rounded-full border border-teal-500/20 bg-teal-500/5 px-4 py-2 text-xs font-semibold text-[#1AAB95]">
               <span className="animate-bounce">↓</span>
-              <span>Scroll to Drive Through Road</span>
+              <span>Scroll to Drive Through Syllabus &amp; Training</span>
               <span className="text-zinc-400">•</span>
-              <span>{numSteps} Hands-On Milestones</span>
+              <span>{numSteps} Milestones</span>
             </div>
           </div>
         </div>
@@ -157,17 +182,31 @@ export default function HtmlOverlay({ course }: { course: RoadmapCourse }) {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <Link
-              href="/#admission"
-              className="rounded-full bg-[#1AAB95] px-8 py-3.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 hover:bg-[#148977]"
+            <a
+              href={`https://wa.me/919479611441?text=${encodeURIComponent(`Hi The Prime Step! I completed the ${course.title} 3D Roadmap and want to book a free demo class.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full bg-[#1AAB95] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 hover:bg-[#148977]"
             >
-              Apply for Admissions
+              WhatsApp Career Counselor
+            </a>
+            <a
+              href="tel:+919479611441"
+              className="rounded-full border border-teal-500/30 bg-teal-500/10 px-6 py-3.5 text-sm font-bold text-[#156b69] transition-colors hover:bg-teal-500/20"
+            >
+              Call +91 94796 11441
+            </a>
+            <Link
+              href={course.seoHref || "/courses"}
+              className="rounded-full border border-zinc-200 bg-white px-6 py-3.5 text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50"
+            >
+              Full Syllabus Details →
             </Link>
             <Link
-              href="/#programs"
-              className="rounded-full border border-zinc-200 bg-white px-7 py-3.5 text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50"
+              href="/courses"
+              className="rounded-full border border-zinc-200 bg-white px-6 py-3.5 text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50"
             >
-              ← Explore Other Courses
+              ← Explore All Courses
             </Link>
           </div>
         </div>

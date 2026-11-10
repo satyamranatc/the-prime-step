@@ -39,7 +39,7 @@ export default function Careers() {
 
         <div className="mt-8 max-w-4xl">
           <h2 id="careers-title" className="display text-[11vw] font-bold tracking-tight text-deep sm:text-[8vw] md:text-[5.5vw] leading-[0.96]">
-            From classroom to career-ready.
+            From classroom to <span className="italic text-brand">career-ready.</span>
           </h2>
           <p className="mt-6 text-lg md:text-xl text-deep/80 leading-relaxed max-w-2xl" data-fade>
             Every course is engineered around real industry roles. Here is what you prepare for, and what you actually do on the job.

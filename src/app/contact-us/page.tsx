@@ -73,7 +73,7 @@ export default function ContactUsPage() {
           <div>
             <p className="eyebrow text-brand">Admissions, Demo Classes &amp; Counseling</p>
             <h1 className="display mt-4 text-[11.5vw] text-deep sm:text-[7.5vw] md:text-[5.2vw] leading-[0.95]">
-              Let&apos;s plan your next step in Indore.
+              Let&apos;s plan your <span className="italic text-brand">next step</span> in Indore.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-deep/85">
               Have questions about which course fits your background, batch timings, or 0% interest installment options? Speak directly with our career counselors or walk into any of our three Indore campuses.

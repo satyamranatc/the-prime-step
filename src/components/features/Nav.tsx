@@ -17,10 +17,12 @@ import {
 } from "@/components/ui/SocialIcons";
 
 const TOP_NAV = [
+  { href: "/", label: "Home" },
+  { href: "/about-us", label: "About Us" },
   { href: "/courses", label: "Courses", hasDropdown: true },
   { href: "/career-courses", label: "Career Courses" },
   { href: "/corporate-training", label: "Corporate Training" },
-  { href: "/about-us", label: "About Us" },
+  { href: "/english-courses", label: "English Courses" },
   { href: "/contact-us", label: "Contact Us" },
 ] as const;
 
@@ -32,7 +34,7 @@ const COURSE_DROPDOWN = [
   },
   {
     href: "/mern-stack-developer-course",
-    title: "MERN Stack Developer",
+    title: "MERN Stack Developer Course",
     meta: "MongoDB · Express · React · Node.js",
   },
   {
@@ -42,17 +44,57 @@ const COURSE_DROPDOWN = [
   },
   {
     href: "/data-science-and-analytics-courses-in-indore",
-    title: "Data Science & Applied AI",
+    title: "Data Science and Analytics Courses in Indore",
     meta: "Python · Pandas · Machine Learning",
   },
   {
     href: "/data-analytics-course-in-indore",
-    title: "Data Analytics & BI",
+    title: "Data Analytics Course in Indore",
     meta: "SQL · Power BI · Tableau · Excel",
   },
   {
+    href: "/power-bi-course-in-indore",
+    title: "Power BI Course in Indore",
+    meta: "Power Query · DAX · BI Dashboards",
+  },
+  {
+    href: "/artificial-intelligence-and-machine-learning-course",
+    title: "Artificial Intelligence and Machine Learning Course",
+    meta: "ML · Deep Learning · NLP · GenAI",
+  },
+  {
+    href: "/c-and-cpp-programming-classes",
+    title: "C and C++ Programming Classes",
+    meta: "C · C++ OOP · STL · Data Structures",
+  },
+  {
+    href: "/android-app-development",
+    title: "Android App Development",
+    meta: "Dart · Flutter · Android & iOS",
+  },
+  {
+    href: "/web-design-and-php-full-stack-course",
+    title: "Web Design and PHP Full Stack Course",
+    meta: "HTML/CSS · JS · PHP · Laravel · MySQL",
+  },
+  {
+    href: "/devops-and-cloud-computing-course",
+    title: "DevOps and Cloud Computing Course",
+    meta: "AWS · Linux · Docker · Kubernetes · CI/CD",
+  },
+  {
+    href: "/digital-marketing-course-in-indore",
+    title: "Digital Marketing Course in Indore",
+    meta: "SEO · Google Ads · Meta Ads · GA4",
+  },
+  {
+    href: "/tally-gst-mastery-course",
+    title: "Tally GST Mastery Course",
+    meta: "Tally Prime · GST Filing · Advanced Excel",
+  },
+  {
     href: "/english-courses",
-    title: "English Courses & Soft Skills",
+    title: "English Courses",
     meta: "Spoken Fluency · GD & HR Interview",
   },
 ] as const;
@@ -114,11 +156,11 @@ export default function Nav() {
       <header
         ref={bar}
         data-solid="0"
-        className="group/nav fixed inset-x-0 top-0 z-[120] border-b border-transparent transition-[background-color,border-color] duration-500 data-[solid=1]:border-pale/60 data-[solid=1]:bg-paper/95"
+        className="group/nav fixed inset-x-0 top-0 z-[120] transition-colors duration-500 data-[solid='1']:bg-paper/90 data-[solid='1']:backdrop-blur-xl"
       >
         <nav
           aria-label="Primary"
-          className="mx-auto flex h-[84px] max-w-[1480px] items-center justify-between px-6 md:px-10"
+          className="mx-auto flex h-20 max-w-[1520px] items-center justify-between px-6 md:px-12"
         >
           <Link
             href="/"
@@ -126,10 +168,10 @@ export default function Nav() {
             className="relative z-[130] flex items-center"
             aria-label={`${SITE.name} — home`}
           >
-            <Logo height={68} variant={open ? "light" : "color"} />
+            <Logo height={64} variant={open ? "light" : "color"} />
           </Link>
 
-          <ul className="hidden items-center gap-8 lg:flex">
+          <ul className="hidden items-center gap-6 xl:gap-8 lg:flex">
             {TOP_NAV.map((l) => {
               const isActive =
                 pathname === l.href ||
@@ -179,36 +221,36 @@ export default function Nav() {
 
                     {/* Clean Apple-grade Courses Popover */}
                     <div
-                      className={`absolute top-full left-1/2 w-[540px] -translate-x-1/2 pt-1 transition-all duration-200 ${
+                      className={`absolute top-full left-1/2 w-[680px] -translate-x-1/2 pt-1 transition-all duration-200 ${
                         coursesOpen
                           ? "pointer-events-auto translate-y-0 opacity-100"
                           : "pointer-events-none -translate-y-1.5 opacity-0"
                       }`}
                     >
-                      <div className="rounded-2xl border border-pale/90 bg-paper p-5 shadow-[0_20px_50px_rgba(0,36,36,0.12)]">
+                      <div className="max-h-[78vh] overflow-y-auto rounded-2xl border border-pale/90 bg-paper p-5 shadow-[0_20px_50px_rgba(0,36,36,0.12)]">
                         <div className="flex items-center justify-between border-b border-pale/60 pb-3 mb-3">
-                          <span className="eyebrow text-brand">Flagship Career Courses</span>
+                          <span className="eyebrow text-brand">All Courses</span>
                           <Link
                             href="/courses"
                             onClick={() => setCoursesOpen(false)}
                             className="text-xs font-semibold text-deep hover:text-brand transition-colors"
                           >
-                            View All 14 Courses →
+                            View Courses Page →
                           </Link>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-2 gap-1.5">
                           {COURSE_DROPDOWN.map((item) => (
                             <Link
                               key={item.href}
                               href={item.href}
                               onClick={() => setCoursesOpen(false)}
-                              className="group rounded-xl p-3 transition-colors hover:bg-soft"
+                              className="group rounded-xl p-2.5 transition-colors hover:bg-soft"
                             >
-                              <p className="text-sm font-semibold text-deep group-hover:text-brand transition-colors">
+                              <p className="text-[13px] font-semibold text-deep group-hover:text-brand transition-colors">
                                 {item.title}
                               </p>
-                              <p className="mt-0.5 text-xs text-deep/65">{item.meta}</p>
+                              <p className="mt-0.5 text-[11px] text-deep/65">{item.meta}</p>
                             </Link>
                           ))}
                         </div>

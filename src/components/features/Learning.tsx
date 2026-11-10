@@ -13,39 +13,25 @@ const PLATES = [
   {
     t: "Practical-based learning",
     d: "Concepts are taught by applying them — exercises, projects and hands-on practice in every program.",
+    img: "/brand/tps-practical-lab.jpg",
+    alt: "Hands-on coding and practical project work at The Prime Step Indore computer lab",
+    badge: "Hands-On Lab · Indore",
   },
   {
     t: "Mentors who stay for the doubt",
     d: "Students most often highlight faculty who clear doubts one-to-one and help debug their logic.",
+    img: "/brand/tps-mentor-classroom.jpg",
+    alt: "Students attending a live interactive classroom mentorship session at The Prime Step Indore",
+    badge: "Live Mentorship · TPS Classroom",
   },
   {
     t: "Close to where you live",
     d: "Three branches across Indore: Vijay Nagar, Bhawarkua and Annapurna Road.",
+    img: "/brand/tps-indore-campus.jpg",
+    alt: "Batch of students learning inside The Prime Step Indore campus classroom",
+    badge: "Vijay Nagar · Bhawarkua · Annapurna",
   },
 ];
-
-function PlateArt({ i }: { i: number }) {
-  const s = { vectorEffect: "non-scaling-stroke" as const, strokeWidth: 1.2 };
-  return (
-    <svg viewBox="0 0 300 380" className="absolute inset-0 h-full w-full" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-      {i === 0 &&
-        [0, 1, 2, 3, 4, 5].map((k) => (
-          <rect key={k} x={40 + k * 18} y={60 + k * 18} width={220 - k * 36} height={260 - k * 36} className={k === 5 ? "fill-brand stroke-deep" : "fill-none stroke-light"} {...s} />
-        ))}
-      {i === 1 &&
-        Array.from({ length: 14 }).map((_, k) => (
-          <line key={k} x1={-20 + k * 28} y1="380" x2={120 + k * 28} y2="0" className="stroke-light" {...s} />
-        ))}
-      {i === 2 && (
-        <>
-          {[150, 110, 70].map((r, k) => (
-            <path key={r} d={`M${150 - r} 340V${190}a${r} ${r} 0 0 1 ${r * 2} 0v150z`} className={k === 2 ? "fill-brand stroke-deep" : "fill-none stroke-light"} {...s} />
-          ))}
-        </>
-      )}
-    </svg>
-  );
-}
 
 /** Chapter 03 — editorial layout of the learning environment. */
 export default function Learning() {
@@ -93,7 +79,7 @@ export default function Learning() {
         <p data-fill className="display mt-10 max-w-[1100px] text-[9.6vw] text-deep md:text-[5.2vw] md:leading-[1.02]">
           {STATEMENT.split(" ").map((w, i) => (
             <span key={i} data-fw className="mr-[0.2em] inline-block">
-              {w}
+              {w}{" "}
             </span>
           ))}
         </p>
@@ -103,14 +89,35 @@ export default function Learning() {
             <div key={p.t} className={i === 1 ? "md:mt-24" : i === 2 ? "md:mt-10" : ""}>
               <div
                 data-plate
-                className="relative aspect-[4/5] overflow-hidden bg-soft"
-                role="img"
-                aria-label={p.t}
+                className="group relative aspect-[4/5] overflow-hidden rounded-2xl border border-deep/10 bg-soft shadow-sm"
               >
                 <div data-inner className="absolute inset-[-10%]">
-                  <PlateArt i={i} />
+                  <img
+                    src={p.img}
+                    alt={p.alt}
+                    width={960}
+                    height={1200}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover object-center saturate-[0.86] contrast-[1.06] brightness-[0.97] transition-transform duration-700 [transition-timing-function:var(--ease-out)] group-hover:scale-105"
+                  />
+                  {/* Cohesive teal editorial grade across all 3 classroom photos */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 bg-brand/14 mix-blend-multiply"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-obsidian/70 via-transparent to-obsidian/20"
+                  />
                 </div>
-                <span className="eyebrow absolute top-5 left-5 text-deep">0{i + 1}</span>
+                <span className="eyebrow absolute top-5 left-5 rounded-full bg-paper/90 px-3 py-1 text-deep backdrop-blur-md">
+                  0{i + 1}
+                </span>
+                <span className="eyebrow absolute right-5 bottom-5 left-5 flex items-center justify-between rounded-xl border border-white/15 bg-ink/65 px-3.5 py-2 text-[11px] text-white backdrop-blur-md">
+                  <span>{p.badge}</span>
+                  <span className="size-2 rounded-full bg-light" />
+                </span>
               </div>
               <h3 className="display mt-6 text-4xl text-deep md:text-[2.6rem]">{p.t}</h3>
               <p className="mt-3 max-w-sm leading-relaxed">{p.d}</p>

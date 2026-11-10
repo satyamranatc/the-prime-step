@@ -78,7 +78,7 @@ export default function CourseDetailTemplate({ course }: { course: CoursePageDat
       <section className="mx-auto max-w-[1480px] px-6 pt-8 pb-20 md:px-10 md:pt-12 md:pb-28">
         <div className="max-w-4xl">
           <p className="eyebrow text-brand">{course.eyebrow}</p>
-          <h1 className="display mt-4 text-[11.5vw] text-deep sm:text-[7.5vw] md:text-[5.4vw] leading-[0.95]">
+          <h1 className="display mt-4 text-[11.5vw] text-brand sm:text-[7.5vw] md:text-[5.4vw] leading-[0.95]">
             {course.heroTitle}
           </h1>
           <p className="mt-6 max-w-2xl text-lg md:text-xl leading-relaxed text-deep/85">
@@ -172,7 +172,7 @@ export default function CourseDetailTemplate({ course }: { course: CoursePageDat
           <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl">
               <h2 className="display text-4xl md:text-6xl text-deep">
-                What you will learn, module by module.
+                What you will learn, <span className="italic text-brand">module by module.</span>
               </h2>
               <p className="mt-4 text-base md:text-lg text-deep/80">
                 Every module concludes with a working project reviewed by senior faculty in our Indore computer labs.
@@ -267,7 +267,7 @@ export default function CourseDetailTemplate({ course }: { course: CoursePageDat
           <Chapter n="04" title="Projects & Career Outcomes" />
           <div className="mt-6 max-w-2xl">
             <h2 className="display text-4xl md:text-6xl text-deep">
-              Build projects employers can actually test.
+              Build projects employers <span className="italic text-brand">actually test.</span>
             </h2>
             <p className="mt-4 text-base md:text-lg text-deep/80">
               Instead of toy examples, you build complete systems that prove your engineering capability in technical interviews.
