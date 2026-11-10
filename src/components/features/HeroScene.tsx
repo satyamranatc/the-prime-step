@@ -425,354 +425,470 @@ function AtomicTechOrbits() {
 /**
  * Ultra-High-Performance Proximity Electric Arc & Spark Discharge
  *
- * Performance Architecture:
+ * Designed for High-Contrast Visibility on Light/White Backgrounds:
+ * - Uses Normal Blending so rich TPS Teal (#008080) and Deep Obsidian Teal (#003838)
+ *   never wash out against the white background.
+ * - Tri-layer braided plasma bolt:
+ *   1. Deep Obsidian Teal (#003838) edge/halo for maximum visual contrast on white
+ *   2. Official TPS Brand Teal (#008080) main electric arc
+ *   3. Vivid Electric Cyan (#00E5D0) high-voltage inner core
+ *   4. Branching arcs in saturated teal (#0C8E8B)
+ *   5. Concentric multi-tier spark points (#003838 + #008080 + #00FFE0) locked to cursor
+ * - Computed in WORLD space: 100% exact alignment directly under the mouse cursor.
  * - ZERO runtime memory allocation: pre-allocated static Float32Array buffers.
- * - Dynamic sleep: 100% idle when cursor is outside proximity radius or offscreen (0 draw calls, 0 GPU work).
- * - Additive electric blending in TPS Brand Electric Teal (#00FFE0 / #1E9C99).
- * - Real-time specular contact flash casting electric light onto the 3D monument chamfers.
+ * - Dynamic sleep: 100% idle when cursor is outside proximity radius or offscreen (0 draw calls).
  */
-const BOLT_SEGMENTS = 14;
+const BOLT_SEGMENTS = 16;
 const BRANCH_SEGMENTS = 7;
-// Main bolt (14 segs * 2 pts * 3 coords = 84) + 2 branches (2 * 7 segs * 2 pts * 3 coords = 84) = 168 floats
-const TOTAL_LINE_FLOATS = (BOLT_SEGMENTS + BRANCH_SEGMENTS * 2) * 6;
-const SPARK_COUNT = 10;
+const BOLT_FLOATS = BOLT_SEGMENTS * 6; // 96
+const BRANCH_FLOATS = BRANCH_SEGMENTS * 2 * 6; // 84
+const SPARK_COUNT = 12;
 
-function ProximityLightning() {
-  const lineMeshRef = useRef<THREE.LineSegments>(null);
-  const glowLineRef = useRef<THREE.LineSegments>(null);
-  const sparkPointsRef = useRef<THREE.Points>(null);
+// Monument emission anchor points in monument local coordinates
+const LOCAL_ANCHORS = [
+  new THREE.Vector3(-0.15, 0.72, 0.1),  // Canopy top edge
+  new THREE.Vector3(0.35, 0.42, 0.05),  // Right shoulder
+  new THREE.Vector3(-0.62, 0.85, 0.15), // Flap corner
+  new THREE.Vector3(-0.32, -0.45, 0.1), // Central pillar flank
+  new THREE.Vector3(-0.18, -1.35, 0.05) // Lower pillar tip
+];
+
+function ProximityLightning({
+  monumentRef,
+}: {
+  monumentRef: React.RefObject<THREE.Group | null>;
+}) {
+  const haloLineRef = useRef<THREE.LineSegments>(null);
+  const mainLineRef = useRef<THREE.LineSegments>(null);
+  const coreLineRef = useRef<THREE.LineSegments>(null);
+  const branchLineRef = useRef<THREE.LineSegments>(null);
+
+  const outerSparksRef = useRef<THREE.Points>(null);
+  const midSparksRef = useRef<THREE.Points>(null);
+  const innerSparksRef = useRef<THREE.Points>(null);
+
   const lightRef = useRef<THREE.PointLight>(null);
 
   // Pre-allocated typed arrays (0 GC garbage during animation)
-  const linePositions = useMemo(() => new Float32Array(TOTAL_LINE_FLOATS), []);
-  const glowPositions = useMemo(() => new Float32Array(TOTAL_LINE_FLOATS), []);
-  const sparkPositions = useMemo(() => new Float32Array(SPARK_COUNT * 3), []);
+  const haloPositions = useMemo(() => new Float32Array(BOLT_FLOATS), []);
+  const mainPositions = useMemo(() => new Float32Array(BOLT_FLOATS), []);
+  const corePositions = useMemo(() => new Float32Array(BOLT_FLOATS), []);
+  const branchPositions = useMemo(() => new Float32Array(BRANCH_FLOATS), []);
 
-  // Pre-allocated reusable vectors
+  const outerSparkPositions = useMemo(() => new Float32Array(SPARK_COUNT * 3), []);
+  const midSparkPositions = useMemo(() => new Float32Array(SPARK_COUNT * 3), []);
+  const innerSparkPositions = useMemo(() => new Float32Array(SPARK_COUNT * 3), []);
+
+  // Pre-allocated reusable vectors and point buffer for bolt vertices
   const sourceVec = useMemo(() => new THREE.Vector3(), []);
   const targetVec = useMemo(() => new THREE.Vector3(), []);
   const dirVec = useMemo(() => new THREE.Vector3(), []);
   const perpVec = useMemo(() => new THREE.Vector3(), []);
+  const logoCenterWorld = useMemo(() => new THREE.Vector3(), []);
+  const unprojectVec = useMemo(() => new THREE.Vector3(), []);
 
-  // Monument emission anchor points in local coordinates
-  const ANCHORS = useMemo(
-    () => [
-      new THREE.Vector3(-0.15, 0.72, 0.1),  // Canopy top edge
-      new THREE.Vector3(0.35, 0.42, 0.05),  // Right shoulder
-      new THREE.Vector3(-0.62, 0.85, 0.15), // Flap corner
-      new THREE.Vector3(-0.32, -0.45, 0.1), // Central pillar flank
-      new THREE.Vector3(-0.18, -1.35, 0.05) // Lower pillar tip
-    ],
+  const boltPts = useMemo(
+    () => Array.from({ length: BOLT_SEGMENTS + 1 }, () => new THREE.Vector3()),
     []
   );
 
   useFrame((state) => {
-    const lineMesh = lineMeshRef.current;
-    const glowLine = glowLineRef.current;
-    const sparks = sparkPointsRef.current;
+    const group = monumentRef.current;
+    const haloLine = haloLineRef.current;
+    const mainLine = mainLineRef.current;
+    const coreLine = coreLineRef.current;
+    const branchLine = branchLineRef.current;
+
+    const outerSparks = outerSparksRef.current;
+    const midSparks = midSparksRef.current;
+    const innerSparks = innerSparksRef.current;
+
     const light = lightRef.current;
 
-    if (!lineMesh || !glowLine || !sparks || !light) return;
+    if (
+      !group ||
+      !haloLine ||
+      !mainLine ||
+      !coreLine ||
+      !branchLine ||
+      !outerSparks ||
+      !midSparks ||
+      !innerSparks ||
+      !light
+    ) {
+      return;
+    }
+
+    const setVisibility = (visible: boolean) => {
+      haloLine.visible = visible;
+      mainLine.visible = visible;
+      coreLine.visible = visible;
+      branchLine.visible = visible;
+      outerSparks.visible = visible;
+      midSparks.visible = visible;
+      innerSparks.visible = visible;
+      if (!visible) light.intensity = 0;
+    };
 
     // Check if cursor is active and on screen
     if (!globalMouse.hasMoved) {
-      if (lineMesh.visible) {
-        lineMesh.visible = false;
-        glowLine.visible = false;
-        sparks.visible = false;
-        light.intensity = 0;
-      }
+      if (haloLine.visible) setVisibility(false);
       return;
     }
 
-    // Convert normalized device pointer (-1 to +1) to 3D Cartesian coordinates at z = 0
-    const cursorX = (state.pointer.x * state.viewport.width) * 0.5;
-    const cursorY = (state.pointer.y * state.viewport.height) * 0.5;
+    // 1. Calculate cursor world position at depth z = 0.25 (flush with logo face)
+    unprojectVec.set(state.pointer.x, state.pointer.y, 0.5);
+    unprojectVec.unproject(state.camera);
+    dirVec.subVectors(unprojectVec, state.camera.position).normalize();
+    const planeDistance = (0.25 - state.camera.position.z) / dirVec.z;
+    targetVec.copy(state.camera.position).addScaledVector(dirVec, planeDistance);
 
-    // Proximity distance to logo center (0, 0.08)
-    const dx = cursorX;
-    const dy = cursorY - 0.08;
-    const dist = Math.sqrt(dx * dx + dy * dy);
+    // 2. Logo center in world space
+    logoCenterWorld.set(0, 0.08, 0).applyMatrix4(group.matrixWorld);
+    const dist = logoCenterWorld.distanceTo(targetVec);
 
-    // Activates when cursor enters proximity zone (dist < 4.2 units)
-    const activationRadius = 4.2;
+    // 3. Proximity check (activates when cursor is within 4.8 world units)
+    const activationRadius = 4.8;
     if (dist > activationRadius) {
-      if (lineMesh.visible) {
-        lineMesh.visible = false;
-        glowLine.visible = false;
-        sparks.visible = false;
-        light.intensity = 0;
-      }
+      if (haloLine.visible) setVisibility(false);
       return;
     }
 
-    // Proximity intensity curve (0 at boundary, up to 1.0 close to logo)
-    const proximity = Math.pow(Math.max(0, 1 - dist / activationRadius), 1.35);
+    // Proximity curve (smooth ease-in as cursor nears the logo)
+    const proximity = Math.pow(Math.max(0, 1 - dist / activationRadius), 1.15);
 
-    // Crackle flicker: lightning pulses rapidly like real electrical discharge
-    const crackle = Math.random() > 0.16 ? 0.75 + Math.random() * 0.55 : 0.2;
+    // Dynamic electrical crackle (keeps it persistently bright while vibrating)
+    const crackle = Math.random() > 0.08 ? 0.82 + Math.random() * 0.18 : 0.45;
     const power = proximity * crackle;
 
-    if (power < 0.05) {
-      lineMesh.visible = false;
-      glowLine.visible = false;
-      sparks.visible = false;
-      light.intensity = 0;
+    if (power < 0.04) {
+      if (haloLine.visible) setVisibility(false);
       return;
     }
 
-    lineMesh.visible = true;
-    glowLine.visible = true;
-    sparks.visible = true;
+    setVisibility(true);
 
-    // 1. Pick the monument emission anchor closest to cursor
-    let bestAnchor = ANCHORS[0];
+    // 4. Find the closest emission anchor on the 3D logo in WORLD space
     let bestDistSq = Infinity;
-    for (let i = 0; i < ANCHORS.length; i++) {
-      const a = ANCHORS[i];
-      const dsq = (cursorX - a.x) * (cursorX - a.x) + (cursorY - a.y) * (cursorY - a.y);
+    for (let i = 0; i < LOCAL_ANCHORS.length; i++) {
+      unprojectVec.copy(LOCAL_ANCHORS[i]).applyMatrix4(group.matrixWorld);
+      const dsq = unprojectVec.distanceToSquared(targetVec);
       if (dsq < bestDistSq) {
         bestDistSq = dsq;
-        bestAnchor = a;
+        sourceVec.copy(unprojectVec);
       }
     }
 
-    sourceVec.copy(bestAnchor);
-    targetVec.set(cursorX, cursorY, 0.18);
-
+    // Direction and perpendicular vector from source to target
     dirVec.subVectors(targetVec, sourceVec);
     const boltLength = dirVec.length();
-    if (boltLength < 0.01) return;
+    if (boltLength < 0.08) return;
 
     dirVec.normalize();
     perpVec.set(-dirVec.y, dirVec.x, 0).normalize();
 
-    let offset = 0;
+    // 5. Generate Primary Jagged Arc Vertices (pin endpoints, max jitter in middle)
+    boltPts[0].copy(sourceVec);
+    boltPts[BOLT_SEGMENTS].copy(targetVec);
 
-    // 2. Synthesize Primary Jagged Electric Arc (source -> target)
-    let prevX = sourceVec.x;
-    let prevY = sourceVec.y;
-    let prevZ = sourceVec.z;
+    const jitterScale = Math.min(0.65, boltLength * 0.24) * (0.6 + power * 0.4);
 
-    let branch1OriginX = prevX;
-    let branch1OriginY = prevY;
-    let branch1OriginZ = prevZ;
-
-    let branch2OriginX = prevX;
-    let branch2OriginY = prevY;
-    let branch2OriginZ = prevZ;
-
-    const jitterScale = Math.min(0.7, boltLength * 0.28) * power;
-
-    for (let i = 1; i <= BOLT_SEGMENTS; i++) {
+    for (let i = 1; i < BOLT_SEGMENTS; i++) {
       const frac = i / BOLT_SEGMENTS;
-      // Arc envelope: pin at endpoints, maximum jagged variance in middle
-      const env = Math.sin(frac * Math.PI);
+      const env = Math.sin(frac * Math.PI); // Envelope: 0 at ends, 1 in middle
+      const jMag = (Math.random() - 0.5) * jitterScale * env;
+      const zMag = (Math.random() - 0.5) * jitterScale * 0.35 * env;
 
-      let curX = sourceVec.x + (targetVec.x - sourceVec.x) * frac;
-      let curY = sourceVec.y + (targetVec.y - sourceVec.y) * frac;
-      let curZ = sourceVec.z + (targetVec.z - sourceVec.z) * frac;
-
-      if (i < BOLT_SEGMENTS) {
-        const jMag = (Math.random() - 0.5) * jitterScale * env;
-        const zMag = (Math.random() - 0.5) * jitterScale * 0.45 * env;
-        curX += perpVec.x * jMag;
-        curY += perpVec.y * jMag;
-        curZ += zMag;
-      }
-
-      linePositions[offset] = prevX;
-      linePositions[offset + 1] = prevY;
-      linePositions[offset + 2] = prevZ;
-      linePositions[offset + 3] = curX;
-      linePositions[offset + 4] = curY;
-      linePositions[offset + 5] = curZ;
-
-      glowPositions[offset] = prevX;
-      glowPositions[offset + 1] = prevY;
-      glowPositions[offset + 2] = prevZ;
-      glowPositions[offset + 3] = curX;
-      glowPositions[offset + 4] = curY;
-      glowPositions[offset + 5] = curZ;
-
-      offset += 6;
-
-      if (i === 5) {
-        branch1OriginX = curX;
-        branch1OriginY = curY;
-        branch1OriginZ = curZ;
-      }
-      if (i === 9) {
-        branch2OriginX = curX;
-        branch2OriginY = curY;
-        branch2OriginZ = curZ;
-      }
-
-      prevX = curX;
-      prevY = curY;
-      prevZ = curZ;
+      boltPts[i].set(
+        sourceVec.x + (targetVec.x - sourceVec.x) * frac + perpVec.x * jMag,
+        sourceVec.y + (targetVec.y - sourceVec.y) * frac + perpVec.y * jMag,
+        sourceVec.z + (targetVec.z - sourceVec.z) * frac + zMag
+      );
     }
 
-    // 3. Synthesize Branch Fork 1
-    let b1X = branch1OriginX;
-    let b1Y = branch1OriginY;
-    let b1Z = branch1OriginZ;
-    const b1DirX = (dirVec.x + perpVec.x * 0.85) * 0.65;
-    const b1DirY = (dirVec.y + perpVec.y * 0.85) * 0.65;
+    // 6. Fill Main Bolt, Dark Contrast Halo, and Inner Cyan Filament
+    for (let i = 0; i < BOLT_SEGMENTS; i++) {
+      const p1 = boltPts[i];
+      const p2 = boltPts[i + 1];
+      const idx = i * 6;
+
+      // Main Brand Teal Arc
+      mainPositions[idx] = p1.x;
+      mainPositions[idx + 1] = p1.y;
+      mainPositions[idx + 2] = p1.z;
+      mainPositions[idx + 3] = p2.x;
+      mainPositions[idx + 4] = p2.y;
+      mainPositions[idx + 5] = p2.z;
+
+      // Dark Obsidian Teal Shadow / Contrast Edge (offset for visible width on white)
+      const haloOffset = (i % 2 === 0 ? 0.024 : -0.024);
+      haloPositions[idx] = p1.x + perpVec.x * haloOffset;
+      haloPositions[idx + 1] = p1.y + perpVec.y * haloOffset;
+      haloPositions[idx + 2] = p1.z - 0.005;
+      haloPositions[idx + 3] = p2.x + perpVec.x * haloOffset;
+      haloPositions[idx + 4] = p2.y + perpVec.y * haloOffset;
+      haloPositions[idx + 5] = p2.z - 0.005;
+
+      // Vivid Electric Cyan Core Filament (micro jitter)
+      const coreOffset = (Math.random() - 0.5) * 0.012;
+      corePositions[idx] = p1.x + perpVec.x * coreOffset;
+      corePositions[idx + 1] = p1.y + perpVec.y * coreOffset;
+      corePositions[idx + 2] = p1.z + 0.008;
+      corePositions[idx + 3] = p2.x + perpVec.x * coreOffset;
+      corePositions[idx + 4] = p2.y + perpVec.y * coreOffset;
+      corePositions[idx + 5] = p2.z + 0.008;
+    }
+
+    // 7. Generate Branching Sub-Arcs (Branch 1 from 35% mark, Branch 2 from 65% mark)
+    let bOffset = 0;
+
+    // Branch 1
+    const b1Start = boltPts[Math.floor(BOLT_SEGMENTS * 0.35)];
+    let curB1X = b1Start.x;
+    let curB1Y = b1Start.y;
+    let curB1Z = b1Start.z;
+    const b1DirX = (dirVec.x + perpVec.x * 0.9) * 0.6;
+    const b1DirY = (dirVec.y + perpVec.y * 0.9) * 0.6;
 
     for (let i = 1; i <= BRANCH_SEGMENTS; i++) {
-      const frac = i / BRANCH_SEGMENTS;
-      const stepDist = (boltLength * 0.35) / BRANCH_SEGMENTS;
-      const jMag = (Math.random() - 0.5) * jitterScale * 0.7;
+      const stepDist = (boltLength * 0.32) / BRANCH_SEGMENTS;
+      const jMag = (Math.random() - 0.5) * jitterScale * 0.6;
 
-      const nextX = b1X + b1DirX * stepDist + perpVec.x * jMag;
-      const nextY = b1Y + b1DirY * stepDist + perpVec.y * jMag;
-      const nextZ = b1Z + (Math.random() - 0.5) * jitterScale * 0.35;
+      const nextX = curB1X + b1DirX * stepDist + perpVec.x * jMag;
+      const nextY = curB1Y + b1DirY * stepDist + perpVec.y * jMag;
+      const nextZ = curB1Z + (Math.random() - 0.5) * 0.08;
 
-      linePositions[offset] = b1X;
-      linePositions[offset + 1] = b1Y;
-      linePositions[offset + 2] = b1Z;
-      linePositions[offset + 3] = nextX;
-      linePositions[offset + 4] = nextY;
-      linePositions[offset + 5] = nextZ;
+      branchPositions[bOffset] = curB1X;
+      branchPositions[bOffset + 1] = curB1Y;
+      branchPositions[bOffset + 2] = curB1Z;
+      branchPositions[bOffset + 3] = nextX;
+      branchPositions[bOffset + 4] = nextY;
+      branchPositions[bOffset + 5] = nextZ;
 
-      glowPositions[offset] = b1X;
-      glowPositions[offset + 1] = b1Y;
-      glowPositions[offset + 2] = b1Z;
-      glowPositions[offset + 3] = nextX;
-      glowPositions[offset + 4] = nextY;
-      glowPositions[offset + 5] = nextZ;
-
-      offset += 6;
-      b1X = nextX;
-      b1Y = nextY;
-      b1Z = nextZ;
+      bOffset += 6;
+      curB1X = nextX;
+      curB1Y = nextY;
+      curB1Z = nextZ;
     }
 
-    // 4. Synthesize Branch Fork 2 (counter-tilted)
-    let b2X = branch2OriginX;
-    let b2Y = branch2OriginY;
-    let b2Z = branch2OriginZ;
+    // Branch 2
+    const b2Start = boltPts[Math.floor(BOLT_SEGMENTS * 0.65)];
+    let curB2X = b2Start.x;
+    let curB2Y = b2Start.y;
+    let curB2Z = b2Start.z;
     const b2DirX = (dirVec.x - perpVec.x * 0.95) * 0.55;
     const b2DirY = (dirVec.y - perpVec.y * 0.95) * 0.55;
 
     for (let i = 1; i <= BRANCH_SEGMENTS; i++) {
-      const frac = i / BRANCH_SEGMENTS;
-      const stepDist = (boltLength * 0.3) / BRANCH_SEGMENTS;
-      const jMag = (Math.random() - 0.5) * jitterScale * 0.7;
+      const stepDist = (boltLength * 0.28) / BRANCH_SEGMENTS;
+      const jMag = (Math.random() - 0.5) * jitterScale * 0.6;
 
-      const nextX = b2X + b2DirX * stepDist - perpVec.x * jMag;
-      const nextY = b2Y + b2DirY * stepDist - perpVec.y * jMag;
-      const nextZ = b2Z + (Math.random() - 0.5) * jitterScale * 0.35;
+      const nextX = curB2X + b2DirX * stepDist - perpVec.x * jMag;
+      const nextY = curB2Y + b2DirY * stepDist - perpVec.y * jMag;
+      const nextZ = curB2Z + (Math.random() - 0.5) * 0.08;
 
-      linePositions[offset] = b2X;
-      linePositions[offset + 1] = b2Y;
-      linePositions[offset + 2] = b2Z;
-      linePositions[offset + 3] = nextX;
-      linePositions[offset + 4] = nextY;
-      linePositions[offset + 5] = nextZ;
+      branchPositions[bOffset] = curB2X;
+      branchPositions[bOffset + 1] = curB2Y;
+      branchPositions[bOffset + 2] = curB2Z;
+      branchPositions[bOffset + 3] = nextX;
+      branchPositions[bOffset + 4] = nextY;
+      branchPositions[bOffset + 5] = nextZ;
 
-      glowPositions[offset] = b2X;
-      glowPositions[offset + 1] = b2Y;
-      glowPositions[offset + 2] = b2Z;
-      glowPositions[offset + 3] = nextX;
-      glowPositions[offset + 4] = nextY;
-      glowPositions[offset + 5] = nextZ;
-
-      offset += 6;
-      b2X = nextX;
-      b2Y = nextY;
-      b2Z = nextZ;
+      bOffset += 6;
+      curB2X = nextX;
+      curB2Y = nextY;
+      curB2Z = nextZ;
     }
 
-    // 5. Electric sparks around mouse cursor
+    // 8. Contact Sparks Buzzing Around Cursor
     for (let i = 0; i < SPARK_COUNT; i++) {
-      const angle = (i / SPARK_COUNT) * Math.PI * 2 + Math.random() * 0.4;
-      const radius = 0.08 + Math.random() * 0.32 * power;
-      sparkPositions[i * 3] = cursorX + Math.cos(angle) * radius;
-      sparkPositions[i * 3 + 1] = cursorY + Math.sin(angle) * radius;
-      sparkPositions[i * 3 + 2] = 0.18 + (Math.random() - 0.5) * 0.15;
+      const angle = (i / SPARK_COUNT) * Math.PI * 2 + Math.random() * 0.5;
+      const r = 0.06 + Math.random() * 0.28 * power;
+      const sx = targetVec.x + Math.cos(angle) * r;
+      const sy = targetVec.y + Math.sin(angle) * r;
+      const sz = targetVec.z + (Math.random() - 0.5) * 0.12;
+
+      const idx = i * 3;
+      outerSparkPositions[idx] = sx;
+      outerSparkPositions[idx + 1] = sy;
+      outerSparkPositions[idx + 2] = sz;
+
+      midSparkPositions[idx] = sx;
+      midSparkPositions[idx + 1] = sy;
+      midSparkPositions[idx + 2] = sz;
+
+      innerSparkPositions[idx] = sx;
+      innerSparkPositions[idx + 1] = sy;
+      innerSparkPositions[idx + 2] = sz;
     }
 
-    // Notify GPU that pre-allocated buffer data has updated
-    const lineGeo = lineMesh.geometry;
-    lineGeo.attributes.position.needsUpdate = true;
+    // 9. Update GPU Buffers
+    haloLine.geometry.attributes.position.needsUpdate = true;
+    mainLine.geometry.attributes.position.needsUpdate = true;
+    coreLine.geometry.attributes.position.needsUpdate = true;
+    branchLine.geometry.attributes.position.needsUpdate = true;
 
-    const glowGeo = glowLine.geometry;
-    glowGeo.attributes.position.needsUpdate = true;
+    outerSparks.geometry.attributes.position.needsUpdate = true;
+    midSparks.geometry.attributes.position.needsUpdate = true;
+    innerSparks.geometry.attributes.position.needsUpdate = true;
 
-    const sparkGeo = sparks.geometry;
-    sparkGeo.attributes.position.needsUpdate = true;
+    // 10. High-Visibility Opacities (Normal Blending with rich saturation)
+    (haloLine.material as THREE.LineBasicMaterial).opacity = Math.min(0.92, 0.5 + power * 0.45);
+    (mainLine.material as THREE.LineBasicMaterial).opacity = Math.min(1.0, 0.65 + power * 0.35);
+    (coreLine.material as THREE.LineBasicMaterial).opacity = Math.min(0.95, 0.55 + power * 0.4);
+    (branchLine.material as THREE.LineBasicMaterial).opacity = Math.min(0.88, 0.4 + power * 0.48);
 
-    // Dynamically modulate brightness & opacity
-    (lineMesh.material as THREE.LineBasicMaterial).opacity = Math.min(1.0, power * 1.1);
-    (glowLine.material as THREE.LineBasicMaterial).opacity = Math.min(0.85, power * 0.65);
-    (sparks.material as THREE.PointsMaterial).opacity = Math.min(1.0, power * 1.2);
+    (outerSparks.material as THREE.PointsMaterial).opacity = Math.min(0.9, power * 1.1);
+    (midSparks.material as THREE.PointsMaterial).opacity = Math.min(1.0, power * 1.2);
+    (innerSparks.material as THREE.PointsMaterial).opacity = Math.min(1.0, power * 1.25);
 
-    // Cast electric cyan contact light onto monument surfaces
-    light.position.set(cursorX * 0.65 + sourceVec.x * 0.35, cursorY * 0.65 + sourceVec.y * 0.35, 0.7);
-    light.intensity = power * 4.2;
+    // 11. Point Light illuminating monument chamfers
+    light.position.set(
+      targetVec.x * 0.7 + sourceVec.x * 0.3,
+      targetVec.y * 0.7 + sourceVec.y * 0.3,
+      0.8
+    );
+    light.intensity = power * 7.5;
   });
 
   return (
     <group>
-      {/* Dynamic Specular Electric Point Light */}
-      <pointLight ref={lightRef} color="#00FFE0" distance={6.0} decay={2.2} intensity={0} />
+      {/* Specular Electric Point Light */}
+      <pointLight ref={lightRef} color="#00FFE0" distance={7.0} decay={2.0} intensity={0} />
 
-      {/* Outer Soft Teal Electric Ion Glow */}
-      <lineSegments ref={glowLineRef} renderOrder={8}>
+      {/* Layer 1: Deep Obsidian Teal (#003838) Shadow / Contrast Outline */}
+      <lineSegments ref={haloLineRef} renderOrder={40}>
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
-            args={[glowPositions, 3]}
-            count={TOTAL_LINE_FLOATS / 3}
+            args={[haloPositions, 3]}
+            count={BOLT_FLOATS / 3}
           />
         </bufferGeometry>
         <lineBasicMaterial
-          color="#1E9C99"
+          color="#003838"
           transparent
           opacity={0}
-          blending={THREE.AdditiveBlending}
           depthWrite={false}
+          blending={THREE.NormalBlending}
           linewidth={3}
         />
       </lineSegments>
 
-      {/* Core Intense Electric Cyan / White Lightning Arc */}
-      <lineSegments ref={lineMeshRef} renderOrder={9}>
+      {/* Layer 2: Official TPS Brand Teal (#008080) Main Saturated Plasma Arc */}
+      <lineSegments ref={mainLineRef} renderOrder={41}>
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
-            args={[linePositions, 3]}
-            count={TOTAL_LINE_FLOATS / 3}
+            args={[mainPositions, 3]}
+            count={BOLT_FLOATS / 3}
           />
         </bufferGeometry>
         <lineBasicMaterial
-          color="#64FFF2"
+          color="#008080"
           transparent
           opacity={0}
-          blending={THREE.AdditiveBlending}
           depthWrite={false}
+          blending={THREE.NormalBlending}
           linewidth={2}
         />
       </lineSegments>
 
-      {/* Electric Sparks Around Mouse Cursor */}
-      <points ref={sparkPointsRef} renderOrder={10}>
+      {/* Layer 3: Vivid Electric Cyan (#00E5D0) High-Voltage Inner Core */}
+      <lineSegments ref={coreLineRef} renderOrder={42}>
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
-            args={[sparkPositions, 3]}
+            args={[corePositions, 3]}
+            count={BOLT_FLOATS / 3}
+          />
+        </bufferGeometry>
+        <lineBasicMaterial
+          color="#00E5D0"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.NormalBlending}
+          linewidth={1}
+        />
+      </lineSegments>
+
+      {/* Layer 4: Branching Arcs in Saturated Vibrant Teal (#0C8E8B) */}
+      <lineSegments ref={branchLineRef} renderOrder={43}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[branchPositions, 3]}
+            count={BRANCH_FLOATS / 3}
+          />
+        </bufferGeometry>
+        <lineBasicMaterial
+          color="#0C8E8B"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.NormalBlending}
+          linewidth={2}
+        />
+      </lineSegments>
+
+      {/* Layer 5: High-Contrast Multi-Tier Sparks Around Cursor */}
+      {/* Outer Contrast Teal Rim */}
+      <points ref={outerSparksRef} renderOrder={44}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[outerSparkPositions, 3]}
             count={SPARK_COUNT}
           />
         </bufferGeometry>
         <pointsMaterial
-          color="#A8FFF9"
-          size={0.09}
+          color="#003838"
+          size={0.24}
           transparent
           opacity={0}
-          blending={THREE.AdditiveBlending}
           depthWrite={false}
+          blending={THREE.NormalBlending}
+          sizeAttenuation
+        />
+      </points>
+
+      {/* Mid Brand Teal Spark Disc */}
+      <points ref={midSparksRef} renderOrder={45}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[midSparkPositions, 3]}
+            count={SPARK_COUNT}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          color="#008080"
+          size={0.16}
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.NormalBlending}
+          sizeAttenuation
+        />
+      </points>
+
+      {/* Inner Electric Cyan Spark Core */}
+      <points ref={innerSparksRef} renderOrder={46}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[innerSparkPositions, 3]}
+            count={SPARK_COUNT}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          color="#00FFE0"
+          size={0.08}
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.NormalBlending}
           sizeAttenuation
         />
       </points>
@@ -793,8 +909,13 @@ function ProximityLightning() {
  * Silky-Smooth Organic Perspective Follow:
  * - Damped, spring-weighted tilt and camera parallax that gently tracks cursor movement.
  */
-function OfficialLogoMonument() {
-  const groupRef = useRef<THREE.Group>(null);
+function OfficialLogoMonument({
+  monumentRef,
+}: {
+  monumentRef?: React.RefObject<THREE.Group | null>;
+}) {
+  const innerGroupRef = useRef<THREE.Group>(null);
+  const groupRef = monumentRef || innerGroupRef;
   const canopyRef = useRef<THREE.Group>(null);
   const pillarRef = useRef<THREE.Group>(null);
   const flapRef = useRef<THREE.Group>(null);
@@ -1034,11 +1155,6 @@ function OfficialLogoMonument() {
             ======================================================== */}
         <AtomicTechOrbits />
 
-        {/* ========================================================
-            PART 06: PROXIMITY LIGHTNING & CURSOR SPARK DISCHARGE
-            ======================================================== */}
-        <ProximityLightning />
-
         {/* SOFT STUDIO GROUND CONTACT SHADOW */}
         <group position={[0, -2.28, 0]}>
           <ContactShadows
@@ -1056,6 +1172,8 @@ function OfficialLogoMonument() {
 }
 
 export default function HeroScene({ active }: { active: boolean }) {
+  const monumentRef = useRef<THREE.Group>(null);
+
   return (
     <Canvas
       dpr={[1, 2]}
@@ -1083,8 +1201,11 @@ export default function HeroScene({ active }: { active: boolean }) {
 
         {/* Float subtly in studio atmosphere */}
         <Float speed={1.3} rotationIntensity={0.06} floatIntensity={0.1}>
-          <OfficialLogoMonument />
+          <OfficialLogoMonument monumentRef={monumentRef} />
         </Float>
+
+        {/* High-Contrast Proximity Lightning Arc (renders in true TPS Teal & Cyan on white) */}
+        <ProximityLightning monumentRef={monumentRef} />
       </Suspense>
     </Canvas>
   );
