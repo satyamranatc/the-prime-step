@@ -160,7 +160,7 @@ export default function Nav() {
       >
         <nav
           aria-label="Primary"
-          className="mx-auto flex h-20 max-w-[1520px] items-center justify-between px-6 md:px-12"
+          className="mx-auto flex h-20 max-w-[1520px] items-center justify-between px-4 sm:px-6 md:px-12"
         >
           <Link
             href="/"
@@ -316,7 +316,7 @@ export default function Nav() {
         id="menu"
         aria-hidden={!open}
         inert={!open}
-        className="fixed inset-0 z-[110] flex flex-col justify-between overflow-y-auto bg-deep px-6 pt-28 pb-10 transition-[clip-path] duration-700 [transition-timing-function:var(--ease-out)] lg:hidden"
+        className="fixed inset-0 z-[110] flex flex-col justify-between overflow-y-auto bg-deep px-5 sm:px-6 pt-[max(6.5rem,calc(env(safe-area-inset-top)+4rem))] pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+1.5rem))] transition-[clip-path] duration-700 [transition-timing-function:var(--ease-out)] lg:hidden"
         style={{ clipPath: open ? "inset(0 0 0 0)" : "inset(0 0 100% 0)" }}
       >
         <div className="space-y-6">
@@ -327,7 +327,7 @@ export default function Nav() {
                   href={l.href}
                   onClick={() => setOpen(false)}
                   style={{ transitionDelay: open ? `${200 + i * 50}ms` : "0ms" }}
-                  className={`display block text-[11vw] leading-[1.02] text-paper transition-transform duration-700 [transition-timing-function:var(--ease-out)] sm:text-5xl ${
+                  className={`display block text-[clamp(1.75rem,8.5vw,3rem)] leading-[1.08] text-paper transition-transform duration-700 [transition-timing-function:var(--ease-out)] break-words sm:text-5xl ${
                     open ? "translate-y-0" : "translate-y-full"
                   }`}
                 >
@@ -345,7 +345,7 @@ export default function Nav() {
                   key={c.href}
                   href={c.href}
                   onClick={() => setOpen(false)}
-                  className="rounded-full border border-pale/30 bg-paper/10 px-3.5 py-1.5 text-xs font-medium text-paper transition-colors hover:bg-brand"
+                  className="rounded-full border border-pale/30 bg-paper/10 px-3 py-1.5 text-xs font-medium text-paper transition-colors hover:bg-brand break-words"
                 >
                   {c.title}
                 </Link>

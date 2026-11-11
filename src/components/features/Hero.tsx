@@ -23,15 +23,15 @@ function webglOK() {
 /** Clean architectural monument poster for mobile & pre-idle state */
 function StaticMonumentPoster() {
   return (
-    <div className="relative flex h-full w-full items-center justify-center p-6">
-      <div className="pointer-events-none absolute size-64 rounded-full bg-brand/10 blur-3xl" />
+    <div className="relative flex h-full w-full items-center justify-center p-4 sm:p-6">
+      <div className="pointer-events-none absolute size-48 sm:size-64 rounded-full bg-brand/10 blur-3xl" />
       <div className="relative flex flex-col items-center">
-        <Logo mark height={220} className="drop-shadow-[0_18px_36px_rgba(15,82,80,0.14)]" />
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <Logo mark height={175} className="drop-shadow-[0_18px_36px_rgba(15,82,80,0.14)] max-h-[220px]" />
+        <div className="mt-4 sm:mt-6 flex flex-wrap justify-center gap-1.5 sm:gap-2">
           {["Python", "Java", "React", "AI / ML", "AWS"].map((tech) => (
             <span
               key={tech}
-              className="rounded-full border border-pale bg-paper/90 px-3 py-1 font-mono text-[11px] font-semibold text-deep shadow-2xs"
+              className="rounded-full border border-pale bg-paper/90 px-2.5 sm:px-3 py-1 font-mono text-[10px] sm:text-[11px] font-semibold text-deep shadow-2xs"
             >
               {tech}
             </span>
@@ -125,7 +125,7 @@ export default function Hero() {
           ======================================================== */}
       <div
         ref={heroStage}
-        className="relative min-h-[100svh] flex flex-col justify-between px-6 pt-28 pb-8 md:px-12 md:pt-32 md:pb-12 max-w-[1520px] mx-auto bg-paper"
+        className="relative min-h-[100svh] flex flex-col justify-between px-4 sm:px-6 pt-24 sm:pt-28 pb-8 md:px-12 md:pt-32 md:pb-12 max-w-[1520px] mx-auto bg-paper"
       >
         {/* 3D Architectural Monument Canvas (Desktop) / Static Poster (Mobile & Pre-Idle) */}
         <div
@@ -137,28 +137,28 @@ export default function Hero() {
 
         {/* Hero Typography & Actions */}
         <div className="my-auto max-w-2xl py-4 md:py-10 z-20">
-          <p className="eyebrow text-brand mb-4" data-hero-sub>
+          <p className="eyebrow text-brand mb-3 sm:mb-4" data-hero-sub>
             Software Architecture &amp; Technology · Indore
           </p>
 
           <h1
             id="hero-title"
             data-hero-headline
-            className="display text-[12vw] text-deep sm:text-[8.6vw] md:text-[5.8vw] leading-[0.96]"
+            className="display text-[11.5vw] text-deep sm:text-[8.6vw] md:text-[5.8vw] leading-[0.96] break-words"
           >
             <TypingHeadline />
           </h1>
 
           <p
             data-hero-sub
-            className="mt-6 max-w-lg text-base md:text-xl leading-relaxed text-deep/85 font-normal"
+            className="mt-5 sm:mt-6 max-w-lg text-sm sm:text-base md:text-xl leading-relaxed text-deep/85 font-normal"
           >
             Master modern full stack development, cloud microservices, and applied AI. Built on practical lab engineering, 1-on-1 mentorship, and placement readiness.
           </p>
 
-          <div data-hero-cta className="mt-8 flex flex-wrap items-center gap-4">
-            <CTA href="/courses" label="Explore Programs" />
-            <CTA href="#campuses" label="Campus Tour" variant="ghost" />
+          <div data-hero-cta className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+            <CTA href="/courses" label="Explore Programs" className="w-full sm:w-auto justify-center text-center" />
+            <CTA href="#campuses" label="Campus Tour" variant="ghost" className="w-full sm:w-auto justify-center text-center" />
           </div>
         </div>
 

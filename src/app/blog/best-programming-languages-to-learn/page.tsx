@@ -151,21 +151,21 @@ export default function BestProgrammingLanguagesToLearnPage() {
         </section>
 
         {/* Explore Links */}
-        <div className="rounded-3xl border border-brand/30 bg-soft p-8 text-center space-y-4">
-          <h3 className="text-2xl font-bold text-deep">Ready to start coding?</h3>
+        <div className="rounded-3xl border border-brand/30 bg-soft p-5 sm:p-8 text-center space-y-4">
+          <h3 className="text-xl sm:text-2xl font-bold text-deep">Ready to start coding?</h3>
           <p className="text-sm text-deep/70 max-w-lg mx-auto">
             Attend a free 2-day hands-on programming demo class in Python, Java, or MERN Stack at The Prime Step.
           </p>
-          <div className="flex flex-wrap justify-center gap-4 pt-2">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-2.5 sm:gap-4 pt-2 w-full sm:w-auto">
             <Link
               href="/python-programming-classes"
-              className="rounded-full bg-deep px-6 py-3 text-sm font-semibold text-paper transition-all hover:bg-brand"
+              className="rounded-full bg-deep px-6 py-3 text-sm font-semibold text-paper text-center transition-all hover:bg-brand w-full sm:w-auto"
             >
               Python Classes in Indore →
             </Link>
             <Link
               href="/java-full-stack-developer"
-              className="rounded-full border border-deep/20 bg-paper px-6 py-3 text-sm font-semibold text-deep transition-all hover:border-brand"
+              className="rounded-full border border-deep/20 bg-paper px-6 py-3 text-sm font-semibold text-deep text-center transition-all hover:border-brand w-full sm:w-auto"
             >
               Java Full Stack Course →
             </Link>

@@ -126,7 +126,7 @@ export default function FAQPage() {
               {category.questions.map((faq, idx) => (
                 <details
                   key={idx}
-                  className="group rounded-2xl border border-pale/70 bg-paper p-6 transition-all open:border-brand/40 open:shadow-sm"
+                  className="group rounded-2xl border border-pale/70 bg-paper p-4 sm:p-6 transition-all open:border-brand/40 open:shadow-sm"
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between text-base md:text-lg font-semibold text-deep group-open:text-brand">
                     <span>{faq.q}</span>
@@ -144,15 +144,15 @@ export default function FAQPage() {
         ))}
 
         {/* Instant Assistance Card */}
-        <div className="rounded-3xl border border-brand/20 bg-soft p-8 md:p-12 text-center">
-          <h3 className="text-2xl font-bold text-deep">Have a specific question not listed here?</h3>
-          <p className="mt-3 text-base text-deep/70 max-w-xl mx-auto">
+        <div className="rounded-3xl border border-brand/20 bg-soft p-5 sm:p-8 md:p-12 text-center">
+          <h3 className="text-xl sm:text-2xl font-bold text-deep">Have a specific question not listed here?</h3>
+          <p className="mt-3 text-sm sm:text-base text-deep/70 max-w-xl mx-auto">
             Our student academic counselors are available daily from 8:00 AM to 8:00 PM across all three Indore campuses.
           </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-6 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-2.5 sm:gap-4 w-full sm:w-auto">
             <a
               href={SITE.phoneHref}
-              className="rounded-full bg-deep px-8 py-3.5 text-sm font-semibold text-paper transition-all hover:bg-brand"
+              className="rounded-full bg-deep px-7 py-3 sm:px-8 sm:py-3.5 text-xs sm:text-sm font-semibold text-paper transition-all hover:bg-brand text-center w-full sm:w-auto"
             >
               Call {SITE.phoneDisplay}
             </a>
@@ -160,13 +160,13 @@ export default function FAQPage() {
               href={SITE.whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full border border-deep/20 bg-paper px-8 py-3.5 text-sm font-semibold text-deep transition-all hover:border-brand hover:text-brand"
+              className="rounded-full border border-deep/20 bg-paper px-7 py-3 sm:px-8 sm:py-3.5 text-xs sm:text-sm font-semibold text-deep transition-all hover:border-brand hover:text-brand text-center w-full sm:w-auto"
             >
               Chat on WhatsApp
             </a>
             <Link
               href="/contact-us"
-              className="rounded-full border border-pale bg-paper px-8 py-3.5 text-sm font-semibold text-deep/80 transition-all hover:border-brand"
+              className="rounded-full border border-pale bg-paper px-7 py-3 sm:px-8 sm:py-3.5 text-xs sm:text-sm font-semibold text-deep/80 transition-all hover:border-brand text-center w-full sm:w-auto"
             >
               Visit a Campus
             </Link>

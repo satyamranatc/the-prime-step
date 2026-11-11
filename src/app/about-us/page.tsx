@@ -102,40 +102,40 @@ export default function AboutUsPage() {
       />
 
       {/* 1. Editorial Hero */}
-      <section className="mx-auto max-w-[1480px] px-6 pt-8 pb-20 md:px-10 md:pt-12 md:pb-28">
+      <section className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10 pt-6 sm:pt-8 pb-16 md:pb-28">
         <p className="eyebrow text-brand">Est. {SITE.established} · {SITE.city}</p>
-        <h1 className="display mt-4 max-w-4xl text-[11.5vw] text-deep sm:text-[7.5vw] md:text-[5.4vw] leading-[0.95]">
+        <h1 className="display mt-4 max-w-4xl text-[11.5vw] text-deep sm:text-[7.5vw] md:text-[5.4vw] leading-[0.95] break-words">
           A classroom isn&apos;t a place you sit. <span className="italic text-brand">It&apos;s a place you build.</span>
         </h1>
-        <p className="mt-6 max-w-2xl text-lg md:text-xl leading-relaxed text-deep/85">
+        <p className="mt-6 max-w-2xl text-base sm:text-lg md:text-xl leading-relaxed text-deep/85">
           Founded in {SITE.established} in Indore, The Prime Step was built on a single conviction: bridge the gap between academic theory and what software companies actually expect on day one of the job.
         </p>
 
         {/* Verified Stats Grid */}
-        <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
+        <div className="mt-10 sm:mt-14 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 md:gap-8">
           {INSTITUTE_STATS.map((s) => (
             <div
               key={s.label}
-              className="rounded-3xl border border-pale/85 bg-soft p-6 md:p-8"
+              className="rounded-3xl border border-pale/85 bg-soft p-4 sm:p-6 md:p-8"
             >
-              <div className="display text-3xl md:text-5xl font-bold text-brand">
+              <div className="display text-2xl sm:text-3xl md:text-5xl font-bold text-brand">
                 {s.value}
               </div>
-              <div className="mt-2 text-sm md:text-base font-semibold text-deep">
+              <div className="mt-1.5 sm:mt-2 text-xs sm:text-sm md:text-base font-semibold text-deep">
                 {s.label}
               </div>
-              <div className="mt-1 text-xs text-deep/70">{s.note}</div>
+              <div className="mt-0.5 sm:mt-1 text-[11px] sm:text-xs text-deep/70">{s.note}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* 2. Teaching Philosophy & Pillars */}
-      <section className="border-t border-pale/60 bg-soft py-20 md:py-28">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
+      <section className="border-t border-pale/60 bg-soft py-16 sm:py-20 md:py-28">
+        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
           <Chapter n="01" title="Our Pedagogy & Values" />
           <div className="mt-6 max-w-2xl">
-            <h2 className="display text-4xl md:text-6xl text-deep">
+            <h2 className="display text-3xl sm:text-4xl md:text-6xl text-deep break-words">
               Why thousands of Indore students trust The Prime Step.
             </h2>
             <p className="mt-4 text-base md:text-lg text-deep/80">
@@ -143,14 +143,14 @@ export default function AboutUsPage() {
             </p>
           </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 sm:mt-12 grid gap-6 md:grid-cols-2">
             {PILLARS.map((p) => (
               <div
                 key={p.number}
-                className="rounded-3xl border border-pale/90 bg-paper p-7 md:p-9"
+                className="rounded-3xl border border-pale/90 bg-paper p-5 sm:p-7 md:p-9"
               >
                 <span className="eyebrow text-brand">Principle {p.number}</span>
-                <h3 className="display mt-3 text-2xl md:text-4xl text-deep">
+                <h3 className="display mt-3 text-2xl md:text-4xl text-deep break-words">
                   {p.title}
                 </h3>
                 <p className="mt-4 text-sm md:text-base leading-relaxed text-deep/80">
@@ -163,29 +163,29 @@ export default function AboutUsPage() {
       </section>
 
       {/* 3. How Every Student Learns (4 Steps) */}
-      <section className="bg-deep py-20 text-paper md:py-28">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
+      <section className="bg-deep py-16 sm:py-20 text-paper md:py-28">
+        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
           <Chapter n="02" title="The 4-Stage Learning Loop" dark />
-          <h2 className="display mt-6 max-w-3xl text-4xl md:text-6xl text-paper">
+          <h2 className="display mt-6 max-w-3xl text-3xl sm:text-4xl md:text-6xl text-paper break-words">
             From your first line of code to a live portfolio.
           </h2>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 sm:mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {BUILD_STEPS.map((s) => (
               <div
                 key={s.n}
-                className="flex flex-col justify-between rounded-3xl border border-pale/25 bg-paper/5 p-7"
+                className="flex flex-col justify-between rounded-3xl border border-pale/25 bg-paper/5 p-5 sm:p-7"
               >
                 <div>
                   <span className="eyebrow text-pale">Step {s.n}</span>
-                  <h3 className="display mt-3 text-2xl md:text-3xl text-paper">
+                  <h3 className="display mt-3 text-2xl md:text-3xl text-paper break-words">
                     {s.title}
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-pale/85">
                     {s.text}
                   </p>
                 </div>
-                <div className="mt-6 rounded-xl bg-obsidian/70 p-3.5 font-mono text-xs text-pale">
+                <div className="mt-6 rounded-xl bg-obsidian/70 p-3 sm:p-3.5 font-mono text-xs text-pale">
                   {s.code.map((ln, idx) => (
                     <div key={idx} className="truncate">
                       {ln}
@@ -199,12 +199,12 @@ export default function AboutUsPage() {
       </section>
 
       {/* 4. Our 3 Indore Campuses */}
-      <section className="bg-paper py-20 md:py-28">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
+      <section className="bg-paper py-16 sm:py-20 md:py-28">
+        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
           <Chapter n="03" title="Our Indore Campuses" />
           <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl">
-              <h2 className="display text-4xl md:text-6xl text-deep">
+              <h2 className="display text-3xl sm:text-4xl md:text-6xl text-deep break-words">
                 Three campuses across Indore.
               </h2>
               <p className="mt-4 text-base md:text-lg text-deep/80">
@@ -214,21 +214,21 @@ export default function AboutUsPage() {
             <CTA href="/contact-us" label="Contact & Directions" />
           </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-10 sm:mt-12 grid gap-6 md:grid-cols-3">
             {BRANCHES.map((b) => (
               <div
                 key={b.name}
-                className="flex flex-col justify-between rounded-3xl border border-pale bg-soft/75 p-7 md:p-8"
+                className="flex flex-col justify-between rounded-3xl border border-pale bg-soft/75 p-5 sm:p-7 md:p-8"
               >
                 <div>
                   <span className="eyebrow text-brand">{b.tag}</span>
-                  <h3 className="display mt-3 text-3xl text-deep">{b.name} Campus</h3>
+                  <h3 className="display mt-3 text-2xl sm:text-3xl text-deep break-words">{b.name} Campus</h3>
                   <p className="mt-1.5 text-xs font-semibold text-brand">{b.landmark}</p>
                   <p className="mt-4 text-sm leading-relaxed text-deep/80">{b.address}</p>
                   <p className="mt-3 text-xs font-mono text-deep/70">{b.hours}</p>
                 </div>
 
-                <div className="mt-6 flex items-center justify-between border-t border-pale/70 pt-4">
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-2 border-t border-pale/70 pt-4">
                   <a
                     href={mapsLink(b.address)}
                     target="_blank"
@@ -248,29 +248,29 @@ export default function AboutUsPage() {
             ))}
           </div>
 
-          <div className="mt-14 flex flex-wrap items-center justify-between gap-6 rounded-3xl border border-pale bg-soft p-8 md:p-10">
+          <div className="mt-10 sm:mt-14 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-between gap-6 rounded-3xl border border-pale bg-soft p-5 sm:p-8 md:p-10">
             <div>
               <p className="eyebrow text-brand">Ready to begin?</p>
-              <h3 className="display mt-2 text-2xl md:text-4xl text-deep">
+              <h3 className="display mt-2 text-2xl md:text-4xl text-deep break-words">
                 Explore our flagship career programs.
               </h3>
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-2.5 sm:gap-3 w-full sm:w-auto">
               <Link
                 href="/java-full-stack-developer"
-                className="rounded-full bg-deep px-5 py-3 text-xs md:text-sm font-semibold text-paper hover:bg-brand transition-colors"
+                className="rounded-full bg-deep px-5 py-3 text-xs md:text-sm font-semibold text-paper text-center hover:bg-brand transition-colors w-full sm:w-auto"
               >
                 Java Full Stack →
               </Link>
               <Link
                 href="/mern-stack-developer-course"
-                className="rounded-full bg-deep px-5 py-3 text-xs md:text-sm font-semibold text-paper hover:bg-brand transition-colors"
+                className="rounded-full bg-deep px-5 py-3 text-xs md:text-sm font-semibold text-paper text-center hover:bg-brand transition-colors w-full sm:w-auto"
               >
                 MERN Stack →
               </Link>
               <Link
                 href="/python-programming-classes"
-                className="rounded-full bg-deep px-5 py-3 text-xs md:text-sm font-semibold text-paper hover:bg-brand transition-colors"
+                className="rounded-full bg-deep px-5 py-3 text-xs md:text-sm font-semibold text-paper text-center hover:bg-brand transition-colors w-full sm:w-auto"
               >
                 Python Classes →
               </Link>

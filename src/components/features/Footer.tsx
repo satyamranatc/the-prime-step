@@ -57,8 +57,8 @@ function getSocialIcon(id: string) {
 export default function Footer() {
   return (
     <footer className="bg-deep text-paper" aria-label="Site footer">
-      <div className="mx-auto max-w-[1480px] overflow-hidden px-6 pt-20 md:px-10 md:pt-28">
-        <div className="grid gap-10 border-t border-pale/30 pt-14 md:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1.15fr_0.85fr_0.95fr]">
+      <div className="mx-auto max-w-[1480px] overflow-hidden px-4 sm:px-6 pt-16 md:px-10 md:pt-28">
+        <div className="grid gap-10 border-t border-pale/30 pt-12 md:pt-14 md:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1.15fr_0.85fr_0.95fr]">
           {/* Brand & Socials */}
           <div>
             <Link href="/" aria-label={`${SITE.name} — Home`}>
@@ -193,17 +193,17 @@ export default function Footer() {
         {/* Big Editorial Logo Wordmark */}
         <p
           aria-hidden="true"
-          className="display mt-16 text-[15vw] leading-[0.92] text-brand select-none md:mt-24 md:text-[11.2vw] tracking-tight"
+          className="display mt-14 text-[12vw] sm:text-[14vw] leading-[0.92] text-brand select-none md:mt-24 md:text-[11.2vw] tracking-tight break-words"
         >
           The Prime Step
         </p>
       </div>
 
-      {/* Bottom Sub-bar */}
-      <div className="relative bg-brand/40 border-t border-pale/20">
-        <div className="mx-auto flex max-w-[1480px] flex-wrap items-center justify-between gap-3 px-6 py-4 text-xs md:text-sm text-pale md:px-10">
+      {/* Bottom Sub-bar with mobile safe padding for StickyLeadBar */}
+      <div className="relative bg-brand/40 border-t border-pale/20 pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-4">
+        <div className="mx-auto flex max-w-[1480px] flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-4 text-xs md:text-sm text-pale md:px-10">
           <span>© {SITE.name} 2026. All rights reserved.</span>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <span>{SITE.city}</span>
             <span>·</span>
             <span>Rated {SITE.rating} on Google</span>

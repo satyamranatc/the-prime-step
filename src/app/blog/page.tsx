@@ -61,15 +61,15 @@ export default function BlogListingPage() {
       eyebrow="The Prime Step Editorial"
       lead="Practical guides, programming tutorials, industry trends, and career roadmaps designed to help students and professionals build high-growth tech careers in Indore and beyond."
     >
-      <section className="mx-auto max-w-4xl space-y-10">
-        <div className="grid gap-8">
+      <section className="mx-auto max-w-4xl space-y-8 sm:space-y-10">
+        <div className="grid gap-6 sm:gap-8">
           {BLOG_POSTS.map((post) => (
             <article
               key={post.slug}
-              className="group rounded-3xl border border-pale/80 bg-paper p-8 transition-all hover:-translate-y-1 hover:border-brand/40 hover:shadow-lg flex flex-col justify-between"
+              className="group rounded-3xl border border-pale/80 bg-paper p-5 sm:p-8 transition-all hover:-translate-y-1 hover:border-brand/40 hover:shadow-lg flex flex-col justify-between"
             >
               <div className="space-y-4">
-                <div className="flex flex-wrap items-center gap-3 text-xs font-semibold">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs font-semibold">
                   <span className="rounded-full bg-soft px-3 py-1 text-brand">
                     {post.category}
                   </span>
@@ -79,16 +79,16 @@ export default function BlogListingPage() {
                   <span className="text-deep/60">{post.readingTime}</span>
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-deep group-hover:text-brand transition-colors">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-deep group-hover:text-brand transition-colors break-words">
                   <Link href={post.href}>{post.title}</Link>
                 </h2>
 
-                <p className="text-base text-deep/75 leading-relaxed">
+                <p className="text-sm sm:text-base text-deep/75 leading-relaxed">
                   {post.excerpt}
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-pale flex items-center justify-between">
+              <div className="mt-6 pt-4 border-t border-pale flex flex-wrap items-center justify-between gap-2">
                 <Link
                   href={post.href}
                   className="text-sm font-semibold text-brand group-hover:underline flex items-center gap-1"
@@ -104,21 +104,21 @@ export default function BlogListingPage() {
         </div>
 
         {/* Career Counseling CTA */}
-        <div className="rounded-3xl border border-brand/20 bg-soft p-8 md:p-12 text-center">
-          <h3 className="text-2xl font-bold text-deep">Ready to launch your tech career?</h3>
-          <p className="mt-3 text-base text-deep/70 max-w-xl mx-auto">
+        <div className="rounded-3xl border border-brand/20 bg-soft p-5 sm:p-8 md:p-12 text-center">
+          <h3 className="text-xl sm:text-2xl font-bold text-deep">Ready to launch your tech career?</h3>
+          <p className="mt-3 text-sm sm:text-base text-deep/70 max-w-xl mx-auto">
             Book a free 1-on-1 counseling session with our senior mentors across our Vijay Nagar, Bhawarkua, or Annapurna campuses.
           </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-6 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-2.5 sm:gap-4 w-full sm:w-auto">
             <Link
               href="/courses"
-              className="rounded-full bg-deep px-8 py-3.5 text-sm font-semibold text-paper transition-all hover:bg-brand"
+              className="rounded-full bg-deep px-7 py-3 sm:px-8 sm:py-3.5 text-xs sm:text-sm font-semibold text-paper text-center transition-all hover:bg-brand w-full sm:w-auto"
             >
               Explore Job-Oriented Courses
             </Link>
             <Link
               href="/contact-us"
-              className="rounded-full border border-deep/20 bg-paper px-8 py-3.5 text-sm font-semibold text-deep transition-all hover:border-brand"
+              className="rounded-full border border-deep/20 bg-paper px-7 py-3 sm:px-8 sm:py-3.5 text-xs sm:text-sm font-semibold text-deep text-center transition-all hover:border-brand w-full sm:w-auto"
             >
               Contact Counselors
             </Link>

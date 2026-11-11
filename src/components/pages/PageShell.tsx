@@ -88,7 +88,7 @@ export default function PageShell({
       {breadcrumbs && breadcrumbs.length > 0 && (
         <nav
           aria-label="Breadcrumb"
-          className="mx-auto max-w-[1480px] px-6 pt-28 md:px-10 md:pt-32"
+          className="mx-auto max-w-[1480px] px-4 sm:px-6 pt-24 sm:pt-28 md:px-10 md:pt-32"
         >
           <ol className="flex flex-wrap items-center gap-2 text-xs font-mono uppercase tracking-wider text-deep/65">
             {breadcrumbs.map((item, idx) => {
@@ -112,19 +112,19 @@ export default function PageShell({
         </nav>
       )}
       {title && (
-        <header className="mx-auto max-w-[1480px] px-6 pt-10 pb-12 md:px-10 md:pt-14 md:pb-16 text-center">
+        <header className="mx-auto max-w-[1480px] px-4 sm:px-6 pt-8 pb-10 md:px-10 md:pt-14 md:pb-16 text-center">
           {eyebrow && <span className="eyebrow text-brand block mb-3">{eyebrow}</span>}
-          <h1 className="display text-4xl md:text-6xl font-bold tracking-tight text-deep max-w-4xl mx-auto">
+          <h1 className="display text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight text-deep max-w-4xl mx-auto break-words">
             {title}
           </h1>
           {lead && (
-            <p className="mt-5 text-base md:text-xl text-deep/75 max-w-2xl mx-auto leading-relaxed">
+            <p className="mt-4 sm:mt-5 text-sm sm:text-base md:text-xl text-deep/75 max-w-2xl mx-auto leading-relaxed">
               {lead}
             </p>
           )}
         </header>
       )}
-      <main className="px-6 pb-20 md:px-10 md:pb-28">{children}</main>
+      <main className="px-4 sm:px-6 pb-20 md:px-10 md:pb-28">{children}</main>
       {!hideNextStep && <NextStep />}
       <Footer />
       <StickyLeadBar />

@@ -75,30 +75,31 @@ export default function CourseDetailTemplate({ course }: { course: CoursePageDat
       />
 
       {/* 1. Editorial Hero */}
-      <section className="mx-auto max-w-[1480px] px-6 pt-8 pb-20 md:px-10 md:pt-12 md:pb-28">
+      <section className="mx-auto max-w-[1480px] px-4 sm:px-6 pt-6 pb-16 md:px-10 md:pt-12 md:pb-28">
         <div className="max-w-4xl">
           <p className="eyebrow text-brand">{course.eyebrow}</p>
-          <h1 className="display mt-4 text-[11.5vw] text-brand sm:text-[7.5vw] md:text-[5.4vw] leading-[0.95]">
+          <h1 className="display mt-4 text-[10.5vw] text-brand sm:text-[7.5vw] md:text-[5.4vw] leading-[0.95] break-words">
             {course.heroTitle}
           </h1>
-          <p className="mt-6 max-w-2xl text-lg md:text-xl leading-relaxed text-deep/85">
+          <p className="mt-5 sm:mt-6 max-w-2xl text-base sm:text-lg md:text-xl leading-relaxed text-deep/85">
             {course.heroSubtitle}
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-4">
-            <CTA href="#admission" label="Book Free 2-Day Demo" />
+          <div className="mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+            <CTA href="#admission" label="Book Free 2-Day Demo" className="w-full sm:w-auto justify-center text-center" />
             {course.roadmapId && (
               <CTA
                 href={`/roadmap/${course.roadmapId}`}
                 label="Drive 3D Syllabus Roadmap"
                 variant="ghost"
+                className="w-full sm:w-auto justify-center text-center"
               />
             )}
             <a
               href={SITE.whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-deep/20 bg-soft px-6 py-3 text-sm font-medium text-deep transition-colors hover:border-brand hover:text-brand"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-deep/20 bg-soft px-6 py-3 text-sm font-medium text-deep transition-colors hover:border-brand hover:text-brand"
             >
               <WhatsAppIcon className="size-4 fill-current text-brand" />
               <span>WhatsApp Syllabus PDF</span>
@@ -107,54 +108,54 @@ export default function CourseDetailTemplate({ course }: { course: CoursePageDat
         </div>
 
         {/* Key Course Metadata Strip */}
-        <div className="mt-14 grid grid-cols-2 gap-4 rounded-3xl border border-pale/80 bg-soft p-6 md:grid-cols-4 md:gap-8 md:p-9">
+        <div className="mt-12 sm:mt-14 grid grid-cols-2 gap-3 rounded-2xl sm:rounded-3xl border border-pale/80 bg-soft p-4 sm:p-6 md:grid-cols-4 md:gap-8 md:p-9">
           <div>
             <span className="eyebrow text-brand">Duration</span>
-            <p className="display mt-2 text-2xl md:text-3xl text-deep">{course.duration}</p>
-            <p className="mt-1 text-xs text-deep/70">Weekday &amp; Weekend Batches</p>
+            <p className="display mt-1.5 sm:mt-2 text-xl sm:text-2xl md:text-3xl text-deep">{course.duration}</p>
+            <p className="mt-0.5 sm:mt-1 text-xs text-deep/70">Weekday &amp; Weekend Batches</p>
           </div>
           <div>
             <span className="eyebrow text-brand">Eligibility</span>
-            <p className="display mt-2 text-2xl md:text-3xl text-deep">{course.level}</p>
-            <p className="mt-1 text-xs text-deep/70">IT &amp; Non-IT Students Welcome</p>
+            <p className="display mt-1.5 sm:mt-2 text-xl sm:text-2xl md:text-3xl text-deep">{course.level}</p>
+            <p className="mt-0.5 sm:mt-1 text-xs text-deep/70">IT &amp; Non-IT Students</p>
           </div>
           <div>
             <span className="eyebrow text-brand">Training Mode</span>
-            <p className="display mt-2 text-2xl md:text-3xl text-deep">{course.format}</p>
-            <p className="mt-1 text-xs text-deep/70">Vijay Nagar · Bhawarkua · Annapurna</p>
+            <p className="display mt-1.5 sm:mt-2 text-xl sm:text-2xl md:text-3xl text-deep">{course.format}</p>
+            <p className="mt-0.5 sm:mt-1 text-xs text-deep/70">3 Indore Campuses</p>
           </div>
           <div>
             <span className="eyebrow text-brand">Portfolio Output</span>
-            <p className="display mt-2 text-2xl md:text-3xl text-deep">{course.projectsCount}</p>
-            <p className="mt-1 text-xs text-deep/70">With 1-on-1 Code Reviews</p>
+            <p className="display mt-1.5 sm:mt-2 text-xl sm:text-2xl md:text-3xl text-deep">{course.projectsCount}</p>
+            <p className="mt-0.5 sm:mt-1 text-xs text-deep/70">With 1-on-1 Code Reviews</p>
           </div>
         </div>
       </section>
 
       {/* 2. Program Overview & Highlights */}
-      <section className="border-t border-pale/60 bg-soft py-20 md:py-28">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
+      <section className="border-t border-pale/60 bg-soft py-16 md:py-28">
+        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
           <Chapter n="01" title="Program Architecture" />
-          <div className="mt-8 grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+          <div className="mt-8 grid gap-10 md:gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
             <div>
-              <h2 className="display text-3xl md:text-5xl text-deep leading-[1.02]">
+              <h2 className="display text-2xl sm:text-3xl md:text-5xl text-deep leading-[1.02]">
                 {course.overviewHeadline}
               </h2>
-              <div className="mt-6 space-y-4 text-base md:text-lg leading-relaxed text-deep/85">
+              <div className="mt-5 sm:mt-6 space-y-4 text-base md:text-lg leading-relaxed text-deep/85">
                 {course.overviewBody.map((p, i) => (
                   <p key={i}>{p}</p>
                 ))}
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-3.5 sm:gap-4 sm:grid-cols-2">
               {course.highlights.map((h) => (
                 <div
                   key={h.label}
-                  className="rounded-2xl border border-pale/90 bg-paper p-6 shadow-2xs"
+                  className="rounded-2xl border border-pale/90 bg-paper p-5 sm:p-6 shadow-2xs"
                 >
                   <span className="eyebrow text-brand">{h.label}</span>
-                  <h3 className="display mt-2 text-2xl text-deep">{h.value}</h3>
+                  <h3 className="display mt-2 text-xl sm:text-2xl text-deep">{h.value}</h3>
                   <p className="mt-2 text-xs md:text-sm leading-relaxed text-deep/75">
                     {h.detail}
                   </p>
@@ -166,22 +167,22 @@ export default function CourseDetailTemplate({ course }: { course: CoursePageDat
       </section>
 
       {/* 3. Step-by-Step Curriculum Modules */}
-      <section className="border-t border-pale/60 bg-paper py-20 md:py-32">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
+      <section className="border-t border-pale/60 bg-paper py-16 md:py-32">
+        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
           <Chapter n="02" title="Step-by-Step Syllabus" />
           <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl">
-              <h2 className="display text-4xl md:text-6xl text-deep">
+              <h2 className="display text-3xl sm:text-4xl md:text-6xl text-deep">
                 What you will learn, <span className="italic text-brand">module by module.</span>
               </h2>
-              <p className="mt-4 text-base md:text-lg text-deep/80">
+              <p className="mt-4 text-sm sm:text-base md:text-lg text-deep/80">
                 Every module concludes with a working project reviewed by senior faculty in our Indore computer labs.
               </p>
             </div>
             {course.roadmapId && (
               <Link
                 href={`/roadmap/${course.roadmapId}`}
-                className="inline-flex items-center gap-2 rounded-full bg-deep px-6 py-3 text-xs md:text-sm font-semibold text-paper transition-colors hover:bg-brand"
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-deep px-6 py-3 text-xs md:text-sm font-semibold text-paper transition-colors hover:bg-brand"
               >
                 <span>Open Interactive 3D Roadmap</span>
                 <span>→</span>
@@ -189,31 +190,31 @@ export default function CourseDetailTemplate({ course }: { course: CoursePageDat
             )}
           </div>
 
-          <div className="mt-12 space-y-6">
+          <div className="mt-10 sm:mt-12 space-y-5 sm:space-y-6">
             {course.modules.map((mod) => (
               <article
                 key={mod.number}
-                className="rounded-3xl border border-pale/85 bg-soft/65 p-7 md:p-10 transition-colors hover:border-brand/50"
+                className="rounded-2xl sm:rounded-3xl border border-pale/85 bg-soft/65 p-5 sm:p-7 md:p-10 transition-colors hover:border-brand/50"
               >
-                <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-pale/70 pb-5">
-                  <div className="flex items-baseline gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2.5 sm:gap-4 border-b border-pale/70 pb-4 sm:pb-5">
+                  <div className="flex flex-wrap items-baseline gap-2.5 sm:gap-4">
                     <span className="eyebrow text-brand">Module {mod.number}</span>
-                    <h3 className="display text-2xl md:text-4xl text-deep">{mod.title}</h3>
+                    <h3 className="display text-xl sm:text-2xl md:text-4xl text-deep">{mod.title}</h3>
                   </div>
-                  <span className="rounded-full border border-deep/20 bg-paper px-4 py-1 text-xs font-mono text-deep">
+                  <span className="self-start sm:self-auto rounded-full border border-deep/20 bg-paper px-3 sm:px-4 py-1 text-xs font-mono text-deep">
                     {mod.duration}
                   </span>
                 </div>
 
-                <p className="mt-5 text-base md:text-lg font-medium text-deep/90">
+                <p className="mt-4 sm:mt-5 text-sm sm:text-base md:text-lg font-medium text-deep/90">
                   {mod.summary}
                 </p>
 
-                <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+                <ul className="mt-4 sm:mt-5 grid gap-2.5 sm:gap-3 sm:grid-cols-2">
                   {mod.topics.map((topic) => (
                     <li
                       key={topic}
-                      className="flex items-start gap-2.5 text-sm md:text-base text-deep/80 leading-relaxed"
+                      className="flex items-start gap-2.5 text-xs sm:text-sm md:text-base text-deep/80 leading-relaxed"
                     >
                       <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-brand" />
                       <span>{topic}</span>
@@ -221,7 +222,7 @@ export default function CourseDetailTemplate({ course }: { course: CoursePageDat
                   ))}
                 </ul>
 
-                <div className="mt-6 flex flex-wrap items-center gap-3 rounded-2xl border border-pale bg-paper px-5 py-3.5 text-xs md:text-sm">
+                <div className="mt-5 sm:mt-6 flex flex-wrap items-center gap-2.5 sm:gap-3 rounded-xl sm:rounded-2xl border border-pale bg-paper px-4 sm:px-5 py-3 text-xs md:text-sm">
                   <span className="eyebrow text-brand">Lab Deliverable:</span>
                   <span className="font-semibold text-deep">{mod.deliverable}</span>
                 </div>

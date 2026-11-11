@@ -21,6 +21,7 @@ export default function CTA({
   icon,
   target,
   rel,
+  className = "",
 }: {
   href: string;
   label: string;
@@ -28,6 +29,7 @@ export default function CTA({
   icon?: ReactNode;
   target?: string;
   rel?: string;
+  className?: string;
 }) {
   const onClick = (e: MouseEvent<HTMLAnchorElement>) => {
     if (href.startsWith("#")) {
@@ -39,16 +41,17 @@ export default function CTA({
   const isExternal = href.startsWith("http://") || href.startsWith("https://");
   const resolvedTarget = target ?? (isExternal ? "_blank" : undefined);
   const resolvedRel = rel ?? (isExternal ? "noopener noreferrer" : undefined);
+  const isFullWidth = className.includes("w-full");
 
   return (
-    <Magnetic>
+    <Magnetic className={isFullWidth ? "w-full sm:w-auto" : ""}>
       <a
         href={href}
         onClick={onClick}
         target={resolvedTarget}
         rel={resolvedRel}
         data-cursor
-        className={`group relative inline-flex items-center gap-4 rounded-full py-2 pr-2 pl-7 text-[0.95rem] font-medium transition-colors duration-500 ${styles[variant]}`}
+        className={`group relative inline-flex items-center justify-between gap-4 rounded-full py-2 pr-2 pl-7 text-[0.95rem] font-medium transition-colors duration-500 ${styles[variant]} ${className}`}
       >
         <span className="relative block overflow-hidden">
           <span className="block transition-transform duration-500 [transition-timing-function:var(--ease-out)] group-hover:-translate-y-full">

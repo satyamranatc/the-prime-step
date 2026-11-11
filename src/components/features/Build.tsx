@@ -96,29 +96,29 @@ export default function Build() {
 
   return (
     <section ref={section} id="build" aria-labelledby="build-title" className="relative min-h-[100svh] bg-deep text-paper">
-      <div className="mx-auto grid min-h-[100svh] max-w-[1480px] items-center gap-10 px-6 py-24 md:grid-cols-[0.8fr_1.4fr] md:gap-14 md:px-10">
+      <div className="mx-auto grid min-h-[100svh] max-w-[1480px] items-center gap-8 sm:gap-10 px-4 sm:px-6 py-16 sm:py-24 md:grid-cols-[0.8fr_1.4fr] md:gap-14 md:px-10">
         <div>
           <Chapter n="04" title="Learn by building" dark />
-          <h2 id="build-title" className="display mt-8 text-[14vw] text-paper md:text-[5.2vw]">
+          <h2 id="build-title" className="display mt-6 sm:mt-8 text-[13vw] sm:text-[14vw] text-paper md:text-[5.2vw] break-words">
             <Split text="Don't just learn it.|*Ship* *it.*" dark />
           </h2>
 
-          <div className="relative mt-8 pl-8">
+          <div className="relative mt-6 sm:mt-8 pl-6 sm:pl-8">
             <div className="absolute top-1 bottom-1 left-0 w-px bg-pale/30">
               <div data-bar className="h-full origin-top scale-y-0 bg-pale max-md:scale-y-100 motion-reduce:scale-y-100" />
             </div>
-            <ol className="space-y-5">
+            <ol className="space-y-4 sm:space-y-5">
               {BUILD_STEPS.map((s, i) => (
                 <li
                   key={s.n}
                   className={`transition-opacity duration-500 ${i <= active ? "opacity-100" : "opacity-60"}`}
                   aria-current={i === active ? "step" : undefined}
                 >
-                  <div className="flex items-baseline gap-4">
+                  <div className="flex items-baseline gap-3 sm:gap-4">
                     <span className="eyebrow text-pale">{s.n}</span>
-                    <h3 className="display text-3xl md:text-[2.1rem]">{s.title}</h3>
+                    <h3 className="display text-2xl sm:text-3xl md:text-[2.1rem] break-words">{s.title}</h3>
                   </div>
-                  <p className="mt-1 max-w-sm pl-10 text-pale">{s.text}</p>
+                  <p className="mt-1 max-w-sm pl-8 sm:pl-10 text-xs sm:text-sm text-pale">{s.text}</p>
                 </li>
               ))}
             </ol>
@@ -131,11 +131,11 @@ export default function Build() {
             className="grid overflow-hidden rounded-xl border border-pale/40 md:h-[min(62svh,560px)] md:grid-cols-2"
             aria-label="Illustrative example: code on the left builds the page on the right"
           >
-            <div className="min-h-[260px] bg-brand/30 md:min-h-0">
-              <div className="flex items-center gap-2 border-b border-pale/30 px-4 py-2.5">
+            <div className="min-h-[240px] sm:min-h-[260px] bg-brand/30 md:min-h-0">
+              <div className="flex items-center gap-2 border-b border-pale/30 px-3.5 sm:px-4 py-2 sm:py-2.5">
                 <span className="eyebrow text-pale">What you type</span>
               </div>
-              <div className="space-y-1.5 p-4 font-mono text-[0.78rem] leading-relaxed md:p-5 md:text-[0.84rem]">
+              <div className="space-y-1.5 p-3.5 sm:p-4 font-mono text-[0.72rem] sm:text-[0.78rem] leading-relaxed md:p-5 md:text-[0.84rem]">
                 {BUILD_STEPS.flatMap((s, si) =>
                   s.code.map((ln, li) => (
                     <div
@@ -151,11 +151,11 @@ export default function Build() {
                 <span className="caret inline-block h-4 w-2 translate-y-0.5 bg-pale" aria-hidden="true" />
               </div>
             </div>
-            <div className="min-h-[320px] border-t border-pale/40 md:min-h-0 md:border-t-0 md:border-l">
+            <div className="min-h-[300px] sm:min-h-[320px] border-t border-pale/40 md:min-h-0 md:border-t-0 md:border-l">
               <Preview active={active} />
             </div>
           </div>
-          <p className="eyebrow mt-3 text-pale">Illustrative example — you type on the left, the page appears on the right.</p>
+          <p className="eyebrow mt-3 text-pale text-[11px] sm:text-xs">Illustrative example — you type on the left, the page appears on the right.</p>
         </div>
       </div>
     </section>

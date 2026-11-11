@@ -159,13 +159,13 @@ export default function Programs() {
 
       <div ref={track} className="h-track">
         {/* Intro panel */}
-        <div className="h-panel flex shrink-0 flex-col justify-center px-6 py-28 md:px-10 md:py-0">
+        <div className="h-panel flex shrink-0 flex-col justify-center px-4 sm:px-6 py-20 sm:py-28 md:px-10 md:py-0">
           <div className="mx-auto w-full max-w-[1480px]">
             <Chapter n="02" title="The world of technology" />
-            <h2 id="programs-title" className="display mt-8 text-[15vw] text-deep md:text-[8.5vw]">
+            <h2 id="programs-title" className="display mt-6 sm:mt-8 text-[13vw] text-deep md:text-[8.5vw] break-words">
               <Split text="Eight worlds.|One *place* *to* *begin.*" />
             </h2>
-            <p className="mt-8 max-w-md text-lg leading-relaxed" data-fade>
+            <p className="mt-6 sm:mt-8 max-w-md text-base sm:text-lg leading-relaxed" data-fade>
               New to tech? Stay on <strong className="font-semibold">Simple</strong> — we explain every
               course in everyday words. Switch to <strong className="font-semibold">Technical</strong> for
               the full detail.
@@ -188,7 +188,7 @@ export default function Programs() {
             <article
               key={d.id}
               data-panel
-              className={`h-panel relative flex shrink-0 items-center overflow-hidden px-6 py-20 md:px-10 md:py-0 ${
+              className={`h-panel relative flex shrink-0 items-center overflow-hidden px-4 sm:px-6 py-16 sm:py-20 md:px-10 md:py-0 ${
                 i % 2 ? "bg-paper" : "bg-soft"
               }`}
               aria-label={d.title}
@@ -196,12 +196,12 @@ export default function Programs() {
               <span
                 data-num
                 aria-hidden="true"
-                className="display outline-text pointer-events-none absolute -top-[2vw] right-[2vw] text-[44vw] leading-none select-none min-[900px]:text-[30vw]"
+                className="display outline-text pointer-events-none absolute -top-[2vw] right-[2vw] text-[34vw] leading-none select-none min-[900px]:text-[30vw]"
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
 
-              <div className="relative mx-auto grid w-full max-w-[1480px] items-center gap-10 min-[900px]:grid-cols-[1.15fr_0.85fr]">
+              <div className="relative mx-auto grid w-full max-w-[1480px] items-center gap-8 sm:gap-10 min-[900px]:grid-cols-[1.15fr_0.85fr]">
                 <div className="min-[900px]:pr-6">
                   <p className="eyebrow text-brand" data-ptxt>
                     {String(i + 1).padStart(2, "0")} / {String(DISCIPLINES.length).padStart(2, "0")}
@@ -211,12 +211,12 @@ export default function Programs() {
                   {simple ? (
                     <>
                       <h3
-                        className="display mt-4 max-w-[16ch] text-[11.5vw] text-deep min-[900px]:text-[5vw] min-[900px]:leading-[1]"
+                        className="display mt-4 max-w-[16ch] text-[10.5vw] text-deep min-[900px]:text-[5vw] min-[900px]:leading-[1] break-words"
                         data-ptxt
                       >
                         {d.plain}
                       </h3>
-                      <p className="mt-6 max-w-md text-lg leading-relaxed" data-ptxt>
+                      <p className="mt-4 sm:mt-6 max-w-md text-base sm:text-lg leading-relaxed" data-ptxt>
                         <span className="eyebrow mr-3 text-brand">Like</span>
                         {d.analogy}
                       </p>
@@ -224,19 +224,19 @@ export default function Programs() {
                   ) : (
                     <>
                       <h3
-                        className="display mt-4 text-[14vw] text-deep min-[900px]:text-[7vw]"
+                        className="display mt-4 text-[12vw] text-deep min-[900px]:text-[7vw] break-words"
                         data-ptxt
                       >
                         {d.title}
                       </h3>
-                      <p className="mt-6 max-w-md text-lg leading-relaxed" data-ptxt>
+                      <p className="mt-4 sm:mt-6 max-w-md text-base sm:text-lg leading-relaxed" data-ptxt>
                         {d.line}
                       </p>
-                      <ul className="mt-8 flex flex-wrap gap-2" data-ptxt>
+                      <ul className="mt-6 sm:mt-8 flex flex-wrap gap-1.5 sm:gap-2" data-ptxt>
                         {d.tags.map((t) => (
                           <li
                             key={t}
-                            className="rounded-full border border-deep/30 px-4 py-1.5 text-sm"
+                            className="rounded-full border border-deep/30 px-3.5 py-1 text-xs sm:text-sm"
                           >
                             {t}
                           </li>
@@ -246,10 +246,10 @@ export default function Programs() {
                   )}
 
                   {/* Primary SEO Course Page Link & Secondary 3D Roadmap Link */}
-                  <div className="mt-8 flex flex-wrap items-center gap-3" data-ptxt>
+                  <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3" data-ptxt>
                     <Link
                       href={COURSE_PAGE_MAP[d.id] || "/courses"}
-                      className="group inline-flex items-center gap-2.5 rounded-full bg-deep text-paper px-6 py-3 text-xs md:text-sm font-semibold transition-all duration-300 hover:bg-brand shadow-sm"
+                      className="group inline-flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-full bg-deep text-paper px-6 py-3 text-xs md:text-sm font-semibold transition-all duration-300 hover:bg-brand shadow-sm text-center"
                     >
                       <span>Explore {d.title} Course</span>
                       <span className="transition-transform duration-300 group-hover:translate-x-1">
@@ -258,7 +258,7 @@ export default function Programs() {
                     </Link>
                     <Link
                       href={`/roadmap/${roadmapKey}`}
-                      className="group inline-flex items-center gap-2 rounded-full border border-deep/30 bg-paper/80 px-5 py-3 text-xs md:text-sm font-semibold text-deep transition-all duration-300 hover:border-brand hover:text-brand"
+                      className="group inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-deep/30 bg-paper/80 px-5 py-3 text-xs md:text-sm font-semibold text-deep transition-all duration-300 hover:border-brand hover:text-brand text-center"
                     >
                       <span>Explore in 3D</span>
                       <span className="transition-transform duration-300 group-hover:translate-x-1">
@@ -270,7 +270,7 @@ export default function Programs() {
 
                 <div
                   data-art
-                  className="mx-auto aspect-square w-[64vw] max-w-[460px] min-[900px]:w-full min-[900px]:max-w-[480px]"
+                  className="mx-auto aspect-square w-[58vw] max-w-[420px] min-[900px]:w-full min-[900px]:max-w-[480px]"
                 >
                   <Glyph id={d.id} />
                 </div>

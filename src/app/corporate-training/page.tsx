@@ -111,22 +111,22 @@ export default function CorporateTrainingPage() {
       />
 
       {/* 1. Hero */}
-      <section className="mx-auto max-w-[1480px] px-6 pt-8 pb-20 md:px-10 md:pt-12 md:pb-28">
+      <section className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10 pt-6 sm:pt-8 pb-16 md:pb-28">
         <p className="eyebrow text-brand">Enterprise &amp; Institutional Upskilling</p>
-        <h1 className="display mt-4 max-w-4xl text-[11.5vw] text-deep sm:text-[7.5vw] md:text-[5.4vw] leading-[0.95]">
+        <h1 className="display mt-4 max-w-4xl text-[11.5vw] text-deep sm:text-[7.5vw] md:text-[5.4vw] leading-[0.95] break-words">
           Corporate Training engineered for <span className="italic text-brand">measurable impact.</span>
         </h1>
-        <p className="mt-6 max-w-2xl text-lg md:text-xl leading-relaxed text-deep/85">
+        <p className="mt-6 max-w-2xl text-base sm:text-lg md:text-xl leading-relaxed text-deep/85">
           We partner with IT companies, growing enterprises, and colleges across Indore and Central India to upskill teams through customized, project-driven workshops in Full Stack Engineering, Data Analytics, Python AI, and Business Communication.
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center gap-4">
-          <CTA href="/contact-us" label="Request Custom Proposal" />
+        <div className="mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
+          <CTA href="/contact-us" label="Request Custom Proposal" className="w-full sm:w-auto text-center justify-center" />
           <a
             href={SITE.whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-deep/25 bg-soft px-6 py-3 text-sm font-medium text-deep transition-colors hover:border-brand hover:text-brand"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-deep/25 bg-soft px-6 py-3 text-sm font-medium text-deep transition-colors hover:border-brand hover:text-brand w-full sm:w-auto text-center"
           >
             <WhatsAppIcon className="size-4 fill-current text-brand" />
             <span>Speak with Training Director</span>
@@ -135,11 +135,11 @@ export default function CorporateTrainingPage() {
       </section>
 
       {/* 2. Corporate Upskilling Domains */}
-      <section className="border-t border-pale/60 bg-soft py-20 md:py-28">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
+      <section className="border-t border-pale/60 bg-soft py-16 sm:py-20 md:py-28">
+        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
           <Chapter n="01" title="Enterprise Training Tracks" />
           <div className="mt-6 max-w-2xl">
-            <h2 className="display text-4xl md:text-6xl text-deep">
+            <h2 className="display text-3xl sm:text-4xl md:text-6xl text-deep break-words">
               Custom curricula aligned to your production stack.
             </h2>
             <p className="mt-4 text-base md:text-lg text-deep/80">
@@ -147,18 +147,18 @@ export default function CorporateTrainingPage() {
             </p>
           </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 sm:mt-12 grid gap-6 md:grid-cols-2">
             {CORPORATE_TRACKS.map((track) => (
               <article
                 key={track.code}
-                className="flex flex-col justify-between rounded-3xl border border-pale/90 bg-paper p-7 md:p-9"
+                className="flex flex-col justify-between rounded-3xl border border-pale/90 bg-paper p-5 sm:p-7 md:p-9"
               >
                 <div>
                   <span className="eyebrow text-brand">Track {track.code}</span>
-                  <h3 className="display mt-3 text-2xl md:text-4xl text-deep">
+                  <h3 className="display mt-3 text-2xl md:text-4xl text-deep break-words">
                     {track.title}
                   </h3>
-                  <p className="mt-2 font-mono text-xs text-brand">{track.focus}</p>
+                  <p className="mt-2 font-mono text-xs text-brand break-words">{track.focus}</p>
                   <p className="mt-4 text-sm md:text-base leading-relaxed text-deep/80">
                     {track.description}
                   </p>
@@ -181,21 +181,21 @@ export default function CorporateTrainingPage() {
       </section>
 
       {/* 3. Delivery Formats */}
-      <section className="bg-paper py-20 md:py-28">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
+      <section className="bg-paper py-16 sm:py-20 md:py-28">
+        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
           <Chapter n="02" title="Flexible Delivery Formats" />
-          <h2 className="display mt-6 max-w-3xl text-4xl md:text-6xl text-deep">
+          <h2 className="display mt-6 max-w-3xl text-3xl sm:text-4xl md:text-6xl text-deep break-words">
             Built around your team&apos;s schedule.
           </h2>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-10 sm:mt-12 grid gap-6 md:grid-cols-3">
             {DELIVERY_MODES.map((m, i) => (
               <div
                 key={m.title}
-                className="rounded-3xl border border-pale bg-soft/75 p-7 md:p-8"
+                className="rounded-3xl border border-pale bg-soft/75 p-5 sm:p-7 md:p-8"
               >
                 <span className="eyebrow text-brand">0{i + 1}</span>
-                <h3 className="display mt-3 text-2xl md:text-3xl text-deep">
+                <h3 className="display mt-3 text-2xl md:text-3xl text-deep break-words">
                   {m.title}
                 </h3>
                 <p className="mt-1.5 text-xs font-semibold text-brand">{m.subtitle}</p>
@@ -209,25 +209,25 @@ export default function CorporateTrainingPage() {
       </section>
 
       {/* 4. Hire From The Prime Step */}
-      <section className="bg-deep py-20 text-paper md:py-28">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
+      <section className="bg-deep py-16 sm:py-20 text-paper md:py-28">
+        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
           <Chapter n="03" title="Zero-Cost Campus Hiring" dark />
-          <div className="mt-6 grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+          <div className="mt-6 grid gap-8 sm:gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div>
-              <h2 className="display text-4xl md:text-6xl text-paper">
+              <h2 className="display text-3xl sm:text-4xl md:text-6xl text-paper break-words">
                 Hire pre-trained developers in Indore at zero recruitment fee.
               </h2>
               <p className="mt-4 max-w-xl text-base md:text-lg leading-relaxed text-pale">
                 Looking to expand your engineering or analytics team? Connect with our placement cell to interview candidates who have already built and deployed 3–5 production projects in Java, MERN, Python, and Data Analytics.
               </p>
             </div>
-            <div className="rounded-3xl border border-pale/25 bg-paper/5 p-8">
+            <div className="rounded-3xl border border-pale/25 bg-paper/5 p-5 sm:p-8">
               <p className="eyebrow text-pale">Corporate &amp; HR Desk</p>
               <p className="display mt-2 text-2xl text-paper">{SITE.phoneDisplay}</p>
               <p className="mt-1 text-sm text-pale/80">{SITE.email}</p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <CTA href={SITE.phoneHref} label="Call Corporate Desk" variant="light" />
-                <CTA href={`mailto:${SITE.email}`} label="Email Requirements" variant="ghost-light" />
+              <div className="mt-6 flex flex-col sm:flex-row flex-wrap gap-2.5 sm:gap-3 w-full sm:w-auto">
+                <CTA href={SITE.phoneHref} label="Call Corporate Desk" variant="light" className="w-full sm:w-auto text-center justify-center" />
+                <CTA href={`mailto:${SITE.email}`} label="Email Requirements" variant="ghost-light" className="w-full sm:w-auto text-center justify-center" />
               </div>
             </div>
           </div>

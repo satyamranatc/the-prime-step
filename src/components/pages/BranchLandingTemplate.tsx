@@ -66,13 +66,13 @@ export default function BranchLandingTemplate({
 
       <section className="mx-auto max-w-5xl space-y-16">
         {/* Campus Overview & Essential Info Card */}
-        <div className="grid gap-8 md:grid-cols-3">
-          <div className="rounded-3xl border border-pale/80 bg-paper p-8 md:col-span-2 space-y-6">
+        <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
+          <div className="rounded-2xl sm:rounded-3xl border border-pale/80 bg-paper p-5 sm:p-8 md:col-span-2 space-y-5 sm:space-y-6">
             <span className="eyebrow text-brand">{branch.tag}</span>
-            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-deep">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-deep">
               Campus Facilities & Practical Labs
             </h2>
-            <p className="text-base text-deep/75 leading-relaxed">
+            <p className="text-sm sm:text-base text-deep/75 leading-relaxed">
               {description}
             </p>
 
@@ -101,7 +101,7 @@ export default function BranchLandingTemplate({
               <span className="text-xs uppercase tracking-wider text-deep/50 font-semibold">
                 Serving Students From
               </span>
-              <div className="mt-2 flex flex-wrap gap-2">
+              <div className="mt-2 flex flex-wrap gap-1.5 sm:gap-2">
                 {nearbyAreas.map((area) => (
                   <span
                     key={area}
@@ -115,11 +115,11 @@ export default function BranchLandingTemplate({
           </div>
 
           {/* Quick Location & Direction Card */}
-          <div className="rounded-3xl border border-brand/20 bg-soft p-8 flex flex-col justify-between">
+          <div className="rounded-2xl sm:rounded-3xl border border-brand/20 bg-soft p-5 sm:p-8 flex flex-col justify-between">
             <div>
               <span className="eyebrow text-brand">Physical Location</span>
-              <h3 className="mt-2 text-xl font-bold text-deep">Visit the Campus</h3>
-              <p className="mt-4 text-sm font-medium text-deep/90 leading-relaxed">
+              <h3 className="mt-2 text-lg sm:text-xl font-bold text-deep">Visit the Campus</h3>
+              <p className="mt-3 sm:mt-4 text-xs sm:text-sm font-medium text-deep/90 leading-relaxed">
                 {branch.address}
               </p>
               <p className="mt-2 text-xs font-semibold text-brand">
@@ -127,18 +127,18 @@ export default function BranchLandingTemplate({
               </p>
             </div>
 
-            <div className="mt-8 space-y-3">
+            <div className="mt-6 sm:mt-8 space-y-3">
               <a
                 href={googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex w-full items-center justify-center rounded-full bg-deep py-3 text-sm font-semibold text-paper transition-all hover:bg-brand"
+                className="flex w-full items-center justify-center rounded-full bg-deep py-3 text-xs sm:text-sm font-semibold text-paper transition-all hover:bg-brand"
               >
                 Open Google Maps Directions ↗
               </a>
               <a
                 href={branch.phoneHref}
-                className="flex w-full items-center justify-center rounded-full border border-deep/20 bg-paper py-3 text-sm font-semibold text-deep transition-all hover:border-brand"
+                className="flex w-full items-center justify-center rounded-full border border-deep/20 bg-paper py-3 text-xs sm:text-sm font-semibold text-deep transition-all hover:border-brand"
               >
                 Call Front Desk
               </a>

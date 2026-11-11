@@ -22,6 +22,7 @@
 html {
   background: #ffffff;
   -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
 }
 
 body {
@@ -32,16 +33,35 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Safe-area insets for notched iPhones and edge-to-edge devices */
-@supports (padding-top: env(safe-area-inset-top)) {
-  .safe-top {
-    padding-top: env(safe-area-inset-top);
+/* Prevent unwanted iOS auto-zoom on input focus while maintaining typography */
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
   }
-  .safe-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
+}
+
+/* Ensure all images and vectors are strictly responsive */
+img,
+svg,
+canvas {
+  max-width: 100%;
+}
+
+/* Safe-area insets for notched iPhones and edge-to-edge Android devices */
+.safe-top {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+.safe-x {
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
 }
 
 ::selection {

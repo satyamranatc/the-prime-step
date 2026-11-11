@@ -130,21 +130,21 @@ export default function RoadmapClient({ courseId }: { courseId: string }) {
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-white select-none">
-      {/* 1. Top Navigation Bar: Back to All Courses & Full Course Page */}
-      <div className="absolute inset-x-0 top-4 md:top-6 z-50 px-4 md:px-6 flex items-center justify-between gap-3 pointer-events-none">
+      {/* 1. Top Navigation Bar: Back to All Courses & Full Course Page (Safe for iOS Dynamic Island / Notches) */}
+      <div className="absolute inset-x-0 top-[max(0.75rem,env(safe-area-inset-top))] md:top-6 z-50 px-3 sm:px-4 md:px-6 flex items-center justify-between gap-2 pointer-events-none">
         <Link
           href="/courses"
-          className="px-4 py-2 md:px-6 md:py-2.5 bg-zinc-900/10 hover:bg-zinc-900/20 text-zinc-900 rounded-full font-semibold text-xs md:text-sm backdrop-blur-md transition-colors flex items-center gap-2 pointer-events-auto shadow-sm"
+          className="px-3.5 py-1.5 sm:px-4 sm:py-2 md:px-6 md:py-2.5 bg-zinc-900/10 hover:bg-zinc-900/20 text-zinc-900 rounded-full font-semibold text-xs md:text-sm backdrop-blur-md transition-colors flex items-center gap-1.5 sm:gap-2 pointer-events-auto shadow-sm"
         >
-          <span>←</span> All Courses
+          <span>←</span> <span className="hidden xs:inline">All</span> Courses
         </Link>
 
         <div className="flex items-center gap-2 pointer-events-auto">
           <Link
             href={course.seoHref || "/courses"}
-            className="px-4 py-2 md:px-5 md:py-2.5 bg-white/90 hover:bg-white text-zinc-900 border border-zinc-200/80 rounded-full font-semibold text-xs md:text-sm backdrop-blur-md transition-colors shadow-sm"
+            className="px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 bg-white/90 hover:bg-white text-zinc-900 border border-zinc-200/80 rounded-full font-semibold text-xs md:text-sm backdrop-blur-md transition-colors shadow-sm"
           >
-            Full Syllabus Page →
+            Syllabus <span className="hidden sm:inline">Page</span> →
           </Link>
           <a
             href={`https://wa.me/919479611441?text=${encodeURIComponent(`Hi The Prime Step! I just explored the ${course.title} 3D Roadmap and want to book a free demo class.`)}`}

@@ -139,15 +139,15 @@ export default function Top10ExcelFormulasPage() {
         </section>
 
         {/* CTA */}
-        <div className="rounded-3xl border border-brand/30 bg-soft p-8 text-center space-y-4">
-          <h3 className="text-2xl font-bold text-deep">Want to master Advanced Excel & MIS Dashboards?</h3>
+        <div className="rounded-3xl border border-brand/30 bg-soft p-5 sm:p-8 text-center space-y-4">
+          <h3 className="text-xl sm:text-2xl font-bold text-deep">Want to master Advanced Excel & MIS Dashboards?</h3>
           <p className="text-sm text-deep/70 max-w-lg mx-auto">
             Join our 100% hands-on MS Office & Advanced Excel training at Vijay Nagar, Bhawarkua, or Annapurna campuses in Indore.
           </p>
-          <div className="flex flex-wrap justify-center gap-4 pt-2">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-2.5 sm:gap-4 pt-2 w-full sm:w-auto">
             <Link
               href="/ms-office-and-excel-course-in-indore"
-              className="rounded-full bg-deep px-8 py-3 text-sm font-semibold text-paper transition-all hover:bg-brand"
+              className="rounded-full bg-deep px-6 sm:px-8 py-3 text-xs sm:text-sm font-semibold text-paper text-center transition-all hover:bg-brand w-full sm:w-auto"
             >
               Explore MS Office & Advanced Excel Course →
             </Link>

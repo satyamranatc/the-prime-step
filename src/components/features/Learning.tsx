@@ -70,13 +70,13 @@ export default function Learning() {
 
   return (
     <section ref={root} id="learning" aria-labelledby="learning-title" className="relative bg-paper" data-aperture>
-      <div className="mx-auto max-w-[1480px] px-6 py-28 md:px-10 md:py-48">
+      <div className="mx-auto max-w-[1480px] px-4 sm:px-6 py-20 sm:py-28 md:px-10 md:py-48">
         <Chapter n="03" title="The learning experience" />
         <h2 id="learning-title" className="sr-only">
           The learning experience at The Prime Step
         </h2>
 
-        <p data-fill className="display mt-10 max-w-[1100px] text-[9.6vw] text-deep md:text-[5.2vw] md:leading-[1.02]">
+        <p data-fill className="display mt-8 sm:mt-10 max-w-[1100px] text-[8.5vw] sm:text-[9.6vw] text-deep md:text-[5.2vw] md:leading-[1.02] break-words">
           {STATEMENT.split(" ").map((w, i) => (
             <span key={i} data-fw className="mr-[0.2em] inline-block">
               {w}{" "}
@@ -84,7 +84,7 @@ export default function Learning() {
           ))}
         </p>
 
-        <div className="mt-24 grid gap-10 md:mt-40 md:grid-cols-3 md:gap-8">
+        <div className="mt-16 sm:mt-24 grid gap-8 sm:gap-10 md:mt-40 md:grid-cols-3 md:gap-8">
           {PLATES.map((p, i) => (
             <div key={p.t} className={i === 1 ? "md:mt-24" : i === 2 ? "md:mt-10" : ""}>
               <div
@@ -111,26 +111,26 @@ export default function Learning() {
                     className="pointer-events-none absolute inset-0 bg-gradient-to-t from-obsidian/70 via-transparent to-obsidian/20"
                   />
                 </div>
-                <span className="eyebrow absolute top-5 left-5 rounded-full bg-paper/90 px-3 py-1 text-deep backdrop-blur-md">
+                <span className="eyebrow absolute top-4 left-4 sm:top-5 sm:left-5 rounded-full bg-paper/90 px-2.5 py-0.5 sm:px-3 sm:py-1 text-deep backdrop-blur-md text-[11px] sm:text-xs">
                   0{i + 1}
                 </span>
-                <span className="eyebrow absolute right-5 bottom-5 left-5 flex items-center justify-between rounded-xl border border-white/15 bg-ink/65 px-3.5 py-2 text-[11px] text-white backdrop-blur-md">
+                <span className="eyebrow absolute right-4 bottom-4 left-4 sm:right-5 sm:bottom-5 sm:left-5 flex items-center justify-between rounded-xl border border-white/15 bg-ink/65 px-3 py-1.5 sm:px-3.5 sm:py-2 text-[10px] sm:text-[11px] text-white backdrop-blur-md">
                   <span>{p.badge}</span>
                   <span className="size-2 rounded-full bg-light" />
                 </span>
               </div>
-              <h3 className="display mt-6 text-4xl text-deep md:text-[2.6rem]">{p.t}</h3>
-              <p className="mt-3 max-w-sm leading-relaxed">{p.d}</p>
+              <h3 className="display mt-5 sm:mt-6 text-3xl sm:text-4xl text-deep md:text-[2.6rem] break-words">{p.t}</h3>
+              <p className="mt-2.5 sm:mt-3 max-w-sm text-sm sm:text-base leading-relaxed text-deep/80">{p.d}</p>
             </div>
           ))}
         </div>
 
         {/* Branches */}
-        <div className="mt-28 md:mt-48">
-          <h3 className="display text-[12vw] text-deep md:text-[5vw]">
+        <div className="mt-20 sm:mt-28 md:mt-48">
+          <h3 className="display text-[11vw] sm:text-[12vw] text-deep md:text-[5vw] break-words">
             <Split text="Find your *branch.*" as="span" />
           </h3>
-          <ul className="mt-10 border-t border-deep/30">
+          <ul className="mt-8 sm:mt-10 border-t border-deep/30">
             {BRANCHES.map((b) => (
               <li key={b.name} className="border-b border-deep/30">
                 <a
@@ -138,15 +138,15 @@ export default function Learning() {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-cursor
-                  className="group grid items-center gap-2 py-7 transition-[padding] duration-500 [transition-timing-function:var(--ease-out)] hover:pl-4 md:grid-cols-[1fr_1.4fr_auto] md:gap-8"
+                  className="group grid items-center gap-2 py-5 sm:py-7 transition-[padding] duration-500 [transition-timing-function:var(--ease-out)] hover:pl-4 md:grid-cols-[1fr_1.4fr_auto] md:gap-8"
                 >
-                  <span className="display text-4xl text-deep transition-colors group-hover:text-brand md:text-6xl">
+                  <span className="display text-3xl sm:text-4xl text-deep transition-colors group-hover:text-brand md:text-6xl break-words">
                     {b.name}
                   </span>
-                  <span className="max-w-lg leading-relaxed">{b.address}</span>
+                  <span className="max-w-lg text-sm sm:text-base leading-relaxed text-deep/80">{b.address}</span>
                   <span className="eyebrow flex items-center gap-3 text-brand">
                     {b.tag}
-                    <span className="grid size-10 place-items-center rounded-full border border-brand transition-colors duration-500 group-hover:bg-brand group-hover:text-white">
+                    <span className="grid size-9 sm:size-10 place-items-center rounded-full border border-brand transition-colors duration-500 group-hover:bg-brand group-hover:text-white">
                       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                         <path d="M3 11L11 3M5 3h6v6" stroke="currentColor" strokeWidth="1.4" />
                       </svg>

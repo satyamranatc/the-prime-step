@@ -105,24 +105,25 @@ export default function NextStep() {
         })}
       </svg>
 
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1480px] flex-col justify-start px-6 pt-16 pb-12 md:px-10 md:pt-20 lg:pt-24">
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1480px] flex-col justify-start px-4 sm:px-6 pt-14 pb-12 md:px-10 md:pt-20 lg:pt-24">
         <Chapter n="07" title="The next step" dark />
-        <h2 id="admission-title" className="display mt-5 text-[15vw] leading-[0.92] text-paper md:mt-6 md:text-[7.5vw] lg:text-[6.5vw]">
+        <h2 id="admission-title" className="display mt-4 sm:mt-5 text-[12vw] sm:text-[14vw] leading-[0.92] text-paper md:mt-6 md:text-[7.5vw] lg:text-[6.5vw] break-words">
           <Split text="The next step|is *yours.*" dark />
         </h2>
-        <p className="mt-4 max-w-md text-base leading-relaxed text-pale md:text-lg" data-fade>
+        <p className="mt-3.5 sm:mt-4 max-w-md text-sm sm:text-base leading-relaxed text-pale md:text-lg" data-fade>
           Speak with our admissions team about the right program for you.
         </p>
 
-        <div data-cta className="mt-6 flex max-w-xl flex-wrap items-center gap-3.5 sm:gap-4">
-          <CTA href={SITE.phoneHref} label={`Call ${SITE.phoneDisplay}`} variant="light" />
+        <div data-cta className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4 max-w-xl">
+          <CTA href={SITE.phoneHref} label={`Call ${SITE.phoneDisplay}`} variant="light" className="w-full sm:w-auto justify-center text-center" />
           <CTA
             href={SITE.whatsappHref}
             label="WhatsApp Admissions"
             variant="primary"
             icon={<WhatsAppIcon className="size-4 fill-current text-white" />}
+            className="w-full sm:w-auto justify-center text-center"
           />
-          <CTA href={`mailto:${SITE.email}`} label="Email admissions" variant="ghost-light" />
+          <CTA href={`mailto:${SITE.email}`} label="Email admissions" variant="ghost-light" className="w-full sm:w-auto justify-center text-center" />
         </div>
       </div>
     </section>

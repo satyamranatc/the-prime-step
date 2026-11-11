@@ -77,17 +77,17 @@ export default function ContactInquiryForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-3xl border border-pale bg-soft p-7 md:p-10 shadow-xs"
+      className="rounded-2xl sm:rounded-3xl border border-pale bg-soft p-5 sm:p-7 md:p-10 shadow-xs"
     >
       <p className="eyebrow text-brand">Instant Demo &amp; Counseling Booking</p>
-      <h2 className="display mt-2 text-3xl md:text-4xl text-deep">
+      <h2 className="display mt-2 text-2xl sm:text-3xl md:text-4xl text-deep">
         Book your free 2-day demo class.
       </h2>
-      <p className="mt-2 text-sm text-deep/80">
+      <p className="mt-2 text-xs sm:text-sm text-deep/80">
         Register your details below. Our Indore admissions counselor will call you to schedule your lab slot, or you can connect immediately on WhatsApp.
       </p>
 
-      <div className="mt-7 space-y-5">
+      <div className="mt-6 sm:mt-7 space-y-4 sm:space-y-5">
         <div>
           <label htmlFor="inq-name" className="block text-xs font-mono font-semibold uppercase tracking-wider text-deep mb-2">
             Full Name *
@@ -99,7 +99,7 @@ export default function ContactInquiryForm() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter your full name"
-            className="w-full rounded-xl border border-pale bg-paper px-4 py-3 text-sm text-deep placeholder:text-deep/45 focus:border-brand focus:outline-none"
+            className="w-full rounded-xl border border-pale bg-paper px-4 py-3 text-base md:text-sm text-deep placeholder:text-deep/45 focus:border-brand focus:outline-none"
           />
         </div>
 
@@ -114,11 +114,11 @@ export default function ContactInquiryForm() {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="+91 98XXX XXXXX"
-            className="w-full rounded-xl border border-pale bg-paper px-4 py-3 text-sm text-deep placeholder:text-deep/45 focus:border-brand focus:outline-none"
+            className="w-full rounded-xl border border-pale bg-paper px-4 py-3 text-base md:text-sm text-deep placeholder:text-deep/45 focus:border-brand focus:outline-none"
           />
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-4 sm:gap-5 sm:grid-cols-2">
           <div>
             <label htmlFor="inq-course" className="block text-xs font-mono font-semibold uppercase tracking-wider text-deep mb-2">
               Course Interest
@@ -127,7 +127,7 @@ export default function ContactInquiryForm() {
               id="inq-course"
               value={course}
               onChange={(e) => setCourse(e.target.value)}
-              className="w-full rounded-xl border border-pale bg-paper px-4 py-3 text-sm text-deep focus:border-brand focus:outline-none"
+              className="w-full rounded-xl border border-pale bg-paper px-4 py-3 text-base md:text-sm text-deep focus:border-brand focus:outline-none"
             >
               {COURSE_OPTIONS.map((c) => (
                 <option key={c} value={c}>
@@ -145,7 +145,7 @@ export default function ContactInquiryForm() {
               id="inq-branch"
               value={branch}
               onChange={(e) => setBranch(e.target.value)}
-              className="w-full rounded-xl border border-pale bg-paper px-4 py-3 text-sm text-deep focus:border-brand focus:outline-none"
+              className="w-full rounded-xl border border-pale bg-paper px-4 py-3 text-base md:text-sm text-deep focus:border-brand focus:outline-none"
             >
               {BRANCHES.map((b) => (
                 <option key={b.name} value={b.name}>
@@ -164,7 +164,7 @@ export default function ContactInquiryForm() {
             id="inq-bg"
             value={background}
             onChange={(e) => setBackground(e.target.value)}
-            className="w-full rounded-xl border border-pale bg-paper px-4 py-3 text-sm text-deep focus:border-brand focus:outline-none"
+            className="w-full rounded-xl border border-pale bg-paper px-4 py-3 text-base md:text-sm text-deep focus:border-brand focus:outline-none"
           >
             <option value="College Student / 12th Pass">College Student / 12th Pass</option>
             <option value="Non-IT / Career Switcher">Non-IT / Career Switcher</option>
@@ -177,32 +177,32 @@ export default function ContactInquiryForm() {
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-brand px-7 py-4 text-sm font-semibold text-white transition-colors hover:bg-deep cursor-pointer disabled:opacity-60"
+          className="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-brand px-7 py-3.5 sm:py-4 text-sm font-semibold text-white transition-colors hover:bg-deep cursor-pointer disabled:opacity-60"
         >
           <span>{submitting ? "Saving Inquiry..." : "Request Free 2-Day Demo Slot"}</span>
         </button>
 
         {submitted && (
-          <div className="rounded-2xl border border-brand/35 bg-paper p-5 space-y-3">
+          <div className="rounded-2xl border border-brand/35 bg-paper p-4 sm:p-5 space-y-3">
             <p className="text-sm font-semibold text-deep">
               ✓ Inquiry saved! Our {branch} counselor will reach out shortly.
             </p>
             <p className="text-xs text-deep/75">
               Want an immediate reply right now? Connect with our counselor directly:
             </p>
-            <div className="flex flex-wrap gap-2.5 pt-1">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-2.5 pt-1">
               <a
                 href={buildWhatsAppUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-[#147a77] px-4 py-2 text-xs font-semibold text-white hover:bg-deep"
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-[#147a77] px-4 py-2.5 text-xs font-semibold text-white hover:bg-deep"
               >
                 <WhatsAppIcon className="size-3.5 fill-current" />
                 <span>Confirm on WhatsApp</span>
               </a>
               <a
                 href={SITE.phoneHref}
-                className="inline-flex items-center gap-1.5 rounded-full border border-deep/20 px-4 py-2 text-xs font-semibold text-deep hover:border-brand"
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-1.5 rounded-full border border-deep/20 px-4 py-2.5 text-xs font-semibold text-deep hover:border-brand"
               >
                 <span>Call {SITE.phoneDisplay}</span>
               </a>

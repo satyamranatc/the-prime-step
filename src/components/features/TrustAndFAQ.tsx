@@ -49,24 +49,24 @@ export default function TrustAndFAQ() {
   };
 
   return (
-    <section id="trust-faq" className="relative bg-paper py-24 md:py-36 border-t border-pale/60">
-      <div className="mx-auto max-w-[1480px] px-6 md:px-12">
+    <section id="trust-faq" className="relative bg-paper py-20 sm:py-24 md:py-36 border-t border-pale/60">
+      <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-12">
         <Chapter n="06" title="Indore Campus & Student Trust" />
 
         {/* 1. Verified Institute Trust Metrics */}
-        <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 md:gap-8">
           {INSTITUTE_STATS.map((s) => (
             <div
               key={s.label}
-              className="rounded-3xl border border-pale/80 bg-soft p-6 md:p-8 transition-transform duration-300 hover:-translate-y-1"
+              className="rounded-2xl sm:rounded-3xl border border-pale/80 bg-soft p-4 sm:p-6 md:p-8 transition-transform duration-300 hover:-translate-y-1"
             >
-              <div className="display text-4xl md:text-6xl text-brand">
+              <div className="display text-3xl sm:text-4xl md:text-6xl text-brand">
                 {s.value}
               </div>
-              <div className="mt-2 text-sm md:text-base font-semibold text-deep">
+              <div className="mt-1.5 sm:mt-2 text-xs sm:text-sm md:text-base font-semibold text-deep">
                 {s.label}
               </div>
-              <div className="mt-1 text-xs text-deep/75">
+              <div className="mt-0.5 sm:mt-1 text-[11px] sm:text-xs text-deep/75">
                 {s.note}
               </div>
             </div>
@@ -209,14 +209,14 @@ export default function TrustAndFAQ() {
                   <button
                     type="button"
                     onClick={() => toggleFaq(idx)}
-                    className="flex w-full items-center justify-between p-6 text-left"
+                    className="flex w-full items-center justify-between p-4 sm:p-6 text-left"
                     aria-expanded={isOpen}
                   >
-                    <span className="text-base md:text-lg font-semibold text-deep pr-4">
+                    <span className="text-sm sm:text-base md:text-lg font-semibold text-deep pr-3 sm:pr-4">
                       {faq.q}
                     </span>
                     <span
-                      className={`size-7 shrink-0 rounded-full border border-deep/20 flex items-center justify-center text-sm font-mono text-deep transition-transform duration-300 ${
+                      className={`size-6 sm:size-7 shrink-0 rounded-full border border-deep/20 flex items-center justify-center text-xs sm:text-sm font-mono text-deep transition-transform duration-300 ${
                         isOpen ? "rotate-45 bg-deep text-paper" : "bg-paper"
                       }`}
                     >
@@ -224,7 +224,7 @@ export default function TrustAndFAQ() {
                     </span>
                   </button>
                   {isOpen && (
-                    <div className="px-6 pb-6 pt-1 text-sm md:text-base text-deep/85 leading-relaxed border-t border-pale/40">
+                    <div className="px-4 sm:px-6 pb-4 sm:pb-6 pt-1 text-xs sm:text-sm md:text-base text-deep/85 leading-relaxed border-t border-pale/40">
                       {faq.a}
                     </div>
                   )}
@@ -233,18 +233,18 @@ export default function TrustAndFAQ() {
             })}
           </div>
 
-          <div className="mt-12 flex flex-wrap items-center gap-4">
-            <CTA href={SITE.phoneHref} label={`Call ${SITE.phoneDisplay}`} />
+          <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+            <CTA href={SITE.phoneHref} label={`Call ${SITE.phoneDisplay}`} className="w-full sm:w-auto justify-center text-center" />
             <a
               href={SITE.whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-paper px-6 py-3.5 text-sm font-semibold text-brand transition-all hover:bg-brand hover:text-paper hover:border-brand"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-brand/30 bg-paper px-6 py-3.5 text-sm font-semibold text-brand transition-all hover:bg-brand hover:text-paper hover:border-brand"
             >
               <WhatsAppIcon className="size-4 fill-current" />
               <span>WhatsApp Counselor</span>
             </a>
-            <CTA href="#admission" label="Book Free 2-Day Demo" variant="ghost" />
+            <CTA href="#admission" label="Book Free 2-Day Demo" variant="ghost" className="w-full sm:w-auto justify-center text-center" />
           </div>
         </div>
       </div>

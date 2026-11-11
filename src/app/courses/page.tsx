@@ -158,10 +158,10 @@ export default function CoursesPage() {
                             ))}
                           </ul>
 
-                          <div className="flex items-center justify-between gap-3">
+                          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
                             <Link
                               href={course.href}
-                              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-deep px-5 py-2.5 text-xs md:text-sm font-semibold text-paper transition-colors duration-300 group-hover:bg-brand"
+                              className="inline-flex w-full sm:flex-1 items-center justify-center gap-2 rounded-full bg-deep px-5 py-2.5 text-xs md:text-sm font-semibold text-paper transition-colors duration-300 group-hover:bg-brand text-center"
                             >
                               <span>View Syllabus &amp; Details</span>
                               <span className="transition-transform duration-300 group-hover:translate-x-1">
@@ -170,7 +170,7 @@ export default function CoursesPage() {
                             </Link>
                             <Link
                               href={roadmapUrl}
-                              className="inline-flex items-center gap-1 rounded-full border border-deep/20 px-4 py-2.5 text-xs font-semibold text-deep transition-colors hover:border-brand hover:text-brand"
+                              className="inline-flex w-full sm:w-auto items-center justify-center gap-1 rounded-full border border-deep/20 px-4 py-2.5 text-xs font-semibold text-deep transition-colors hover:border-brand hover:text-brand text-center"
                             >
                               <span>Explore in 3D</span>
                               <span>↗</span>
