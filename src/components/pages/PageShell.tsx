@@ -13,10 +13,16 @@ import StickyLeadBar from "@/components/ui/StickyLeadBar";
 export default function PageShell({
   children,
   breadcrumbs,
+  title,
+  eyebrow,
+  lead,
   hideNextStep = false,
 }: {
   children: ReactNode;
   breadcrumbs?: { name: string; path: string }[];
+  title?: string;
+  eyebrow?: string;
+  lead?: string;
   hideNextStep?: boolean;
 }) {
   useEffect(() => {
@@ -105,7 +111,20 @@ export default function PageShell({
           </ol>
         </nav>
       )}
-      <main>{children}</main>
+      {title && (
+        <header className="mx-auto max-w-[1480px] px-6 pt-10 pb-12 md:px-10 md:pt-14 md:pb-16 text-center">
+          {eyebrow && <span className="eyebrow text-brand block mb-3">{eyebrow}</span>}
+          <h1 className="display text-4xl md:text-6xl font-bold tracking-tight text-deep max-w-4xl mx-auto">
+            {title}
+          </h1>
+          {lead && (
+            <p className="mt-5 text-base md:text-xl text-deep/75 max-w-2xl mx-auto leading-relaxed">
+              {lead}
+            </p>
+          )}
+        </header>
+      )}
+      <main className="px-6 pb-20 md:px-10 md:pb-28">{children}</main>
       {!hideNextStep && <NextStep />}
       <Footer />
       <StickyLeadBar />

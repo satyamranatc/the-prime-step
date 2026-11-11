@@ -328,7 +328,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="en-IN"
       className={`${geistSans.variable} ${geistMono.variable} ${instrument.variable} antialiased`}
     >
       <head>

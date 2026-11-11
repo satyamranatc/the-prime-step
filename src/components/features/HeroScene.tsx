@@ -9,7 +9,7 @@ import { sceneState } from "@/lib/scroll";
 // Center of official mark in original vector coordinates
 const CX = 396.5;
 const CY = 788.5;
-// Architectural scale calibrated for bold heroic presence
+// Architectural scale calibrated for clean, balanced heroic presence
 const SCALE = 0.0063;
 
 // Precise coordinates matching The Prime Step official logo vector geometry
@@ -64,7 +64,7 @@ function makeShape(pts: [number, number][]): THREE.Shape {
   return shape;
 }
 
-// Global window mouse coordinates normalized from -1 to +1 + raw screen coordinates for proximity lightning
+// Global window mouse coordinates normalized from -1 to +1
 const globalMouse = {
   x: 0,
   y: 0,
@@ -76,25 +76,26 @@ const globalMouse = {
 };
 
 if (typeof window !== "undefined") {
-  window.addEventListener(
-    "mousemove",
-    (e) => {
-      globalMouse.targetX = (e.clientX / window.innerWidth) * 2 - 1;
-      globalMouse.targetY = -(e.clientY / window.innerHeight) * 2 + 1; // standard Cartesian Y
-      globalMouse.clientX = e.clientX;
-      globalMouse.clientY = e.clientY;
-      globalMouse.hasMoved = true;
-    },
-    { passive: true }
-  );
+  const onMove = (e: MouseEvent) => {
+    globalMouse.targetX = (e.clientX / window.innerWidth) * 2 - 1;
+    globalMouse.targetY = -(e.clientY / window.innerHeight) * 2 + 1;
+    globalMouse.clientX = e.clientX;
+    globalMouse.clientY = e.clientY;
+    globalMouse.hasMoved = true;
+  };
 
-  window.addEventListener(
-    "pointerleave",
-    () => {
+  const onLeave = () => {
+    globalMouse.hasMoved = false;
+  };
+
+  window.addEventListener("mousemove", onMove, { passive: true });
+  document.addEventListener("mouseleave", onLeave, { passive: true });
+  window.addEventListener("blur", onLeave, { passive: true });
+  document.addEventListener("mouseout", (e) => {
+    if (!e.relatedTarget && !(e as unknown as { toElement?: Element }).toElement) {
       globalMouse.hasMoved = false;
-    },
-    { passive: true }
-  );
+    }
+  }, { passive: true });
 
   window.addEventListener(
     "deviceorientation",
@@ -108,13 +109,12 @@ if (typeof window !== "undefined") {
   );
 }
 
-// Technology metadata matching the requested official tech logos
+// Technology metadata matching official tech logos
 interface TechMeta {
   id: "python" | "java" | "react" | "tensorflow" | "aws";
   name: string;
   url: string;
   accent: string;
-  multiplier: number;
 }
 
 const TECH_ITEMS: Record<string, TechMeta> = {
@@ -123,39 +123,37 @@ const TECH_ITEMS: Record<string, TechMeta> = {
     name: "Python",
     url: "/tech/python.png",
     accent: "#387EB8",
-    multiplier: 1.35,
   },
   java: {
     id: "java",
     name: "Java",
     url: "/tech/java.png",
     accent: "#E76F00",
-    multiplier: 1.6,
   },
   react: {
     id: "react",
     name: "React",
     url: "/tech/react.png",
     accent: "#00D8FF",
-    multiplier: 1.35,
   },
   tensorflow: {
     id: "tensorflow",
     name: "TensorFlow",
     url: "/tech/tensorflow.png",
     accent: "#FF6F00",
-    multiplier: 1.35,
   },
   aws: {
     id: "aws",
     name: "AWS",
     url: "/tech/aws.png",
     accent: "#FF9900",
-    multiplier: 1.45,
   },
 };
 
-// Generate high-resolution, vector-crisp 2D canvas textures for orbiting technology icons
+/**
+ * Generate uniform, vector-crisp 2D canvas textures for orbiting technology medallions.
+ * Enforces uniform circular dimensions, balanced padding, and consistent border aesthetics.
+ */
 function createTechCanvasTexture(meta: TechMeta): THREE.CanvasTexture {
   if (typeof document === "undefined") {
     return new THREE.CanvasTexture(null as unknown as HTMLCanvasElement);
@@ -169,22 +167,22 @@ function createTechCanvasTexture(meta: TechMeta): THREE.CanvasTexture {
 
   const cx = size / 2;
   const cy = size / 2;
-  const r = size * 0.43;
+  const r = size * 0.42;
 
   const renderDisc = (img?: HTMLImageElement) => {
     ctx.clearRect(0, 0, size, size);
 
-    // 1. Soft ambient outer glow
+    // 1. Soft ambient outer shadow for depth
     ctx.save();
-    ctx.shadowColor = "rgba(15, 82, 80, 0.24)";
-    ctx.shadowBlur = 28;
-    ctx.shadowOffsetY = 10;
+    ctx.shadowColor = "rgba(10, 60, 58, 0.26)";
+    ctx.shadowBlur = 24;
+    ctx.shadowOffsetY = 8;
 
-    // 2. Pure porcelain ceramic disc face with subtle radial gradient
+    // 2. Uniform porcelain ceramic face
     const grad = ctx.createRadialGradient(cx - r * 0.25, cy - r * 0.25, r * 0.1, cx, cy, r);
     grad.addColorStop(0, "#FFFFFF");
-    grad.addColorStop(0.85, "#F9FEFE");
-    grad.addColorStop(1, "#EDF8F7");
+    grad.addColorStop(0.82, "#F8FCFC");
+    grad.addColorStop(1, "#EDF7F6");
 
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
@@ -192,23 +190,23 @@ function createTechCanvasTexture(meta: TechMeta): THREE.CanvasTexture {
     ctx.fill();
     ctx.restore();
 
-    // 3. Crisp colored accent rim
+    // 3. Crisp uniform colored accent rim
     ctx.beginPath();
-    ctx.arc(cx, cy, r - 4, 0, Math.PI * 2);
-    ctx.lineWidth = 10;
+    ctx.arc(cx, cy, r - 3, 0, Math.PI * 2);
+    ctx.lineWidth = 8;
     ctx.strokeStyle = meta.accent;
     ctx.stroke();
 
     // 4. Subtle inner highlight ring
     ctx.beginPath();
-    ctx.arc(cx, cy, r - 14, 0, Math.PI * 2);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "rgba(20, 122, 119, 0.12)";
+    ctx.arc(cx, cy, r - 12, 0, Math.PI * 2);
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = "rgba(20, 122, 119, 0.14)";
     ctx.stroke();
 
-    // 5. Draw official tech logo centered with generous padding
+    // 5. Draw tech logo centered with consistent uniform padding
     if (img && img.complete && img.naturalWidth > 0) {
-      const maxDim = r * 1.15;
+      const maxDim = r * 1.16;
       const scale = Math.min(maxDim / img.naturalWidth, maxDim / img.naturalHeight);
       const w = img.naturalWidth * scale;
       const h = img.naturalHeight * scale;
@@ -250,34 +248,34 @@ interface OrbitConfig {
 }
 
 const ORBITS: OrbitConfig[] = [
-  // Orbit 1: Outer Perimeter Loop with React & AWS (clears monument silhouette completely)
+  // Orbit 1: Outer Loop with React & AWS (180° balanced spacing)
   {
-    radiusX: 2.44,
-    radiusY: 2.26,
+    radiusX: 2.45,
+    radiusY: 2.25,
     rotation: [Math.PI * 0.11, Math.PI * 0.12, Math.PI * 0.18],
-    speed: 0.52,
+    speed: 0.50,
     icons: [
       { tech: TECH_ITEMS.react, offset: 0.35 },
       { tech: TECH_ITEMS.aws, offset: 0.35 + Math.PI },
     ],
   },
-  // Orbit 2: Counter-Tilted Outer Loop with Python & TensorFlow
+  // Orbit 2: Counter-Tilted Outer Loop with Python & TensorFlow (180° balanced spacing)
   {
-    radiusX: 2.56,
-    radiusY: 2.36,
-    rotation: [-Math.PI * 0.12, -Math.PI * 0.11, -Math.PI * 0.2],
+    radiusX: 2.55,
+    radiusY: 2.35,
+    rotation: [-Math.PI * 0.12, -Math.PI * 0.11, -Math.PI * 0.20],
     speed: 0.44,
     icons: [
       { tech: TECH_ITEMS.python, offset: 1.45 },
       { tech: TECH_ITEMS.tensorflow, offset: 1.45 + Math.PI },
     ],
   },
-  // Orbit 3: Equatorial Halo Loop with Java (never intersects central teal pillar)
+  // Orbit 3: Equatorial Loop with Java
   {
-    radiusX: 2.36,
-    radiusY: 2.22,
+    radiusX: 2.35,
+    radiusY: 2.20,
     rotation: [Math.PI * 0.09, -Math.PI * 0.12, Math.PI * 0.05],
-    speed: 0.58,
+    speed: 0.56,
     icons: [
       { tech: TECH_ITEMS.java, offset: 2.65 },
     ],
@@ -294,12 +292,12 @@ function SingleAtomicOrbit({
   const groupRef = useRef<THREE.Group>(null);
   const ringRef = useRef<THREE.Mesh>(null);
   const iconRefs = useRef<(THREE.Group | null)[]>([]);
+  const connectorRefs = useRef<(THREE.Group | null)[]>([]);
   const trailRefs = useRef<(THREE.Mesh | null)[]>([]);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     const p = sceneState.progress;
-    // Controlled expansion on scroll so orbits never touch canvas edges
     const expansion = 1 + p * 0.08;
     const rx = config.radiusX * expansion;
     const ry = config.radiusY * expansion;
@@ -309,18 +307,23 @@ function SingleAtomicOrbit({
     }
 
     config.icons.forEach((item, idx) => {
+      const angle = t * config.speed + item.offset;
+      const posX = Math.cos(angle) * rx;
+      const posY = Math.sin(angle) * ry;
+
       const node = iconRefs.current[idx];
       if (node) {
-        const angle = t * config.speed + item.offset;
-        node.position.set(
-          Math.cos(angle) * rx,
-          Math.sin(angle) * ry,
-          0
-        );
+        node.position.set(posX, posY, 0);
       }
+
+      const conn = connectorRefs.current[idx];
+      if (conn) {
+        conn.position.set(posX, posY, 0);
+      }
+
       const trail = trailRefs.current[idx];
       if (trail) {
-        const trailAngle = t * config.speed + item.offset - 0.18;
+        const trailAngle = angle - 0.18;
         trail.position.set(
           Math.cos(trailAngle) * rx,
           Math.sin(trailAngle) * ry,
@@ -329,7 +332,6 @@ function SingleAtomicOrbit({
       }
     });
 
-    // Gentle gyroscopic precession
     if (groupRef.current) {
       groupRef.current.rotation.z = config.rotation[2] + Math.sin(t * 0.35) * 0.035;
     }
@@ -337,7 +339,7 @@ function SingleAtomicOrbit({
 
   return (
     <group ref={groupRef} rotation={config.rotation}>
-      {/* 1. True 3D Tubular Orbital Track Ring (never vanishes edge-on) */}
+      {/* 1. True 3D Tubular Orbital Track Ring */}
       <mesh ref={ringRef} renderOrder={1}>
         <torusGeometry args={[config.radiusX, 0.011, 16, 140]} />
         <meshPhysicalMaterial
@@ -352,7 +354,7 @@ function SingleAtomicOrbit({
         />
       </mesh>
 
-      {/* 2. Subtle Trailing Photon Nodes */}
+      {/* 2. Trailing Photon Node */}
       {config.icons.map((item, idx) => (
         <mesh
           key={`trail-${item.tech.id}`}
@@ -361,12 +363,40 @@ function SingleAtomicOrbit({
           }}
           renderOrder={2}
         >
-          <sphereGeometry args={[0.034, 12, 12]} />
+          <sphereGeometry args={[0.032, 12, 12]} />
           <meshBasicMaterial color={item.tech.accent} transparent opacity={0.7} />
         </mesh>
       ))}
 
-      {/* 3. Upright Camera-Facing Billboard Tech Medallions (offset toward camera so ring never cuts across face) */}
+      {/* 3. Physical Clasp / Connector Nodes Anchoring Medallions Directly to Orbital Track */}
+      {config.icons.map((item, idx) => (
+        <group
+          key={`connector-${item.tech.id}`}
+          ref={(el) => {
+            connectorRefs.current[idx] = el;
+          }}
+        >
+          {/* Orbital Track Clasp Ring */}
+          <mesh renderOrder={3}>
+            <sphereGeometry args={[0.042, 16, 16]} />
+            <meshStandardMaterial
+              color="#0C8E8B"
+              emissive="#00FFE0"
+              emissiveIntensity={0.35}
+              metalness={0.65}
+              roughness={0.22}
+            />
+          </mesh>
+
+          {/* Micro-Pin Link to Floating Medallion Backplate */}
+          <mesh position={[0, 0, 0.08]} rotation={[Math.PI / 2, 0, 0]} renderOrder={3}>
+            <cylinderGeometry args={[0.012, 0.012, 0.14, 8]} />
+            <meshStandardMaterial color="#1E9C99" metalness={0.7} roughness={0.3} />
+          </mesh>
+        </group>
+      ))}
+
+      {/* 4. Uniform Circular Camera-Facing Medallions */}
       {config.icons.map((item, idx) => (
         <group
           key={item.tech.id}
@@ -375,20 +405,20 @@ function SingleAtomicOrbit({
           }}
         >
           <Billboard follow={true} lockX={false} lockY={false} lockZ={false}>
-            {/* Soft Backplate Halo */}
+            {/* Uniform Circular Outer Glow Halo */}
             <mesh position={[0, 0, 0.14]} renderOrder={4}>
-              <circleGeometry args={[0.27, 48]} />
+              <circleGeometry args={[0.265, 48]} />
               <meshBasicMaterial
                 color={item.tech.accent}
                 transparent
-                opacity={0.18}
+                opacity={0.20}
                 depthWrite={false}
               />
             </mesh>
 
-            {/* High-DPI Upright Medallion Face */}
+            {/* Uniform Circular Medallion Face */}
             <mesh position={[0, 0, 0.16]} renderOrder={5}>
-              <circleGeometry args={[0.245, 48]} />
+              <circleGeometry args={[0.24, 48]} />
               <meshBasicMaterial
                 map={textures[item.tech.id]}
                 transparent
@@ -414,7 +444,7 @@ function AtomicTechOrbits() {
   }, []);
 
   return (
-    <group position={[0, 0.05, 0]}>
+    <group position={[0, 0.06, 0]}>
       {ORBITS.map((orbit, index) => (
         <SingleAtomicOrbit key={index} config={orbit} textures={textures} />
       ))}
@@ -423,350 +453,362 @@ function AtomicTechOrbits() {
 }
 
 /**
- * Ultra-High-Performance Proximity Electric Arc & Spark Discharge
+ * Natural Cursor-Follower Lightning & Particle Energy System
  *
- * Designed for High-Contrast Visibility on Light/White Backgrounds:
- * - Uses Normal Blending so rich TPS Teal (#008080) and Deep Obsidian Teal (#003838)
- *   never wash out against the white background.
- * - Tri-layer braided plasma bolt:
- *   1. Deep Obsidian Teal (#003838) edge/halo for maximum visual contrast on white
- *   2. Official TPS Brand Teal (#008080) main electric arc
- *   3. Vivid Electric Cyan (#00E5D0) high-voltage inner core
- *   4. Branching arcs in saturated teal (#0C8E8B)
- *   5. Concentric multi-tier spark points (#003838 + #008080 + #00FFE0) locked to cursor
- * - Computed in WORLD space: 100% exact alignment directly under the mouse cursor.
- * - ZERO runtime memory allocation: pre-allocated static Float32Array buffers.
- * - Dynamic sleep: 100% idle when cursor is outside proximity radius or offscreen (0 draw calls).
+ * Sequence Architecture:
+ * 1. Clearly Defined Starting Point: Emanates from the logo's apex emitter node.
+ * 2. Natural Curvature: Follows cursor with organic inertia via cubic Bezier spline
+ *    and harmonic electromagnetic ripples, avoiding sharp random zigzags.
+ * 3. Cyan Energy Core with Subtle Outer Glow: Multi-layer luminous filament that tapers
+ *    gracefully to avoid pixelated or abrupt endings.
+ * 4. Particles Along Trail: Energy motes spawn along the motion arc and fade progressively.
+ * 5. Smooth Fade Away: Decays naturally with damped intensity when idle or departing.
  */
-const BOLT_SEGMENTS = 16;
-const BRANCH_SEGMENTS = 7;
-const BOLT_FLOATS = BOLT_SEGMENTS * 6; // 96
-const BRANCH_FLOATS = BRANCH_SEGMENTS * 2 * 6; // 84
-const SPARK_COUNT = 12;
+const SPLINE_SEGMENTS = 26;
+const SPLINE_FLOATS = SPLINE_SEGMENTS * 2 * 3; // 156 floats for line segments
 
-// Monument emission anchor points in monument local coordinates
-const LOCAL_ANCHORS = [
-  new THREE.Vector3(-0.15, 0.72, 0.1),  // Canopy top edge
-  new THREE.Vector3(0.35, 0.42, 0.05),  // Right shoulder
-  new THREE.Vector3(-0.62, 0.85, 0.15), // Flap corner
-  new THREE.Vector3(-0.32, -0.45, 0.1), // Central pillar flank
-  new THREE.Vector3(-0.18, -1.35, 0.05) // Lower pillar tip
-];
+const PARTICLE_COUNT = 24;
+const PARTICLE_FLOATS = PARTICLE_COUNT * 2 * 3; // 144 floats for particle streaks
 
-function ProximityLightning({
+// Fixed emitter focal origin in logo monument local coordinates (apex of the loop)
+const LOGO_EMITTER_LOCAL = new THREE.Vector3(0.06, 0.52, 0.22);
+
+function NaturalCursorLightning({
   monumentRef,
 }: {
   monumentRef: React.RefObject<THREE.Group | null>;
 }) {
-  const haloLineRef = useRef<THREE.LineSegments>(null);
-  const mainLineRef = useRef<THREE.LineSegments>(null);
-  const coreLineRef = useRef<THREE.LineSegments>(null);
-  const branchLineRef = useRef<THREE.LineSegments>(null);
+  const outerGlowLineRef = useRef<THREE.LineSegments>(null);
+  const innerCoreLineRef = useRef<THREE.LineSegments>(null);
+  const particleLineRef = useRef<THREE.LineSegments>(null);
+  const contactHaloRef = useRef<THREE.Mesh>(null);
+  const emitterBeadRef = useRef<THREE.Mesh>(null);
+  const pointLightRef = useRef<THREE.PointLight>(null);
 
-  const outerSparksRef = useRef<THREE.Points>(null);
-  const midSparksRef = useRef<THREE.Points>(null);
-  const innerSparksRef = useRef<THREE.Points>(null);
+  // Pre-allocated typed arrays for zero GC allocation at 60fps
+  const outerGlowPositions = useMemo(() => new Float32Array(SPLINE_FLOATS), []);
+  const innerCorePositions = useMemo(() => new Float32Array(SPLINE_FLOATS), []);
+  const particlePositions = useMemo(() => new Float32Array(PARTICLE_FLOATS), []);
 
-  const lightRef = useRef<THREE.PointLight>(null);
-
-  // Pre-allocated typed arrays (0 GC garbage during animation)
-  const haloPositions = useMemo(() => new Float32Array(BOLT_FLOATS), []);
-  const mainPositions = useMemo(() => new Float32Array(BOLT_FLOATS), []);
-  const corePositions = useMemo(() => new Float32Array(BOLT_FLOATS), []);
-  const branchPositions = useMemo(() => new Float32Array(BRANCH_FLOATS), []);
-
-  const outerSparkPositions = useMemo(() => new Float32Array(SPARK_COUNT * 3), []);
-  const midSparkPositions = useMemo(() => new Float32Array(SPARK_COUNT * 3), []);
-  const innerSparkPositions = useMemo(() => new Float32Array(SPARK_COUNT * 3), []);
-
-  // Pre-allocated reusable vectors and point buffer for bolt vertices
-  const sourceVec = useMemo(() => new THREE.Vector3(), []);
-  const targetVec = useMemo(() => new THREE.Vector3(), []);
-  const dirVec = useMemo(() => new THREE.Vector3(), []);
-  const perpVec = useMemo(() => new THREE.Vector3(), []);
-  const logoCenterWorld = useMemo(() => new THREE.Vector3(), []);
+  // Reusable vectors
+  const originWorld = useMemo(() => new THREE.Vector3(), []);
+  const targetCursor = useMemo(() => new THREE.Vector3(), []);
+  const laggedCursor = useMemo(() => new THREE.Vector3(), []);
+  const prevCursor = useMemo(() => new THREE.Vector3(), []);
   const unprojectVec = useMemo(() => new THREE.Vector3(), []);
+  const dirVec = useMemo(() => new THREE.Vector3(), []);
+  const normalVec = useMemo(() => new THREE.Vector3(), []);
+  const cp1 = useMemo(() => new THREE.Vector3(), []);
+  const cp2 = useMemo(() => new THREE.Vector3(), []);
 
-  const boltPts = useMemo(
-    () => Array.from({ length: BOLT_SEGMENTS + 1 }, () => new THREE.Vector3()),
+  // Pre-allocated curve samples
+  const curvePts = useMemo(
+    () => Array.from({ length: SPLINE_SEGMENTS + 1 }, () => new THREE.Vector3()),
     []
   );
 
-  useFrame((state) => {
+  // Pre-allocated particle pool
+  const particles = useMemo(
+    () =>
+      Array.from({ length: PARTICLE_COUNT }, () => ({
+        x: 0,
+        y: 0,
+        z: 0,
+        vx: 0,
+        vy: 0,
+        vz: 0,
+        life: 0,
+        decay: 2.2,
+        size: 0.024,
+      })),
+    []
+  );
+
+  // Damped state
+  const stateRef = useRef({
+    energyIntensity: 0,
+    initialized: false,
+  });
+
+  useFrame((state, dt) => {
     const group = monumentRef.current;
-    const haloLine = haloLineRef.current;
-    const mainLine = mainLineRef.current;
-    const coreLine = coreLineRef.current;
-    const branchLine = branchLineRef.current;
-
-    const outerSparks = outerSparksRef.current;
-    const midSparks = midSparksRef.current;
-    const innerSparks = innerSparksRef.current;
-
-    const light = lightRef.current;
+    const outerGlow = outerGlowLineRef.current;
+    const innerCore = innerCoreLineRef.current;
+    const particleMesh = particleLineRef.current;
+    const contactHalo = contactHaloRef.current;
+    const emitterBead = emitterBeadRef.current;
+    const pointLight = pointLightRef.current;
 
     if (
       !group ||
-      !haloLine ||
-      !mainLine ||
-      !coreLine ||
-      !branchLine ||
-      !outerSparks ||
-      !midSparks ||
-      !innerSparks ||
-      !light
+      !outerGlow ||
+      !innerCore ||
+      !particleMesh ||
+      !contactHalo ||
+      !emitterBead ||
+      !pointLight
     ) {
       return;
     }
 
-    const setVisibility = (visible: boolean) => {
-      haloLine.visible = visible;
-      mainLine.visible = visible;
-      coreLine.visible = visible;
-      branchLine.visible = visible;
-      outerSparks.visible = visible;
-      midSparks.visible = visible;
-      innerSparks.visible = visible;
-      if (!visible) light.intensity = 0;
-    };
+    const clampedDt = Math.min(0.04, Math.max(0.001, dt));
+    const s = stateRef.current;
 
-    // Check if cursor is active and on screen
-    if (!globalMouse.hasMoved) {
-      if (haloLine.visible) setVisibility(false);
-      return;
-    }
+    // 1. Calculate clearly defined starting point on the logo in world coordinates
+    originWorld.copy(LOGO_EMITTER_LOCAL).applyMatrix4(group.matrixWorld);
 
-    // 1. Calculate cursor world position at depth z = 0.25 (flush with logo face)
+    // 2. Unproject cursor position in world space at z = 0.25
     unprojectVec.set(state.pointer.x, state.pointer.y, 0.5);
     unprojectVec.unproject(state.camera);
     dirVec.subVectors(unprojectVec, state.camera.position).normalize();
     const planeDistance = (0.25 - state.camera.position.z) / dirVec.z;
-    targetVec.copy(state.camera.position).addScaledVector(dirVec, planeDistance);
+    targetCursor.copy(state.camera.position).addScaledVector(dirVec, planeDistance);
 
-    // 2. Logo center in world space
-    logoCenterWorld.set(0, 0.08, 0).applyMatrix4(group.matrixWorld);
-    const dist = logoCenterWorld.distanceTo(targetVec);
+    if (!s.initialized) {
+      laggedCursor.copy(targetCursor);
+      prevCursor.copy(targetCursor);
+      s.initialized = true;
+    }
 
-    // 3. Proximity check (activates when cursor is within 4.8 world units)
-    const activationRadius = 4.8;
-    if (dist > activationRadius) {
-      if (haloLine.visible) setVisibility(false);
+    // 3. Natural delay: spring-damp lagged cursor towards real cursor
+    laggedCursor.x = THREE.MathUtils.damp(laggedCursor.x, targetCursor.x, 8.5, clampedDt);
+    laggedCursor.y = THREE.MathUtils.damp(laggedCursor.y, targetCursor.y, 8.5, clampedDt);
+    laggedCursor.z = THREE.MathUtils.damp(laggedCursor.z, targetCursor.z, 8.5, clampedDt);
+
+    // Calculate motion speed
+    const cursorSpeed = targetCursor.distanceTo(prevCursor) / clampedDt;
+    prevCursor.copy(targetCursor);
+
+    // 4. Proximity & Activity Evaluation
+    const distFromOrigin = originWorld.distanceTo(targetCursor);
+    const maxRadius = 3.0;
+    const inRange = distFromOrigin <= maxRadius && globalMouse.hasMoved;
+
+    // Target intensity: high when moving in proximity, fades progressively when idle or departing
+    const proximityRatio = Math.max(0, 1 - distFromOrigin / maxRadius);
+    const targetIntensity = inRange
+      ? Math.pow(proximityRatio, 1.1) * (0.55 + Math.min(0.45, cursorSpeed * 0.08))
+      : 0.0;
+
+    // Smooth progressive fade in and buttery gradual decay
+    s.energyIntensity = THREE.MathUtils.damp(
+      s.energyIntensity,
+      targetIntensity,
+      inRange ? 5.5 : 2.6,
+      clampedDt
+    );
+
+    const energy = s.energyIntensity;
+
+    if (energy < 0.008) {
+      outerGlow.visible = false;
+      innerCore.visible = false;
+      particleMesh.visible = false;
+      contactHalo.visible = false;
+      emitterBead.visible = false;
+      pointLight.intensity = 0;
       return;
     }
 
-    // Proximity curve (smooth ease-in as cursor nears the logo)
-    const proximity = Math.pow(Math.max(0, 1 - dist / activationRadius), 1.15);
+    outerGlow.visible = true;
+    innerCore.visible = true;
+    particleMesh.visible = true;
+    contactHalo.visible = true;
+    emitterBead.visible = true;
 
-    // Dynamic electrical crackle (keeps it persistently bright while vibrating)
-    const crackle = Math.random() > 0.08 ? 0.82 + Math.random() * 0.18 : 0.45;
-    const power = proximity * crackle;
-
-    if (power < 0.04) {
-      if (haloLine.visible) setVisibility(false);
-      return;
-    }
-
-    setVisibility(true);
-
-    // 4. Find the closest emission anchor on the 3D logo in WORLD space
-    let bestDistSq = Infinity;
-    for (let i = 0; i < LOCAL_ANCHORS.length; i++) {
-      unprojectVec.copy(LOCAL_ANCHORS[i]).applyMatrix4(group.matrixWorld);
-      const dsq = unprojectVec.distanceToSquared(targetVec);
-      if (dsq < bestDistSq) {
-        bestDistSq = dsq;
-        sourceVec.copy(unprojectVec);
-      }
-    }
-
-    // Direction and perpendicular vector from source to target
-    dirVec.subVectors(targetVec, sourceVec);
-    const boltLength = dirVec.length();
-    if (boltLength < 0.08) return;
-
+    // 5. Construct Smooth Aerodynamic Spline (Curves naturally instead of random zigzags)
+    dirVec.subVectors(targetCursor, originWorld);
+    const chordLength = dirVec.length();
     dirVec.normalize();
-    perpVec.set(-dirVec.y, dirVec.x, 0).normalize();
 
-    // 5. Generate Primary Jagged Arc Vertices (pin endpoints, max jitter in middle)
-    boltPts[0].copy(sourceVec);
-    boltPts[BOLT_SEGMENTS].copy(targetVec);
+    // Perpendicular plane normal for aerodynamic whip curve
+    normalVec.set(-dirVec.y, dirVec.x, 0.2).normalize();
 
-    const jitterScale = Math.min(0.65, boltLength * 0.24) * (0.6 + power * 0.4);
+    // Cubic Bezier Control Points
+    // CP1 extends along logo outward tangent
+    cp1.copy(originWorld).addScaledVector(dirVec, chordLength * 0.35);
+    cp1.y += chordLength * 0.12;
 
-    for (let i = 1; i < BOLT_SEGMENTS; i++) {
-      const frac = i / BOLT_SEGMENTS;
-      const env = Math.sin(frac * Math.PI); // Envelope: 0 at ends, 1 in middle
-      const jMag = (Math.random() - 0.5) * jitterScale * env;
-      const zMag = (Math.random() - 0.5) * jitterScale * 0.35 * env;
+    // CP2 lags behind cursor movement, creating smooth whip inertia
+    cp2.copy(laggedCursor).addScaledVector(dirVec, -chordLength * 0.25);
 
-      boltPts[i].set(
-        sourceVec.x + (targetVec.x - sourceVec.x) * frac + perpVec.x * jMag,
-        sourceVec.y + (targetVec.y - sourceVec.y) * frac + perpVec.y * jMag,
-        sourceVec.z + (targetVec.z - sourceVec.z) * frac + zMag
+    const time = state.clock.elapsedTime;
+
+    // Evaluate cubic Bezier with gentle electromagnetic harmonic ripples
+    for (let i = 0; i <= SPLINE_SEGMENTS; i++) {
+      const u = i / SPLINE_SEGMENTS;
+      const invU = 1 - u;
+
+      // Cubic Bezier interpolation
+      const b0 = invU * invU * invU;
+      const b1 = 3 * invU * invU * u;
+      const b2 = 3 * invU * u * u;
+      const b3 = u * u * u;
+
+      const px = b0 * originWorld.x + b1 * cp1.x + b2 * cp2.x + b3 * targetCursor.x;
+      const py = b0 * originWorld.y + b1 * cp1.y + b2 * cp2.y + b3 * targetCursor.y;
+      const pz = b0 * originWorld.z + b1 * cp1.z + b2 * cp2.z + b3 * targetCursor.z;
+
+      // Natural harmonic wave envelope (strictly 0 at both endpoints, fluid wave in center)
+      const env = Math.sin(u * Math.PI);
+      const wave =
+        (Math.sin(u * 14.0 - time * 16.0) * 0.045 +
+          Math.sin(u * 28.0 - time * 28.0) * 0.018) *
+        env *
+        (0.5 + energy * 0.5);
+
+      curvePts[i].set(
+        px + normalVec.x * wave,
+        py + normalVec.y * wave,
+        pz + normalVec.z * wave
       );
     }
 
-    // 6. Fill Main Bolt, Dark Contrast Halo, and Inner Cyan Filament
-    for (let i = 0; i < BOLT_SEGMENTS; i++) {
-      const p1 = boltPts[i];
-      const p2 = boltPts[i + 1];
+    // 6. Populate Spline Line Segments: Outer Cyan Glow Sheath & Inner High-Energy Core
+    for (let i = 0; i < SPLINE_SEGMENTS; i++) {
+      const p1 = curvePts[i];
+      const p2 = curvePts[i + 1];
       const idx = i * 6;
 
-      // Main Brand Teal Arc
-      mainPositions[idx] = p1.x;
-      mainPositions[idx + 1] = p1.y;
-      mainPositions[idx + 2] = p1.z;
-      mainPositions[idx + 3] = p2.x;
-      mainPositions[idx + 4] = p2.y;
-      mainPositions[idx + 5] = p2.z;
+      // Outer Cyan Glow Sheath (#00A89F)
+      outerGlowPositions[idx] = p1.x;
+      outerGlowPositions[idx + 1] = p1.y;
+      outerGlowPositions[idx + 2] = p1.z - 0.004;
+      outerGlowPositions[idx + 3] = p2.x;
+      outerGlowPositions[idx + 4] = p2.y;
+      outerGlowPositions[idx + 5] = p2.z - 0.004;
 
-      // Dark Obsidian Teal Shadow / Contrast Edge (offset for visible width on white)
-      const haloOffset = (i % 2 === 0 ? 0.024 : -0.024);
-      haloPositions[idx] = p1.x + perpVec.x * haloOffset;
-      haloPositions[idx + 1] = p1.y + perpVec.y * haloOffset;
-      haloPositions[idx + 2] = p1.z - 0.005;
-      haloPositions[idx + 3] = p2.x + perpVec.x * haloOffset;
-      haloPositions[idx + 4] = p2.y + perpVec.y * haloOffset;
-      haloPositions[idx + 5] = p2.z - 0.005;
-
-      // Vivid Electric Cyan Core Filament (micro jitter)
-      const coreOffset = (Math.random() - 0.5) * 0.012;
-      corePositions[idx] = p1.x + perpVec.x * coreOffset;
-      corePositions[idx + 1] = p1.y + perpVec.y * coreOffset;
-      corePositions[idx + 2] = p1.z + 0.008;
-      corePositions[idx + 3] = p2.x + perpVec.x * coreOffset;
-      corePositions[idx + 4] = p2.y + perpVec.y * coreOffset;
-      corePositions[idx + 5] = p2.z + 0.008;
+      // Inner Razor Core (#00FFE0)
+      innerCorePositions[idx] = p1.x;
+      innerCorePositions[idx + 1] = p1.y;
+      innerCorePositions[idx + 2] = p1.z + 0.004;
+      innerCorePositions[idx + 3] = p2.x;
+      innerCorePositions[idx + 4] = p2.y;
+      innerCorePositions[idx + 5] = p2.z + 0.004;
     }
 
-    // 7. Generate Branching Sub-Arcs (Branch 1 from 35% mark, Branch 2 from 65% mark)
-    let bOffset = 0;
+    // 7. Small Progressive Particles Along the Trail
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const p = particles[i];
+      p.life -= clampedDt * p.decay;
 
-    // Branch 1
-    const b1Start = boltPts[Math.floor(BOLT_SEGMENTS * 0.35)];
-    let curB1X = b1Start.x;
-    let curB1Y = b1Start.y;
-    let curB1Z = b1Start.z;
-    const b1DirX = (dirVec.x + perpVec.x * 0.9) * 0.6;
-    const b1DirY = (dirVec.y + perpVec.y * 0.9) * 0.6;
+      // Spawn new particles along the curved trail when energy is active
+      if (p.life <= 0) {
+        if (energy > 0.12 && Math.random() < 0.45) {
+          // Sample an interpolated point along the smooth spline
+          const sampleU = 0.15 + Math.random() * 0.75;
+          const segFloat = sampleU * SPLINE_SEGMENTS;
+          const segIdx = Math.min(SPLINE_SEGMENTS - 1, Math.floor(segFloat));
+          const frac = segFloat - segIdx;
 
-    for (let i = 1; i <= BRANCH_SEGMENTS; i++) {
-      const stepDist = (boltLength * 0.32) / BRANCH_SEGMENTS;
-      const jMag = (Math.random() - 0.5) * jitterScale * 0.6;
+          const pStart = curvePts[segIdx];
+          const pEnd = curvePts[segIdx + 1];
 
-      const nextX = curB1X + b1DirX * stepDist + perpVec.x * jMag;
-      const nextY = curB1Y + b1DirY * stepDist + perpVec.y * jMag;
-      const nextZ = curB1Z + (Math.random() - 0.5) * 0.08;
+          p.x = pStart.x + (pEnd.x - pStart.x) * frac + (Math.random() - 0.5) * 0.03;
+          p.y = pStart.y + (pEnd.y - pStart.y) * frac + (Math.random() - 0.5) * 0.03;
+          p.z = pStart.z + (pEnd.z - pStart.z) * frac + (Math.random() - 0.5) * 0.03;
 
-      branchPositions[bOffset] = curB1X;
-      branchPositions[bOffset + 1] = curB1Y;
-      branchPositions[bOffset + 2] = curB1Z;
-      branchPositions[bOffset + 3] = nextX;
-      branchPositions[bOffset + 4] = nextY;
-      branchPositions[bOffset + 5] = nextZ;
+          const driftAngle = Math.random() * Math.PI * 2;
+          const driftSpeed = 0.25 + Math.random() * 0.65;
+          p.vx = Math.cos(driftAngle) * driftSpeed;
+          p.vy = Math.sin(driftAngle) * driftSpeed + 0.15; // subtle upward buoyancy
+          p.vz = (Math.random() - 0.5) * 0.2;
+          p.life = 1.0;
+          p.decay = 1.8 + Math.random() * 1.6; // Progressive fade over ~0.3-0.5s
+          p.size = 0.022 + Math.random() * 0.020;
+        }
+      } else {
+        // Integrate position with slight drag
+        p.x += p.vx * clampedDt;
+        p.y += p.vy * clampedDt;
+        p.z += p.vz * clampedDt;
+        p.vx *= 0.94;
+        p.vy *= 0.94;
+        p.vz *= 0.94;
+      }
 
-      bOffset += 6;
-      curB1X = nextX;
-      curB1Y = nextY;
-      curB1Z = nextZ;
+      const idx = i * 6;
+      if (p.life > 0) {
+        const streakTailX = p.x - p.vx * p.size;
+        const streakTailY = p.y - p.vy * p.size;
+        const streakTailZ = p.z - p.vz * p.size;
+
+        particlePositions[idx] = p.x;
+        particlePositions[idx + 1] = p.y;
+        particlePositions[idx + 2] = p.z;
+        particlePositions[idx + 3] = streakTailX;
+        particlePositions[idx + 4] = streakTailY;
+        particlePositions[idx + 5] = streakTailZ;
+      } else {
+        particlePositions[idx] = targetCursor.x;
+        particlePositions[idx + 1] = targetCursor.y;
+        particlePositions[idx + 2] = targetCursor.z;
+        particlePositions[idx + 3] = targetCursor.x;
+        particlePositions[idx + 4] = targetCursor.y;
+        particlePositions[idx + 5] = targetCursor.z;
+      }
     }
 
-    // Branch 2
-    const b2Start = boltPts[Math.floor(BOLT_SEGMENTS * 0.65)];
-    let curB2X = b2Start.x;
-    let curB2Y = b2Start.y;
-    let curB2Z = b2Start.z;
-    const b2DirX = (dirVec.x - perpVec.x * 0.95) * 0.55;
-    const b2DirY = (dirVec.y - perpVec.y * 0.95) * 0.55;
+    // 8. Tapering Endpoint & Emitter Node
+    // Clearly defined logo emitter node
+    emitterBead.position.copy(originWorld);
+    const emitterScale = 0.7 + energy * 0.5;
+    emitterBead.scale.set(emitterScale, emitterScale, emitterScale);
 
-    for (let i = 1; i <= BRANCH_SEGMENTS; i++) {
-      const stepDist = (boltLength * 0.28) / BRANCH_SEGMENTS;
-      const jMag = (Math.random() - 0.5) * jitterScale * 0.6;
-
-      const nextX = curB2X + b2DirX * stepDist - perpVec.x * jMag;
-      const nextY = curB2Y + b2DirY * stepDist - perpVec.y * jMag;
-      const nextZ = curB2Z + (Math.random() - 0.5) * 0.08;
-
-      branchPositions[bOffset] = curB2X;
-      branchPositions[bOffset + 1] = curB2Y;
-      branchPositions[bOffset + 2] = curB2Z;
-      branchPositions[bOffset + 3] = nextX;
-      branchPositions[bOffset + 4] = nextY;
-      branchPositions[bOffset + 5] = nextZ;
-
-      bOffset += 6;
-      curB2X = nextX;
-      curB2Y = nextY;
-      curB2Z = nextZ;
-    }
-
-    // 8. Contact Sparks Buzzing Around Cursor
-    for (let i = 0; i < SPARK_COUNT; i++) {
-      const angle = (i / SPARK_COUNT) * Math.PI * 2 + Math.random() * 0.5;
-      const r = 0.06 + Math.random() * 0.28 * power;
-      const sx = targetVec.x + Math.cos(angle) * r;
-      const sy = targetVec.y + Math.sin(angle) * r;
-      const sz = targetVec.z + (Math.random() - 0.5) * 0.12;
-
-      const idx = i * 3;
-      outerSparkPositions[idx] = sx;
-      outerSparkPositions[idx + 1] = sy;
-      outerSparkPositions[idx + 2] = sz;
-
-      midSparkPositions[idx] = sx;
-      midSparkPositions[idx + 1] = sy;
-      midSparkPositions[idx + 2] = sz;
-
-      innerSparkPositions[idx] = sx;
-      innerSparkPositions[idx + 1] = sy;
-      innerSparkPositions[idx + 2] = sz;
-    }
+    // Smooth soft contact node at cursor (eliminates abrupt pixelated endings)
+    contactHalo.position.copy(targetCursor);
+    const haloScale = (0.5 + Math.min(0.8, cursorSpeed * 0.05)) * energy;
+    contactHalo.scale.set(haloScale, haloScale, haloScale);
 
     // 9. Update GPU Buffers
-    haloLine.geometry.attributes.position.needsUpdate = true;
-    mainLine.geometry.attributes.position.needsUpdate = true;
-    coreLine.geometry.attributes.position.needsUpdate = true;
-    branchLine.geometry.attributes.position.needsUpdate = true;
+    outerGlow.geometry.attributes.position.needsUpdate = true;
+    innerCore.geometry.attributes.position.needsUpdate = true;
+    particleMesh.geometry.attributes.position.needsUpdate = true;
 
-    outerSparks.geometry.attributes.position.needsUpdate = true;
-    midSparks.geometry.attributes.position.needsUpdate = true;
-    innerSparks.geometry.attributes.position.needsUpdate = true;
+    // 10. Update Opacities with Progressive Fade
+    (outerGlow.material as THREE.LineBasicMaterial).opacity = Math.min(0.85, energy * 0.9);
+    (innerCore.material as THREE.LineBasicMaterial).opacity = Math.min(1.0, energy * 1.15);
+    (particleMesh.material as THREE.LineBasicMaterial).opacity = Math.min(0.9, energy * 1.0);
+    (contactHalo.material as THREE.MeshBasicMaterial).opacity = Math.min(0.8, energy * 0.95);
+    (emitterBead.material as THREE.MeshBasicMaterial).opacity = Math.min(0.9, energy * 1.0);
 
-    // 10. High-Visibility Opacities (Normal Blending with rich saturation)
-    (haloLine.material as THREE.LineBasicMaterial).opacity = Math.min(0.92, 0.5 + power * 0.45);
-    (mainLine.material as THREE.LineBasicMaterial).opacity = Math.min(1.0, 0.65 + power * 0.35);
-    (coreLine.material as THREE.LineBasicMaterial).opacity = Math.min(0.95, 0.55 + power * 0.4);
-    (branchLine.material as THREE.LineBasicMaterial).opacity = Math.min(0.88, 0.4 + power * 0.48);
-
-    (outerSparks.material as THREE.PointsMaterial).opacity = Math.min(0.9, power * 1.1);
-    (midSparks.material as THREE.PointsMaterial).opacity = Math.min(1.0, power * 1.2);
-    (innerSparks.material as THREE.PointsMaterial).opacity = Math.min(1.0, power * 1.25);
-
-    // 11. Point Light illuminating monument chamfers
-    light.position.set(
-      targetVec.x * 0.7 + sourceVec.x * 0.3,
-      targetVec.y * 0.7 + sourceVec.y * 0.3,
-      0.8
+    // 11. Point Light Illumination
+    pointLight.position.set(
+      targetCursor.x * 0.65 + originWorld.x * 0.35,
+      targetCursor.y * 0.65 + originWorld.y * 0.35,
+      0.65
     );
-    light.intensity = power * 7.5;
+    pointLight.intensity = energy * 6.0;
   });
 
   return (
     <group>
-      {/* Specular Electric Point Light */}
-      <pointLight ref={lightRef} color="#00FFE0" distance={7.0} decay={2.0} intensity={0} />
+      {/* Dynamic Specular Point Light casting cyan reflections */}
+      <pointLight ref={pointLightRef} color="#00FFE0" distance={6.0} decay={2.0} intensity={0} />
 
-      {/* Layer 1: Deep Obsidian Teal (#003838) Shadow / Contrast Outline */}
-      <lineSegments ref={haloLineRef} renderOrder={40}>
+      {/* Clearly Defined Starting Point Emitter Node */}
+      <mesh ref={emitterBeadRef} renderOrder={46}>
+        <sphereGeometry args={[0.045, 16, 16]} />
+        <meshBasicMaterial
+          color="#00FFE0"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.NormalBlending}
+        />
+      </mesh>
+
+      {/* Outer Cyan Glow Sheath (#00A89F) */}
+      <lineSegments ref={outerGlowLineRef} renderOrder={41}>
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
-            args={[haloPositions, 3]}
-            count={BOLT_FLOATS / 3}
+            args={[outerGlowPositions, 3]}
+            count={SPLINE_FLOATS / 3}
           />
         </bufferGeometry>
         <lineBasicMaterial
-          color="#003838"
+          color="#00A89F"
           transparent
           opacity={0}
           depthWrite={false}
@@ -775,139 +817,68 @@ function ProximityLightning({
         />
       </lineSegments>
 
-      {/* Layer 2: Official TPS Brand Teal (#008080) Main Saturated Plasma Arc */}
-      <lineSegments ref={mainLineRef} renderOrder={41}>
+      {/* Inner High-Energy Cyan Core (#00FFE0) */}
+      <lineSegments ref={innerCoreLineRef} renderOrder={42}>
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
-            args={[mainPositions, 3]}
-            count={BOLT_FLOATS / 3}
+            args={[innerCorePositions, 3]}
+            count={SPLINE_FLOATS / 3}
           />
         </bufferGeometry>
         <lineBasicMaterial
-          color="#008080"
-          transparent
-          opacity={0}
-          depthWrite={false}
-          blending={THREE.NormalBlending}
-          linewidth={2}
-        />
-      </lineSegments>
-
-      {/* Layer 3: Vivid Electric Cyan (#00E5D0) High-Voltage Inner Core */}
-      <lineSegments ref={coreLineRef} renderOrder={42}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            args={[corePositions, 3]}
-            count={BOLT_FLOATS / 3}
-          />
-        </bufferGeometry>
-        <lineBasicMaterial
-          color="#00E5D0"
-          transparent
-          opacity={0}
-          depthWrite={false}
-          blending={THREE.NormalBlending}
-          linewidth={1}
-        />
-      </lineSegments>
-
-      {/* Layer 4: Branching Arcs in Saturated Vibrant Teal (#0C8E8B) */}
-      <lineSegments ref={branchLineRef} renderOrder={43}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            args={[branchPositions, 3]}
-            count={BRANCH_FLOATS / 3}
-          />
-        </bufferGeometry>
-        <lineBasicMaterial
-          color="#0C8E8B"
-          transparent
-          opacity={0}
-          depthWrite={false}
-          blending={THREE.NormalBlending}
-          linewidth={2}
-        />
-      </lineSegments>
-
-      {/* Layer 5: High-Contrast Multi-Tier Sparks Around Cursor */}
-      {/* Outer Contrast Teal Rim */}
-      <points ref={outerSparksRef} renderOrder={44}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            args={[outerSparkPositions, 3]}
-            count={SPARK_COUNT}
-          />
-        </bufferGeometry>
-        <pointsMaterial
-          color="#003838"
-          size={0.24}
-          transparent
-          opacity={0}
-          depthWrite={false}
-          blending={THREE.NormalBlending}
-          sizeAttenuation
-        />
-      </points>
-
-      {/* Mid Brand Teal Spark Disc */}
-      <points ref={midSparksRef} renderOrder={45}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            args={[midSparkPositions, 3]}
-            count={SPARK_COUNT}
-          />
-        </bufferGeometry>
-        <pointsMaterial
-          color="#008080"
-          size={0.16}
-          transparent
-          opacity={0}
-          depthWrite={false}
-          blending={THREE.NormalBlending}
-          sizeAttenuation
-        />
-      </points>
-
-      {/* Inner Electric Cyan Spark Core */}
-      <points ref={innerSparksRef} renderOrder={46}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            args={[innerSparkPositions, 3]}
-            count={SPARK_COUNT}
-          />
-        </bufferGeometry>
-        <pointsMaterial
           color="#00FFE0"
-          size={0.08}
           transparent
           opacity={0}
           depthWrite={false}
           blending={THREE.NormalBlending}
-          sizeAttenuation
+          linewidth={1.5}
         />
-      </points>
+      </lineSegments>
+
+      {/* Progressively Fading Flying Energy Motes */}
+      <lineSegments ref={particleLineRef} renderOrder={43}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[particlePositions, 3]}
+            count={PARTICLE_FLOATS / 3}
+          />
+        </bufferGeometry>
+        <lineBasicMaterial
+          color="#00FFE0"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.NormalBlending}
+          linewidth={2}
+        />
+      </lineSegments>
+
+      {/* Smooth Soft Contact Halo Node (Eliminates Abrupt Pixelated Ending) */}
+      <mesh ref={contactHaloRef} renderOrder={44}>
+        <circleGeometry args={[0.08, 20]} />
+        <meshBasicMaterial
+          color="#00FFE0"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.NormalBlending}
+        />
+      </mesh>
     </group>
   );
 }
 
 /**
- * Hyper-Realistic 3D Prime Step Architectural Monument
+ * 3D Prime Step Monument
  *
- * Exact Brand Vector Colors (matching public/brand/logo-mark.svg):
- * - Roof Canopy: Architectural Graphite Black (#1B1B1B) with physical clearcoat
- * - Vertical Pillar: Official Prime Step Teal (#1F9D9A) with satin metallic depth
- * - Eaves Flap: Vibrant Cyan (#1E9C99) with light transmission
- * - Optical Inner Core: Refractive crystal glass revealed on scroll
- * - Atomic Tech Orbits: Floating technology icons orbiting the nucleus
- *
- * Silky-Smooth Organic Perspective Follow:
- * - Damped, spring-weighted tilt and camera parallax that gently tracks cursor movement.
+ * Geometric Refinement:
+ * - Proportional Extrusions: Teal pillar sits proudly in the foreground (`depth: 0.54`),
+ *   while the black canopy arch (`depth: 0.42`) is recessed so the "P" form is recognized immediately.
+ * - Consistent 3D Bevels: Uniform bevel size and segments across all pieces (`0.034` thickness, `0.026` size).
+ * - Reduced Black Surface & Cyan Sheen: Black canopy is finished in graphite charcoal (`#1E2328`)
+ *   with iridescent teal/cyan sheen (`sheenColor="#00E6D2"`) reflecting light on the bevels.
  */
 function OfficialLogoMonument({
   monumentRef,
@@ -920,7 +891,6 @@ function OfficialLogoMonument({
   const pillarRef = useRef<THREE.Group>(null);
   const flapRef = useRef<THREE.Group>(null);
   const coreRef = useRef<THREE.Group>(null);
-  const dynamicLightRef = useRef<THREE.DirectionalLight>(null);
 
   const { pillarShape, flapShape, ribbonShape, coreShape } = useMemo(() => {
     return {
@@ -931,46 +901,48 @@ function OfficialLogoMonument({
     };
   }, []);
 
-  // Premium diamond-cut chamfer extrusions
-  const ribbonExtrude = useMemo(
+  // Consistent, uniform bevel parameters across all architectural components
+  const uniformBevel = useMemo(
     () => ({
-      depth: 0.72,
       bevelEnabled: true,
-      bevelThickness: 0.048,
-      bevelSize: 0.036,
-      bevelSegments: 10,
-    }),
-    []
-  );
-
-  const pillarExtrude = useMemo(
-    () => ({
-      depth: 0.66,
-      bevelEnabled: true,
-      bevelThickness: 0.045,
-      bevelSize: 0.035,
-      bevelSegments: 10,
-    }),
-    []
-  );
-
-  const flapExtrude = useMemo(
-    () => ({
-      depth: 0.6,
-      bevelEnabled: true,
-      bevelThickness: 0.035,
-      bevelSize: 0.025,
+      bevelThickness: 0.034,
+      bevelSize: 0.026,
       bevelSegments: 8,
     }),
     []
   );
 
+  // Balanced extrusions: Pillar is prominent, canopy is balanced and never overwhelms
+  const pillarExtrude = useMemo(
+    () => ({
+      depth: 0.54,
+      ...uniformBevel,
+    }),
+    [uniformBevel]
+  );
+
+  const ribbonExtrude = useMemo(
+    () => ({
+      depth: 0.42,
+      ...uniformBevel,
+    }),
+    [uniformBevel]
+  );
+
+  const flapExtrude = useMemo(
+    () => ({
+      depth: 0.46,
+      ...uniformBevel,
+    }),
+    [uniformBevel]
+  );
+
   const coreExtrude = useMemo(
     () => ({
-      depth: 0.45,
+      depth: 0.38,
       bevelEnabled: true,
-      bevelThickness: 0.03,
-      bevelSize: 0.02,
+      bevelThickness: 0.025,
+      bevelSize: 0.018,
       bevelSegments: 8,
     }),
     []
@@ -980,7 +952,7 @@ function OfficialLogoMonument({
     const g = groupRef.current;
     if (!g) return;
 
-    // Organic weighted damping for buttery, gentle mouse response
+    // Organic weighted damping for silky-smooth cursor follow
     globalMouse.x = THREE.MathUtils.damp(globalMouse.x, globalMouse.targetX, 2.8, dt);
     globalMouse.y = THREE.MathUtils.damp(globalMouse.y, globalMouse.targetY, 2.8, dt);
 
@@ -989,21 +961,17 @@ function OfficialLogoMonument({
     const p = sceneState.progress;
     const t = state.clock.elapsedTime;
 
-    // Subtle breathing float when idle
     const idleFloat = Math.sin(t * 1.3) * 0.035;
     const idleRot = Math.sin(t * 0.5) * 0.02;
 
-    // GENTLE PERSPECTIVE TILT:
-    // When the cursor moves, the logo gently rotates to follow the user's line of sight
-    const targetRotY = 0.05 + mx * 0.38 + idleRot + p * 0.85;
-    const targetRotX = -0.03 - my * 0.28 + p * 0.15;
-    const targetRotZ = -mx * 0.035;
+    // Perspective tracking
+    const targetRotY = 0.05 + mx * 0.36 + idleRot + p * 0.85;
+    const targetRotX = -0.03 - my * 0.26 + p * 0.15;
+    const targetRotZ = -mx * 0.03;
 
-    // Subtle lateral and vertical translation
-    const targetPosX = mx * 0.18;
-    const targetPosY = 0.08 + my * 0.12 + idleFloat - p * 0.18;
+    const targetPosX = mx * 0.16;
+    const targetPosY = 0.08 + my * 0.10 + idleFloat - p * 0.18;
 
-    // Responsive viewport fit scale so monument + orbits never clip on narrow or square viewports
     const minViewportDim = Math.min(state.viewport.width, state.viewport.height);
     const fitScale = Math.min(1, Math.max(0.72, minViewportDim / 6.3));
     g.scale.setScalar(THREE.MathUtils.damp(g.scale.x, fitScale, 4.0, dt));
@@ -1014,160 +982,144 @@ function OfficialLogoMonument({
     g.position.x = THREE.MathUtils.damp(g.position.x, targetPosX, 3.0, dt);
     g.position.y = THREE.MathUtils.damp(g.position.y, targetPosY, 3.0, dt);
 
-    // Dynamic specular key light softly sweeping chamfer highlights with cursor
-    if (dynamicLightRef.current) {
-      dynamicLightRef.current.position.x = 5 + mx * 4;
-      dynamicLightRef.current.position.y = 8 + my * 3;
-    }
-
     // Camera perspective tracking for spatial parallax
     state.camera.position.x = THREE.MathUtils.damp(state.camera.position.x, mx * 0.35, 2.4, dt);
     state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, my * 0.25, 2.4, dt);
     state.camera.lookAt(0, 0, 0);
 
-    // SCROLL-ACTIVATED ARCHITECTURAL EXPLODED DECONSTRUCTION (centered around z = 0)
+    // Scroll-activated architectural exploded deconstruction
     const explode = Math.pow(Math.min(1, Math.max(0, p * 2.0)), 1.2);
 
     if (canopyRef.current) {
       canopyRef.current.position.x = THREE.MathUtils.damp(canopyRef.current.position.x, explode * 0.45, 4.0, dt);
       canopyRef.current.position.y = THREE.MathUtils.damp(canopyRef.current.position.y, explode * 0.95, 4.0, dt);
-      canopyRef.current.position.z = THREE.MathUtils.damp(canopyRef.current.position.z, -0.32 + explode * 0.65, 4.0, dt);
+      canopyRef.current.position.z = THREE.MathUtils.damp(canopyRef.current.position.z, -0.24 + explode * 0.65, 4.0, dt);
       canopyRef.current.rotation.x = THREE.MathUtils.damp(canopyRef.current.rotation.x, explode * 0.15, 4.0, dt);
     }
 
     if (flapRef.current) {
       flapRef.current.position.x = THREE.MathUtils.damp(flapRef.current.position.x, -explode * 0.7, 4.0, dt);
       flapRef.current.position.y = THREE.MathUtils.damp(flapRef.current.position.y, explode * 0.4, 4.0, dt);
-      flapRef.current.position.z = THREE.MathUtils.damp(flapRef.current.position.z, -0.26 + explode * 0.85, 4.0, dt);
+      flapRef.current.position.z = THREE.MathUtils.damp(flapRef.current.position.z, -0.22 + explode * 0.85, 4.0, dt);
     }
 
     if (pillarRef.current) {
       pillarRef.current.position.x = THREE.MathUtils.damp(pillarRef.current.position.x, -explode * 0.4, 4.0, dt);
       pillarRef.current.position.y = THREE.MathUtils.damp(pillarRef.current.position.y, -explode * 0.8, 4.0, dt);
-      pillarRef.current.position.z = THREE.MathUtils.damp(pillarRef.current.position.z, -0.36 - explode * 0.3, 4.0, dt);
+      pillarRef.current.position.z = THREE.MathUtils.damp(pillarRef.current.position.z, -0.22 - explode * 0.3, 4.0, dt);
       pillarRef.current.rotation.y = THREE.MathUtils.damp(pillarRef.current.rotation.y, explode * 0.14, 4.0, dt);
     }
 
     if (coreRef.current) {
       const coreScale = 0.85 + explode * 0.28;
       coreRef.current.scale.setScalar(THREE.MathUtils.damp(coreRef.current.scale.x, coreScale, 4.0, dt));
-      coreRef.current.position.z = THREE.MathUtils.damp(coreRef.current.position.z, -0.22 + explode * 0.22, 4.0, dt);
+      coreRef.current.position.z = THREE.MathUtils.damp(coreRef.current.position.z, -0.20 + explode * 0.22, 4.0, dt);
     }
   });
 
   return (
-    <>
-      {/* Specular Key Light following cursor */}
-      <directionalLight
-        ref={dynamicLightRef}
-        position={[5, 8, 7]}
-        intensity={2.8}
-        color="#FFFFFF"
-        castShadow
-        shadow-mapSize={[1024, 1024]}
-        shadow-bias={-0.0001}
-      />
-
-      <group ref={groupRef} position={[0, 0.08, 0]}>
-        {/* ========================================================
-            PART 01: LOGO BLACK CANOPY ARCH (Exact Vector Black #1B1B1B)
-            ======================================================== */}
-        <group ref={canopyRef} position={[0, 0, -0.32]}>
-          <mesh castShadow receiveShadow>
-            <extrudeGeometry args={[ribbonShape, ribbonExtrude]} />
-            <meshPhysicalMaterial
-              color="#1B1B1B"
-              roughness={0.12}
-              metalness={0.15}
-              clearcoat={1.0}
-              clearcoatRoughness={0.04}
-              reflectivity={0.95}
-              envMapIntensity={1.4}
-            />
-          </mesh>
-        </group>
-
-        {/* ========================================================
-            PART 02: LOGO VERTICAL PILLAR (Exact Vector Teal #1F9D9A)
-            ======================================================== */}
-        <group ref={pillarRef} position={[0, 0, -0.36]}>
-          <mesh castShadow receiveShadow>
-            <extrudeGeometry args={[pillarShape, pillarExtrude]} />
-            <meshPhysicalMaterial
-              color="#1F9D9A"
-              emissive="#0C5C5A"
-              emissiveIntensity={0.25}
-              roughness={0.14}
-              metalness={0.45}
-              clearcoat={0.95}
-              clearcoatRoughness={0.04}
-              reflectivity={0.96}
-              envMapIntensity={1.5}
-            />
-          </mesh>
-        </group>
-
-        {/* ========================================================
-            PART 03: LOGO FRONT EAVES FLAP (Exact Vector Cyan #1E9C99)
-            ======================================================== */}
-        <group ref={flapRef} position={[0, 0, -0.26]}>
-          <mesh castShadow receiveShadow>
-            <extrudeGeometry args={[flapShape, flapExtrude]} />
-            <meshPhysicalMaterial
-              color="#1E9C99"
-              emissive="#127875"
-              emissiveIntensity={0.45}
-              roughness={0.08}
-              metalness={0.15}
-              transmission={0.45}
-              thickness={0.65}
-              clearcoat={1.0}
-              clearcoatRoughness={0.02}
-              ior={1.52}
-            />
-          </mesh>
-        </group>
-
-        {/* ========================================================
-            PART 04: OPTICAL CRYSTAL GLASS INNER CORE (Revealed On Scroll)
-            ======================================================== */}
-        <group ref={coreRef} position={[-0.1, 0.25, -0.22]}>
-          <mesh castShadow receiveShadow>
-            <extrudeGeometry args={[coreShape, coreExtrude]} />
-            <meshPhysicalMaterial
-              color="#E8FBFB"
-              emissive="#1F9D9A"
-              emissiveIntensity={0.15}
-              roughness={0.04}
-              metalness={0.05}
-              transmission={0.94}
-              thickness={1.1}
-              ior={1.54}
-              clearcoat={1.0}
-              transparent
-              opacity={0.88}
-            />
-          </mesh>
-        </group>
-
-        {/* ========================================================
-            PART 05: ATOMIC TECH ORBITS ("Electrons" Orbiting Nucleus)
-            ======================================================== */}
-        <AtomicTechOrbits />
-
-        {/* SOFT STUDIO GROUND CONTACT SHADOW */}
-        <group position={[0, -2.28, 0]}>
-          <ContactShadows
-            position={[0, 0, 0]}
-            opacity={0.38}
-            scale={7.8}
-            blur={2.8}
-            far={4.5}
-            color="#051515"
+    <group ref={groupRef} position={[0, 0.08, 0]}>
+      {/* ========================================================
+          PART 01: LOGO BLACK CANOPY ARCH (Graphite Charcoal with Cyan Sheen)
+          ======================================================== */}
+      <group ref={canopyRef} position={[0, 0, -0.24]}>
+        <mesh castShadow receiveShadow>
+          <extrudeGeometry args={[ribbonShape, ribbonExtrude]} />
+          <meshPhysicalMaterial
+            color="#1E2328"
+            roughness={0.22}
+            metalness={0.35}
+            clearcoat={1.0}
+            clearcoatRoughness={0.06}
+            sheen={0.9}
+            sheenColor="#00E6D2"
+            sheenRoughness={0.25}
+            reflectivity={0.94}
+            envMapIntensity={1.3}
           />
-        </group>
+        </mesh>
       </group>
-    </>
+
+      {/* ========================================================
+          PART 02: LOGO VERTICAL PILLAR (Prominent Official TPS Teal #1F9D9A)
+          ======================================================== */}
+      <group ref={pillarRef} position={[0, 0, -0.22]}>
+        <mesh castShadow receiveShadow>
+          <extrudeGeometry args={[pillarShape, pillarExtrude]} />
+          <meshPhysicalMaterial
+            color="#1F9D9A"
+            emissive="#0C5C5A"
+            emissiveIntensity={0.24}
+            roughness={0.15}
+            metalness={0.38}
+            clearcoat={0.95}
+            clearcoatRoughness={0.05}
+            reflectivity={0.96}
+            envMapIntensity={1.5}
+          />
+        </mesh>
+      </group>
+
+      {/* ========================================================
+          PART 03: LOGO FRONT EAVES FLAP (Vibrant Cyan #1E9C99)
+          ======================================================== */}
+      <group ref={flapRef} position={[0, 0, -0.22]}>
+        <mesh castShadow receiveShadow>
+          <extrudeGeometry args={[flapShape, flapExtrude]} />
+          <meshPhysicalMaterial
+            color="#1E9C99"
+            emissive="#127875"
+            emissiveIntensity={0.42}
+            roughness={0.08}
+            metalness={0.18}
+            transmission={0.42}
+            thickness={0.55}
+            clearcoat={1.0}
+            clearcoatRoughness={0.02}
+            ior={1.52}
+          />
+        </mesh>
+      </group>
+
+      {/* ========================================================
+          PART 04: OPTICAL CRYSTAL GLASS INNER CORE (Revealed On Scroll)
+          ======================================================== */}
+      <group ref={coreRef} position={[-0.1, 0.25, -0.20]}>
+        <mesh castShadow receiveShadow>
+          <extrudeGeometry args={[coreShape, coreExtrude]} />
+          <meshPhysicalMaterial
+            color="#E8FBFB"
+            emissive="#1F9D9A"
+            emissiveIntensity={0.15}
+            roughness={0.04}
+            metalness={0.05}
+            transmission={0.94}
+            thickness={1.0}
+            ior={1.54}
+            clearcoat={1.0}
+            transparent
+            opacity={0.88}
+          />
+        </mesh>
+      </group>
+
+      {/* ========================================================
+          PART 05: ATOMIC TECH ORBITS
+          ======================================================== */}
+      <AtomicTechOrbits />
+
+      {/* SOFT STUDIO GROUND CONTACT SHADOW */}
+      <group position={[0, -2.25, 0]}>
+        <ContactShadows
+          position={[0, 0, 0]}
+          opacity={0.44}
+          scale={8.4}
+          blur={2.6}
+          far={4.6}
+          color="#041616"
+        />
+      </group>
+    </group>
   );
 }
 
@@ -1189,12 +1141,26 @@ export default function HeroScene({ active }: { active: boolean }) {
       aria-hidden="true"
     >
       <Suspense fallback={null}>
-        {/* Soft, warm studio fill */}
-        <ambientLight intensity={0.7} color="#FFFFFF" />
-        <hemisphereLight args={["#FFFFFF", "#0C5C5A", 0.65]} />
+        {/* Soft studio ambient fill */}
+        <ambientLight intensity={0.65} color="#FFFFFF" />
+        <hemisphereLight args={["#FFFFFF", "#0A4846", 0.55]} />
 
-        {/* Cool Cyan Rim Light — accentuating the architectural silhouette */}
-        <directionalLight position={[-8, 4, 3]} intensity={2.2} color="#1E9C99" />
+        {/* Consistent Architectural Key Light from Upper Right [4.5, 7.5, 6.0] */}
+        <directionalLight
+          position={[4.5, 7.5, 6.0]}
+          intensity={2.6}
+          color="#FFFFFF"
+          castShadow
+          shadow-mapSize={[1024, 1024]}
+          shadow-bias={-0.0001}
+        />
+
+        {/* Dedicated Teal/Cyan Rim Light producing cyan reflections on black surfaces */}
+        <directionalLight
+          position={[-5.5, -2.2, 4.0]}
+          intensity={2.0}
+          color="#00D4C4"
+        />
 
         {/* Soft Uplight bounce */}
         <directionalLight position={[0, -5, -2]} intensity={0.45} color="#F4F8F8" />
@@ -1204,8 +1170,8 @@ export default function HeroScene({ active }: { active: boolean }) {
           <OfficialLogoMonument monumentRef={monumentRef} />
         </Float>
 
-        {/* High-Contrast Proximity Lightning Arc (renders in true TPS Teal & Cyan on white) */}
-        <ProximityLightning monumentRef={monumentRef} />
+        {/* Natural Cursor-Following Lightning with Particle Trail */}
+        <NaturalCursorLightning monumentRef={monumentRef} />
       </Suspense>
     </Canvas>
   );

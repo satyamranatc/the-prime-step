@@ -11,6 +11,14 @@ const STATIC_SEO_ROUTES = [
   { path: "/corporate-training", priority: 0.9 },
   { path: "/courses", priority: 0.95 },
   { path: "/roadmap", priority: 0.85 },
+  { path: "/faq", priority: 0.9 },
+  { path: "/blog", priority: 0.85 },
+  { path: "/blog/top-digital-marketing-careers", priority: 0.8 },
+  { path: "/blog/best-programming-languages-to-learn", priority: 0.8 },
+  { path: "/blog/top-10-excel-formulas-functions", priority: 0.8 },
+  { path: "/vijay-nagar", priority: 0.95 },
+  { path: "/bhawarkua", priority: 0.95 },
+  { path: "/annapurna", priority: 0.9 },
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {

@@ -2430,6 +2430,150 @@ export const COURSE_PAGES: Record<string, CoursePageData> = {
       },
     ],
   },
+  "ms-office-and-excel-course-in-indore": {
+    slug: "ms-office-and-excel-course-in-indore",
+    title: "MS Office & Advanced Excel Course in Indore",
+    metaTitle: "MS Office & Advanced Excel Course in Indore | The Prime Step",
+    metaDescription:
+      "Master Microsoft Word, Excel, PowerPoint, Outlook & Advanced Excel with VLOOKUP, XLOOKUP, Pivot Tables, Macros & MIS Dashboards in Indore. Hands-on practical lab training at Vijay Nagar, Bhawarkua & Annapurna campuses.",
+    keywords: [
+      "MS Office course in Indore",
+      "Advanced Excel training in Indore",
+      "Microsoft Excel classes Vijay Nagar Indore",
+      "Excel coaching Bhawarkua Indore",
+      "MIS executive course Indore",
+      "Computer basic and MS Office classes",
+    ],
+    eyebrow: "Corporate Office & Business Productivity Track",
+    heroTitle: "MS Office & Advanced Excel.",
+    heroSubtitle:
+      "From essential office productivity in Microsoft Word and executive PowerPoint decks to high-powered Excel data modeling, XLOOKUP, dynamic Pivot Tables, and automated MIS reporting.",
+    duration: "2 – 3 Months",
+    level: "Beginner to Advanced Corporate Level",
+    format: "In-Campus Practical Labs (Indore)",
+    projectsCount: "5 Practical MIS & Office Projects",
+    roadmapId: "advanced-excel",
+    overviewHeadline: "The universal operating system of modern business, mastered through daily hands-on practice.",
+    overviewBody: [
+      "Every organization—from fast-growing startups and IT enterprises to retail chains, logistics firms, and corporate banks—runs on Microsoft Office and Excel. Proficiency in data analysis, reporting, and executive documentation is one of the most in-demand workplace skills.",
+      "At The Prime Step, our MS Office & Advanced Excel program goes far beyond basic typing. You will work on real business spreadsheets, financial statements, sales registers, and HR trackers. You will master keyboard shortcuts, advanced data lookup functions (XLOOKUP, VLOOKUP, INDEX-MATCH), nested IF conditions, conditional formatting, dynamic Pivot Charts, and automated summary macros.",
+    ],
+    highlights: [
+      { label: "Excel Functions", value: "80+ Formulas", detail: "XLOOKUP, VLOOKUP, INDEX/MATCH, Dynamic Arrays, Nested Logic" },
+      { label: "MIS Reporting", value: "Live Dashboards", detail: "Interactive KPI dashboards, slicers, timelines, and trend charts" },
+      { label: "Suite Coverage", value: "Full Suite", detail: "Excel, Word, PowerPoint, Outlook, and Google Workspace equivalents" },
+      { label: "Practical Labs", value: "100% Hands-on", detail: "Daily corporate exercises and real-world business case studies" },
+    ],
+    techCategories: [
+      {
+        category: "Microsoft Excel & Analytics",
+        items: ["Excel Interface & Shortcuts", "XLOOKUP & VLOOKUP", "INDEX-MATCH", "Pivot Tables & Slicers", "Data Validation & What-If Analysis", "Conditional Formatting", "Macros & Automation Basics"],
+      },
+      {
+        category: "Microsoft Word & Documentation",
+        items: ["Corporate Letterheads & Proposals", "Mail Merge Automation", "Table of Contents & Indexing", "Formal Formatting Standards", "Forms & Protected Documents"],
+      },
+      {
+        category: "PowerPoint & Executive Presentations",
+        items: ["Pitch Decks & Corporate Templates", "SmartArt & Infographics", "Data-Driven Dynamic Charts", "Slide Masters & Animations", "Speaker Notes & Rehearsals"],
+      },
+      {
+        category: "Workplace Digital Tools",
+        items: ["Outlook Email Etiquette & Rules", "Calendar & Meeting Scheduling", "Google Sheets / Docs / Slides Collaboration", "OneDrive & Cloud Storage"],
+      },
+    ],
+    modules: [
+      {
+        number: "01",
+        title: "MS Word: Professional Documentation & Corporate Formatting",
+        duration: "2 Weeks",
+        summary: "Master business letter writing, automated mail merge, proposal design, and formatting standards required in corporate offices.",
+        topics: ["Document Structure & Styles", "Typography & Layout Rules", "Tables, Callouts & Graphic Elements", "Mail Merge with Excel Data Sources", "Exporting & Document Security"],
+        deliverable: "Corporate business proposal and automated employee offer letter campaign.",
+      },
+      {
+        number: "02",
+        title: "Core Microsoft Excel: Data Entry, Formatting & Essential Math",
+        duration: "3 Weeks",
+        summary: "Build absolute fluency with spreadsheets, high-speed keyboard navigation, references, and core mathematical formulas.",
+        topics: ["Ribbon & Essential Hotkeys", "Relative vs Absolute Cell Referencing ($)", "SUM, AVERAGE, COUNT, COUNTA, COUNTBLANK", "Basic Conditional Formatting", "Sorting, Auto-Filter & Advanced Filter"],
+        deliverable: "Automated monthly expense and departmental budget tracker.",
+      },
+      {
+        number: "03",
+        title: "Advanced Excel Formulas & Lookup Mastery",
+        duration: "3 Weeks",
+        summary: "Master the industry-standard formulas that drive modern data analysis and reporting.",
+        topics: ["XLOOKUP, VLOOKUP & HLOOKUP with Error Handling (IFERROR)", "INDEX & MATCH Two-Way Lookups", "Logical Formulas: IF, AND, OR, IFS, SWITCH", "Text Formulas: LEFT, RIGHT, MID, CONCAT, TEXTSPLIT", "Date & Time Intelligence"],
+        deliverable: "Multi-sheet inventory reconciler and employee payroll calculator.",
+      },
+      {
+        number: "04",
+        title: "Pivot Tables, Slicers & Dynamic MIS Dashboards",
+        duration: "2 Weeks",
+        summary: "Transform raw operational data into visual executive dashboards that summarize thousands of rows in seconds.",
+        topics: ["Pivot Table Architecture & Calculations", "Grouping by Dates, Buckets & Categories", "Slicers, Timelines & Linked Filters", "Calculated Fields & Items", "Pivot Charts & Executive Dashboard Layouts"],
+        deliverable: "Interactive retail sales and KPI performance executive dashboard.",
+      },
+      {
+        number: "05",
+        title: "PowerPoint, Outlook & Business Communication",
+        duration: "2 Weeks",
+        summary: "Design investor-ready slide decks and master corporate email correspondence and scheduling.",
+        topics: ["Slide Master Customization", "Visual Data Storytelling with Charts", "Animation & Transition Discipline", "Outlook Mail Sorting, Rules & Signatures", "Meeting Invites & Task Management"],
+        deliverable: "A complete 12-slide quarterly corporate business review presentation.",
+      },
+    ],
+    projects: [
+      {
+        title: "Interactive Sales & Revenue MIS Dashboard",
+        stack: "Advanced Excel, Pivot Tables, Slicers, Dynamic Charts",
+        description: "An executive dashboard analyzing 50,000+ rows of e-commerce transactions with dynamic region, category, and date filtering.",
+        outcomes: ["Automated calculation of profit margins and YoY growth", "Interactive slicers connected to multiple pivot caches", "Executive-ready visual layout designed for leadership reviews"],
+      },
+      {
+        title: "Corporate HR Payroll & Attendance System",
+        stack: "Excel Formulas, XLOOKUP, Nested IF, Conditional Formatting",
+        description: "A robust payroll workbook calculating gross salaries, PF, ESI, overtime, and tax deductions with error protection.",
+        outcomes: ["Automated pay slip generation via Word Mail Merge", "Input validation to eliminate data entry mistakes", "Dynamic attendance tracking with leave balances"],
+      },
+    ],
+    careerRoles: [
+      {
+        role: "MIS Executive / Data Coordinator",
+        skills: "Advanced Excel, Pivot Tables, VLOOKUP/XLOOKUP, Dashboards",
+        description: "Responsible for compiling, analyzing, and presenting daily, weekly, and monthly operational metrics to management.",
+      },
+      {
+        role: "Office Administrator / Executive Assistant",
+        skills: "MS Office Suite, Word, Excel, PowerPoint, Outlook, Documentation",
+        description: "Manages executive scheduling, corporate correspondence, presentations, and organizational records.",
+      },
+      {
+        role: "Back Office / Operations Executive",
+        skills: "Spreadsheet Processing, Data Quality, Inventory Tracking, Reporting",
+        description: "Coordinates order processing, billing reconciliation, vendor data, and digital workflow documentation.",
+      },
+    ],
+    faqs: [
+      {
+        q: "I am a complete beginner with computers. Can I learn Advanced Excel?",
+        a: "Yes, absolutely! The course starts from computer fundamentals, keyboard shortcuts, and spreadsheet basics before moving step by step into Advanced formulas and MIS dashboards.",
+      },
+      {
+        q: "Which Excel version is taught in the computer labs?",
+        a: "We train on the latest Microsoft 365 / Excel 2021 versions, teaching modern dynamic formulas like XLOOKUP, UNIQUE, FILTER, and TEXTSPLIT, as well as legacy backward-compatible VLOOKUP and INDEX-MATCH.",
+      },
+      {
+        q: "Will I get practical lab time every day?",
+        a: "Yes. Every session includes hands-on lab time at your dedicated workstation with instructor supervision across our Vijay Nagar, Bhawarkua, and Annapurna campuses.",
+      },
+      {
+        q: "Do you provide certificates and placement assistance?",
+        a: "Yes. You receive an ISO-aligned certification upon project completion, along with resume building and placement interview support for MIS, back office, and administrative job openings across Indore.",
+      },
+    ],
+  },
 };
 
 export interface CatalogCourseItem {
@@ -2445,6 +2589,17 @@ export interface CatalogCourseItem {
 }
 
 export const ALL_CATALOG_COURSES: CatalogCourseItem[] = [
+  {
+    title: "MS Office & Advanced Excel Course in Indore",
+    category: "Mobile & Business",
+    duration: "2 – 3 Months",
+    level: "Beginner to Advanced",
+    description: "Master Word, PowerPoint, Outlook, and Advanced Excel with XLOOKUP, Pivot Tables, MIS Dashboards, and workplace automation.",
+    tags: ["Advanced Excel", "XLOOKUP", "MIS Reporting", "MS Office", "Pivot Tables"],
+    href: "/ms-office-and-excel-course-in-indore",
+    roadmapId: "advanced-excel",
+    featured: true,
+  },
   {
     title: "Java Full Stack Developer",
     category: "Full Stack & Web",
