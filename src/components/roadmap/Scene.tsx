@@ -1,11 +1,12 @@
 "use client";
 
-import { Environment, ContactShadows, Scroll } from "@react-three/drei";
+import { Environment, ContactShadows } from "@react-three/drei";
 import * as THREE from "three";
 import CameraRig from "./CameraRig";
 import RoadPath from "./RoadPath";
 import Car from "./Car";
 import HtmlOverlay from "./HtmlOverlay";
+import SafeScrollHtml from "./SafeScrollHtml";
 import type { RoadmapCourse } from "@/lib/roadmapCourses";
 
 export default function Scene({
@@ -66,10 +67,10 @@ export default function Scene({
       {/* 8. Cinematic Tracking Camera */}
       <CameraRig roadCurve={roadCurve} />
 
-      {/* 9. HTML Overlay synchronised with Drei Scroll */}
-      <Scroll html style={{ width: "100vw" }}>
+      {/* 9. HTML Overlay synchronised with Drei Scroll (React 19 Safe Portal) */}
+      <SafeScrollHtml style={{ width: "100vw" }}>
         <HtmlOverlay course={course} />
-      </Scroll>
+      </SafeScrollHtml>
     </>
   );
 }

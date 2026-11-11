@@ -43,14 +43,6 @@ const BLACK_RIBBON_POINTS: [number, number][] = [
   [250, 578],
 ];
 
-const CORE_POINTS: [number, number][] = [
-  [260, 600],
-  [360, 520],
-  [480, 590],
-  [480, 720],
-  [380, 790],
-  [380, 670],
-];
 
 function makeShape(pts: [number, number][]): THREE.Shape {
   const shape = new THREE.Shape();
@@ -250,34 +242,34 @@ interface OrbitConfig {
 const ORBITS: OrbitConfig[] = [
   // Orbit 1: Outer Loop with React & AWS (180° balanced spacing)
   {
-    radiusX: 2.45,
-    radiusY: 2.25,
-    rotation: [Math.PI * 0.11, Math.PI * 0.12, Math.PI * 0.18],
-    speed: 0.50,
+    radiusX: 2.75,
+    radiusY: 2.45,
+    rotation: [Math.PI * 0.12, Math.PI * 0.14, Math.PI * 0.18],
+    speed: 0.45,
     icons: [
-      { tech: TECH_ITEMS.react, offset: 0.35 },
-      { tech: TECH_ITEMS.aws, offset: 0.35 + Math.PI },
+      { tech: TECH_ITEMS.react, offset: 0.85 },
+      { tech: TECH_ITEMS.aws, offset: 0.85 + Math.PI },
     ],
   },
   // Orbit 2: Counter-Tilted Outer Loop with Python & TensorFlow (180° balanced spacing)
   {
-    radiusX: 2.55,
-    radiusY: 2.35,
-    rotation: [-Math.PI * 0.12, -Math.PI * 0.11, -Math.PI * 0.20],
-    speed: 0.44,
+    radiusX: 2.85,
+    radiusY: 2.55,
+    rotation: [-Math.PI * 0.14, -Math.PI * 0.12, -Math.PI * 0.22],
+    speed: 0.40,
     icons: [
-      { tech: TECH_ITEMS.python, offset: 1.45 },
-      { tech: TECH_ITEMS.tensorflow, offset: 1.45 + Math.PI },
+      { tech: TECH_ITEMS.python, offset: 1.85 },
+      { tech: TECH_ITEMS.tensorflow, offset: 1.85 + Math.PI },
     ],
   },
   // Orbit 3: Equatorial Loop with Java
   {
-    radiusX: 2.35,
-    radiusY: 2.20,
-    rotation: [Math.PI * 0.09, -Math.PI * 0.12, Math.PI * 0.05],
-    speed: 0.56,
+    radiusX: 2.65,
+    radiusY: 2.40,
+    rotation: [Math.PI * 0.08, -Math.PI * 0.15, Math.PI * 0.06],
+    speed: 0.50,
     icons: [
-      { tech: TECH_ITEMS.java, offset: 2.65 },
+      { tech: TECH_ITEMS.java, offset: 3.14 },
     ],
   },
 ];
@@ -464,33 +456,53 @@ function AtomicTechOrbits() {
  * 4. Particles Along Trail: Energy motes spawn along the motion arc and fade progressively.
  * 5. Smooth Fade Away: Decays naturally with damped intensity when idle or departing.
  */
-const SPLINE_SEGMENTS = 26;
-const SPLINE_FLOATS = SPLINE_SEGMENTS * 2 * 3; // 156 floats for line segments
+// Apex emitter origin placed precisely at the summit apex of the logo monument
+const LOGO_EMITTER_LOCAL = new THREE.Vector3(-0.23, 2.05, 0.20);
 
-const PARTICLE_COUNT = 24;
-const PARTICLE_FLOATS = PARTICLE_COUNT * 2 * 3; // 144 floats for particle streaks
+const SPLINE_SEGMENTS = 30;
+const RIBBON_FLOATS = SPLINE_SEGMENTS * 6 * 3; // 540 floats
 
-// Fixed emitter focal origin in logo monument local coordinates (apex of the loop)
-const LOGO_EMITTER_LOCAL = new THREE.Vector3(0.06, 0.52, 0.22);
+const BRANCH_SEGMENTS = 12;
+const BRANCH_FLOATS = BRANCH_SEGMENTS * 6 * 3; // 216 floats
 
+const SPARK_PARTICLE_COUNT = 32;
+const SPARK_FLOATS = SPARK_PARTICLE_COUNT * 6 * 3; // 576 floats (billboard quad per spark)
+
+/**
+ * High-Visibility, Photorealistic Cursor-Follower Lightning Arc
+ *
+ * Engineered with:
+ * 1. Double-Layer Camera-Facing Dynamic Ribbon Geometry (Core + Plasma Glow)
+ *    - Completely bypasses WebGL 1px linewidth limits
+ *    - Intense incandescent white core (#FFFFFF) + vibrant electric cyan halo (#00FFE0)
+ *    - Additive Blending (THREE.AdditiveBlending) for pure electrical radiance
+ * 2. High-Frequency Harmonic Electric Jitter & Micro-Branching Arcs
+ * 3. Clearly Defined Summit Apex Emitter on Monument
+ * 4. Progressive Flying Spark Embers spraying along the path
+ * 5. Smooth, natural fade-to-zero when cursor departs or rests
+ */
 function NaturalCursorLightning({
   monumentRef,
 }: {
   monumentRef: React.RefObject<THREE.Group | null>;
 }) {
-  const outerGlowLineRef = useRef<THREE.LineSegments>(null);
-  const innerCoreLineRef = useRef<THREE.LineSegments>(null);
-  const particleLineRef = useRef<THREE.LineSegments>(null);
-  const contactHaloRef = useRef<THREE.Mesh>(null);
-  const emitterBeadRef = useRef<THREE.Mesh>(null);
+  const outerGlowMeshRef = useRef<THREE.Mesh>(null);
+  const innerCoreMeshRef = useRef<THREE.Mesh>(null);
+  const branchMeshRef = useRef<THREE.Mesh>(null);
+  const sparkParticlesRef = useRef<THREE.Mesh>(null);
+  const emitterGlowRef = useRef<THREE.Mesh>(null);
+  const emitterCoreRef = useRef<THREE.Mesh>(null);
+  const cursorFlareRef = useRef<THREE.Mesh>(null);
+  const cursorCoreRef = useRef<THREE.Mesh>(null);
   const pointLightRef = useRef<THREE.PointLight>(null);
 
-  // Pre-allocated typed arrays for zero GC allocation at 60fps
-  const outerGlowPositions = useMemo(() => new Float32Array(SPLINE_FLOATS), []);
-  const innerCorePositions = useMemo(() => new Float32Array(SPLINE_FLOATS), []);
-  const particlePositions = useMemo(() => new Float32Array(PARTICLE_FLOATS), []);
+  // Pre-allocated typed arrays for zero garbage collection at 60fps
+  const outerGlowPositions = useMemo(() => new Float32Array(RIBBON_FLOATS), []);
+  const innerCorePositions = useMemo(() => new Float32Array(RIBBON_FLOATS), []);
+  const branchPositions = useMemo(() => new Float32Array(BRANCH_FLOATS), []);
+  const sparkPositions = useMemo(() => new Float32Array(SPARK_FLOATS), []);
 
-  // Reusable vectors
+  // Reusable vectors for ribbon math
   const originWorld = useMemo(() => new THREE.Vector3(), []);
   const targetCursor = useMemo(() => new THREE.Vector3(), []);
   const laggedCursor = useMemo(() => new THREE.Vector3(), []);
@@ -501,16 +513,27 @@ function NaturalCursorLightning({
   const cp1 = useMemo(() => new THREE.Vector3(), []);
   const cp2 = useMemo(() => new THREE.Vector3(), []);
 
-  // Pre-allocated curve samples
+  const tVec0 = useMemo(() => new THREE.Vector3(), []);
+  const tVec1 = useMemo(() => new THREE.Vector3(), []);
+  const camVec0 = useMemo(() => new THREE.Vector3(), []);
+  const camVec1 = useMemo(() => new THREE.Vector3(), []);
+  const sideVec0 = useMemo(() => new THREE.Vector3(), []);
+  const sideVec1 = useMemo(() => new THREE.Vector3(), []);
+
+  // Pre-allocated spine nodes
   const curvePts = useMemo(
     () => Array.from({ length: SPLINE_SEGMENTS + 1 }, () => new THREE.Vector3()),
     []
   );
+  const branchPts = useMemo(
+    () => Array.from({ length: BRANCH_SEGMENTS + 1 }, () => new THREE.Vector3()),
+    []
+  );
 
-  // Pre-allocated particle pool
-  const particles = useMemo(
+  // Pre-allocated spark particles
+  const sparkParticles = useMemo(
     () =>
-      Array.from({ length: PARTICLE_COUNT }, () => ({
+      Array.from({ length: SPARK_PARTICLE_COUNT }, () => ({
         x: 0,
         y: 0,
         z: 0,
@@ -518,128 +541,150 @@ function NaturalCursorLightning({
         vy: 0,
         vz: 0,
         life: 0,
-        decay: 2.2,
-        size: 0.024,
+        maxLife: 0.4,
+        size: 0.035,
       })),
     []
   );
 
-  // Damped state
   const stateRef = useRef({
-    energyIntensity: 0,
+    intensity: 0,
     initialized: false,
+    lastMoveTime: 0,
   });
 
   useFrame((state, dt) => {
     const group = monumentRef.current;
-    const outerGlow = outerGlowLineRef.current;
-    const innerCore = innerCoreLineRef.current;
-    const particleMesh = particleLineRef.current;
-    const contactHalo = contactHaloRef.current;
-    const emitterBead = emitterBeadRef.current;
-    const pointLight = pointLightRef.current;
+    const outerMesh = outerGlowMeshRef.current;
+    const innerMesh = innerCoreMeshRef.current;
+    const branchMesh = branchMeshRef.current;
+    const sparkMesh = sparkParticlesRef.current;
+    const emitGlow = emitterGlowRef.current;
+    const emitCore = emitterCoreRef.current;
+    const curFlare = cursorFlareRef.current;
+    const curCore = cursorCoreRef.current;
+    const light = pointLightRef.current;
 
     if (
       !group ||
-      !outerGlow ||
-      !innerCore ||
-      !particleMesh ||
-      !contactHalo ||
-      !emitterBead ||
-      !pointLight
+      !outerMesh ||
+      !innerMesh ||
+      !branchMesh ||
+      !sparkMesh ||
+      !emitGlow ||
+      !emitCore ||
+      !curFlare ||
+      !curCore ||
+      !light
     ) {
       return;
     }
 
     const clampedDt = Math.min(0.04, Math.max(0.001, dt));
     const s = stateRef.current;
+    const now = state.clock.elapsedTime;
 
-    // 1. Calculate clearly defined starting point on the logo in world coordinates
+    // 1. Calculate clearly defined starting point on monument apex in world coordinates
     originWorld.copy(LOGO_EMITTER_LOCAL).applyMatrix4(group.matrixWorld);
 
     // 2. Unproject cursor position in world space at z = 0.25
     unprojectVec.set(state.pointer.x, state.pointer.y, 0.5);
     unprojectVec.unproject(state.camera);
     dirVec.subVectors(unprojectVec, state.camera.position).normalize();
-    const planeDistance = (0.25 - state.camera.position.z) / dirVec.z;
-    targetCursor.copy(state.camera.position).addScaledVector(dirVec, planeDistance);
+    const planeDist = (0.25 - state.camera.position.z) / dirVec.z;
+    targetCursor.copy(state.camera.position).addScaledVector(dirVec, planeDist);
 
     if (!s.initialized) {
       laggedCursor.copy(targetCursor);
       prevCursor.copy(targetCursor);
+      s.lastMoveTime = now;
       s.initialized = true;
     }
 
-    // 3. Natural delay: spring-damp lagged cursor towards real cursor
-    laggedCursor.x = THREE.MathUtils.damp(laggedCursor.x, targetCursor.x, 8.5, clampedDt);
-    laggedCursor.y = THREE.MathUtils.damp(laggedCursor.y, targetCursor.y, 8.5, clampedDt);
-    laggedCursor.z = THREE.MathUtils.damp(laggedCursor.z, targetCursor.z, 8.5, clampedDt);
+    // 3. Natural follow lag: spring-damp lagged cursor towards real cursor
+    laggedCursor.x = THREE.MathUtils.damp(laggedCursor.x, targetCursor.x, 9.5, clampedDt);
+    laggedCursor.y = THREE.MathUtils.damp(laggedCursor.y, targetCursor.y, 9.5, clampedDt);
+    laggedCursor.z = THREE.MathUtils.damp(laggedCursor.z, targetCursor.z, 9.5, clampedDt);
 
-    // Calculate motion speed
-    const cursorSpeed = targetCursor.distanceTo(prevCursor) / clampedDt;
+    // Motion detection
+    const moveDist = targetCursor.distanceTo(prevCursor);
+    if (moveDist > 0.004) {
+      s.lastMoveTime = now;
+    }
+    const cursorSpeed = moveDist / clampedDt;
     prevCursor.copy(targetCursor);
 
     // 4. Proximity & Activity Evaluation
-    const distFromOrigin = originWorld.distanceTo(targetCursor);
-    const maxRadius = 3.0;
-    const inRange = distFromOrigin <= maxRadius && globalMouse.hasMoved;
+    const distFromApex = originWorld.distanceTo(targetCursor);
+    const maxInteractiveDist = 7.5;
+    const idleSeconds = now - s.lastMoveTime;
+    const isInsideWindow =
+      globalMouse.hasMoved &&
+      Math.abs(state.pointer.x) <= 1.05 &&
+      Math.abs(state.pointer.y) <= 1.05;
 
-    // Target intensity: high when moving in proximity, fades progressively when idle or departing
-    const proximityRatio = Math.max(0, 1 - distFromOrigin / maxRadius);
-    const targetIntensity = inRange
-      ? Math.pow(proximityRatio, 1.1) * (0.55 + Math.min(0.45, cursorSpeed * 0.08))
-      : 0.0;
+    // High energy when active and nearby, gracefully decays when idle (> 2.0s) or far
+    let targetIntensity = 0;
+    if (isInsideWindow && distFromApex < maxInteractiveDist) {
+      const distFactor = Math.max(0, 1 - distFromApex / maxInteractiveDist);
+      const activityFactor = Math.max(0, 1 - idleSeconds / 2.2);
+      const speedBoost = Math.min(0.35, cursorSpeed * 0.06);
+      targetIntensity = Math.min(1.0, (distFactor * 0.8 + 0.2) * (0.65 + speedBoost) * activityFactor);
+    }
 
-    // Smooth progressive fade in and buttery gradual decay
-    s.energyIntensity = THREE.MathUtils.damp(
-      s.energyIntensity,
+    // Silky progressive ramp and smooth decay to zero
+    s.intensity = THREE.MathUtils.damp(
+      s.intensity,
       targetIntensity,
-      inRange ? 5.5 : 2.6,
+      targetIntensity > s.intensity ? 7.0 : 3.2,
       clampedDt
     );
 
-    const energy = s.energyIntensity;
+    const energy = s.intensity;
 
-    if (energy < 0.008) {
-      outerGlow.visible = false;
-      innerCore.visible = false;
-      particleMesh.visible = false;
-      contactHalo.visible = false;
-      emitterBead.visible = false;
-      pointLight.intensity = 0;
+    if (energy < 0.01) {
+      outerMesh.visible = false;
+      innerMesh.visible = false;
+      branchMesh.visible = false;
+      sparkMesh.visible = false;
+      emitGlow.visible = false;
+      emitCore.visible = false;
+      curFlare.visible = false;
+      curCore.visible = false;
+      light.intensity = 0;
       return;
     }
 
-    outerGlow.visible = true;
-    innerCore.visible = true;
-    particleMesh.visible = true;
-    contactHalo.visible = true;
-    emitterBead.visible = true;
+    outerMesh.visible = true;
+    innerMesh.visible = true;
+    branchMesh.visible = true;
+    sparkMesh.visible = true;
+    emitGlow.visible = true;
+    emitCore.visible = true;
+    curFlare.visible = true;
+    curCore.visible = true;
 
-    // 5. Construct Smooth Aerodynamic Spline (Curves naturally instead of random zigzags)
+    // 5. Build Natural Aerodynamic Spline with High-Voltage Jitter
     dirVec.subVectors(targetCursor, originWorld);
-    const chordLength = dirVec.length();
+    const chordLen = dirVec.length();
     dirVec.normalize();
 
-    // Perpendicular plane normal for aerodynamic whip curve
-    normalVec.set(-dirVec.y, dirVec.x, 0.2).normalize();
+    // Perpendicular plane for whip curve
+    normalVec.set(-dirVec.y, dirVec.x, 0.35).normalize();
 
     // Cubic Bezier Control Points
-    // CP1 extends along logo outward tangent
-    cp1.copy(originWorld).addScaledVector(dirVec, chordLength * 0.35);
-    cp1.y += chordLength * 0.12;
+    cp1.copy(originWorld).addScaledVector(dirVec, chordLen * 0.32);
+    cp1.y += chordLen * 0.15;
 
-    // CP2 lags behind cursor movement, creating smooth whip inertia
-    cp2.copy(laggedCursor).addScaledVector(dirVec, -chordLength * 0.25);
+    cp2.copy(laggedCursor).addScaledVector(dirVec, -chordLen * 0.28);
+    cp2.y -= chordLen * 0.08;
 
-    const time = state.clock.elapsedTime;
-
-    // Evaluate cubic Bezier with gentle electromagnetic harmonic ripples
+    // Sample Bezier curve + High-Frequency Electric Crackle
     for (let i = 0; i <= SPLINE_SEGMENTS; i++) {
       const u = i / SPLINE_SEGMENTS;
       const invU = 1 - u;
 
-      // Cubic Bezier interpolation
+      // Base Bezier
       const b0 = invU * invU * invU;
       const b1 = 3 * invU * invU * u;
       const b2 = 3 * invU * u * u;
@@ -649,221 +694,408 @@ function NaturalCursorLightning({
       const py = b0 * originWorld.y + b1 * cp1.y + b2 * cp2.y + b3 * targetCursor.y;
       const pz = b0 * originWorld.z + b1 * cp1.z + b2 * cp2.z + b3 * targetCursor.z;
 
-      // Natural harmonic wave envelope (strictly 0 at both endpoints, fluid wave in center)
+      // Envelope anchors firmly at both endpoints (0 at u=0 and u=1)
       const env = Math.sin(u * Math.PI);
-      const wave =
-        (Math.sin(u * 14.0 - time * 16.0) * 0.045 +
-          Math.sin(u * 28.0 - time * 28.0) * 0.018) *
-        env *
-        (0.5 + energy * 0.5);
+
+      // Authentic electric crackle: multi-frequency harmonic turbulence
+      const crackle1 = Math.sin(u * 28.0 - now * 32.0) * 0.055;
+      const crackle2 = Math.cos(u * 52.0 + now * 48.0) * 0.028;
+      const crackle3 = Math.sin(u * 94.0 - now * 80.0) * 0.015;
+      const totalJitter = (crackle1 + crackle2 + crackle3) * env * (0.4 + energy * 0.6);
 
       curvePts[i].set(
-        px + normalVec.x * wave,
-        py + normalVec.y * wave,
-        pz + normalVec.z * wave
+        px + normalVec.x * totalJitter,
+        py + normalVec.y * totalJitter,
+        pz + normalVec.z * totalJitter
       );
     }
 
-    // 6. Populate Spline Line Segments: Outer Cyan Glow Sheath & Inner High-Energy Core
+    // 6. Camera-Facing Ribbon Generation (Pure WebGL Triangles, Bold & Thick)
+    const camPos = state.camera.position;
+    const baseCoreWidth = 0.042 * (0.6 + energy * 0.4);
+    const baseGlowWidth = 0.24 * (0.5 + energy * 0.5);
+
+    let vIdx = 0;
     for (let i = 0; i < SPLINE_SEGMENTS; i++) {
-      const p1 = curvePts[i];
-      const p2 = curvePts[i + 1];
-      const idx = i * 6;
+      const p0 = curvePts[i];
+      const p1 = curvePts[i + 1];
 
-      // Outer Cyan Glow Sheath (#00A89F)
-      outerGlowPositions[idx] = p1.x;
-      outerGlowPositions[idx + 1] = p1.y;
-      outerGlowPositions[idx + 2] = p1.z - 0.004;
-      outerGlowPositions[idx + 3] = p2.x;
-      outerGlowPositions[idx + 4] = p2.y;
-      outerGlowPositions[idx + 5] = p2.z - 0.004;
+      // Tangents
+      if (i === 0) tVec0.subVectors(p1, p0).normalize();
+      else tVec0.subVectors(p1, curvePts[i - 1]).normalize();
 
-      // Inner Razor Core (#00FFE0)
-      innerCorePositions[idx] = p1.x;
-      innerCorePositions[idx + 1] = p1.y;
-      innerCorePositions[idx + 2] = p1.z + 0.004;
-      innerCorePositions[idx + 3] = p2.x;
-      innerCorePositions[idx + 4] = p2.y;
-      innerCorePositions[idx + 5] = p2.z + 0.004;
+      if (i + 1 === SPLINE_SEGMENTS) tVec1.subVectors(p1, p0).normalize();
+      else tVec1.subVectors(curvePts[i + 2], p0).normalize();
+
+      // Camera-perpendicular side vectors
+      camVec0.subVectors(camPos, p0).normalize();
+      sideVec0.crossVectors(tVec0, camVec0).normalize();
+
+      camVec1.subVectors(camPos, p1).normalize();
+      sideVec1.crossVectors(tVec1, camVec1).normalize();
+
+      // Envelope width taper: elegant taper at endpoints, thick plasma in body
+      const u0 = i / SPLINE_SEGMENTS;
+      const u1 = (i + 1) / SPLINE_SEGMENTS;
+      const env0 = 0.45 + Math.sin(u0 * Math.PI) * 0.55;
+      const env1 = 0.45 + Math.sin(u1 * Math.PI) * 0.55;
+
+      const cw0 = baseCoreWidth * env0 * 0.5;
+      const cw1 = baseCoreWidth * env1 * 0.5;
+      const gw0 = baseGlowWidth * env0 * 0.5;
+      const gw1 = baseGlowWidth * env1 * 0.5;
+
+      // --- INNER CORE QUAD (2 Triangles = 6 Vertices) ---
+      // V0: L0, V1: R0, V2: L1
+      innerCorePositions[vIdx] = p0.x - sideVec0.x * cw0;
+      innerCorePositions[vIdx + 1] = p0.y - sideVec0.y * cw0;
+      innerCorePositions[vIdx + 2] = p0.z - sideVec0.z * cw0 + 0.005;
+
+      innerCorePositions[vIdx + 3] = p0.x + sideVec0.x * cw0;
+      innerCorePositions[vIdx + 4] = p0.y + sideVec0.y * cw0;
+      innerCorePositions[vIdx + 5] = p0.z + sideVec0.z * cw0 + 0.005;
+
+      innerCorePositions[vIdx + 6] = p1.x - sideVec1.x * cw1;
+      innerCorePositions[vIdx + 7] = p1.y - sideVec1.y * cw1;
+      innerCorePositions[vIdx + 8] = p1.z - sideVec1.z * cw1 + 0.005;
+
+      // V3: R0, V4: R1, V5: L1
+      innerCorePositions[vIdx + 9] = p0.x + sideVec0.x * cw0;
+      innerCorePositions[vIdx + 10] = p0.y + sideVec0.y * cw0;
+      innerCorePositions[vIdx + 11] = p0.z + sideVec0.z * cw0 + 0.005;
+
+      innerCorePositions[vIdx + 12] = p1.x + sideVec1.x * cw1;
+      innerCorePositions[vIdx + 13] = p1.y + sideVec1.y * cw1;
+      innerCorePositions[vIdx + 14] = p1.z + sideVec1.z * cw1 + 0.005;
+
+      innerCorePositions[vIdx + 15] = p1.x - sideVec1.x * cw1;
+      innerCorePositions[vIdx + 16] = p1.y - sideVec1.y * cw1;
+      innerCorePositions[vIdx + 17] = p1.z - sideVec1.z * cw1 + 0.005;
+
+      // --- OUTER GLOW QUAD ---
+      outerGlowPositions[vIdx] = p0.x - sideVec0.x * gw0;
+      outerGlowPositions[vIdx + 1] = p0.y - sideVec0.y * gw0;
+      outerGlowPositions[vIdx + 2] = p0.z - sideVec0.z * gw0;
+
+      outerGlowPositions[vIdx + 3] = p0.x + sideVec0.x * gw0;
+      outerGlowPositions[vIdx + 4] = p0.y + sideVec0.y * gw0;
+      outerGlowPositions[vIdx + 5] = p0.z + sideVec0.z * gw0;
+
+      outerGlowPositions[vIdx + 6] = p1.x - sideVec1.x * gw1;
+      outerGlowPositions[vIdx + 7] = p1.y - sideVec1.y * gw1;
+      outerGlowPositions[vIdx + 8] = p1.z - sideVec1.z * gw1;
+
+      outerGlowPositions[vIdx + 9] = p0.x + sideVec0.x * gw0;
+      outerGlowPositions[vIdx + 10] = p0.y + sideVec0.y * gw0;
+      outerGlowPositions[vIdx + 11] = p0.z + sideVec0.z * gw0;
+
+      outerGlowPositions[vIdx + 12] = p1.x + sideVec1.x * gw1;
+      outerGlowPositions[vIdx + 13] = p1.y + sideVec1.y * gw1;
+      outerGlowPositions[vIdx + 14] = p1.z + sideVec1.z * gw1;
+
+      outerGlowPositions[vIdx + 15] = p1.x - sideVec1.x * gw1;
+      outerGlowPositions[vIdx + 16] = p1.y - sideVec1.y * gw1;
+      outerGlowPositions[vIdx + 17] = p1.z - sideVec1.z * gw1;
+
+      vIdx += 18;
     }
 
-    // 7. Small Progressive Particles Along the Trail
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const p = particles[i];
-      p.life -= clampedDt * p.decay;
+    // 7. Secondary Fork Branch Arc
+    const forkRootIdx = Math.floor(SPLINE_SEGMENTS * 0.38);
+    const forkRoot = curvePts[forkRootIdx];
+    const branchOut = normalVec.clone().multiplyScalar(0.45);
+    branchOut.y += 0.2;
 
-      // Spawn new particles along the curved trail when energy is active
+    for (let i = 0; i <= BRANCH_SEGMENTS; i++) {
+      const bu = i / BRANCH_SEGMENTS;
+      const bpx = forkRoot.x + dirVec.x * bu * chordLen * 0.28 + branchOut.x * bu;
+      const bpy = forkRoot.y + dirVec.y * bu * chordLen * 0.28 + branchOut.y * bu;
+      const bpz = forkRoot.z + branchOut.z * bu;
+
+      const benv = Math.sin(bu * Math.PI);
+      const bcrackle = Math.sin(bu * 36.0 + now * 40.0) * 0.04 * benv;
+
+      branchPts[i].set(bpx + normalVec.x * bcrackle, bpy + normalVec.y * bcrackle, bpz);
+    }
+
+    let bIdx = 0;
+    const branchWidth = 0.06 * energy;
+    for (let i = 0; i < BRANCH_SEGMENTS; i++) {
+      const bp0 = branchPts[i];
+      const bp1 = branchPts[i + 1];
+
+      tVec0.subVectors(bp1, bp0).normalize();
+      camVec0.subVectors(camPos, bp0).normalize();
+      sideVec0.crossVectors(tVec0, camVec0).normalize();
+
+      const bw = branchWidth * (1 - i / BRANCH_SEGMENTS) * 0.5;
+
+      branchPositions[bIdx] = bp0.x - sideVec0.x * bw;
+      branchPositions[bIdx + 1] = bp0.y - sideVec0.y * bw;
+      branchPositions[bIdx + 2] = bp0.z - sideVec0.z * bw;
+
+      branchPositions[bIdx + 3] = bp0.x + sideVec0.x * bw;
+      branchPositions[bIdx + 4] = bp0.y + sideVec0.y * bw;
+      branchPositions[bIdx + 5] = bp0.z + sideVec0.z * bw;
+
+      branchPositions[bIdx + 6] = bp1.x - sideVec0.x * bw * 0.7;
+      branchPositions[bIdx + 7] = bp1.y - sideVec0.y * bw * 0.7;
+      branchPositions[bIdx + 8] = bp1.z - sideVec0.z * bw * 0.7;
+
+      branchPositions[bIdx + 9] = bp0.x + sideVec0.x * bw;
+      branchPositions[bIdx + 10] = bp0.y + sideVec0.y * bw;
+      branchPositions[bIdx + 11] = bp0.z + sideVec0.z * bw;
+
+      branchPositions[bIdx + 12] = bp1.x + sideVec0.x * bw * 0.7;
+      branchPositions[bIdx + 13] = bp1.y + sideVec0.y * bw * 0.7;
+      branchPositions[bIdx + 14] = bp1.z + sideVec0.z * bw * 0.7;
+
+      branchPositions[bIdx + 15] = bp1.x - sideVec0.x * bw * 0.7;
+      branchPositions[bIdx + 16] = bp1.y - sideVec0.y * bw * 0.7;
+      branchPositions[bIdx + 17] = bp1.z - sideVec0.z * bw * 0.7;
+
+      bIdx += 18;
+    }
+
+    // 8. Dynamic Flying Spark Embers
+    let sIdx = 0;
+    for (let i = 0; i < SPARK_PARTICLE_COUNT; i++) {
+      const p = sparkParticles[i];
+      p.life -= clampedDt;
+
       if (p.life <= 0) {
-        if (energy > 0.12 && Math.random() < 0.45) {
-          // Sample an interpolated point along the smooth spline
-          const sampleU = 0.15 + Math.random() * 0.75;
+        if (energy > 0.15 && Math.random() < 0.65) {
+          const sampleU = 0.1 + Math.random() * 0.85;
           const segFloat = sampleU * SPLINE_SEGMENTS;
-          const segIdx = Math.min(SPLINE_SEGMENTS - 1, Math.floor(segFloat));
-          const frac = segFloat - segIdx;
+          const sIndex = Math.min(SPLINE_SEGMENTS - 1, Math.floor(segFloat));
+          const frac = segFloat - sIndex;
 
-          const pStart = curvePts[segIdx];
-          const pEnd = curvePts[segIdx + 1];
+          const ptA = curvePts[sIndex];
+          const ptB = curvePts[sIndex + 1];
 
-          p.x = pStart.x + (pEnd.x - pStart.x) * frac + (Math.random() - 0.5) * 0.03;
-          p.y = pStart.y + (pEnd.y - pStart.y) * frac + (Math.random() - 0.5) * 0.03;
-          p.z = pStart.z + (pEnd.z - pStart.z) * frac + (Math.random() - 0.5) * 0.03;
+          p.x = ptA.x + (ptB.x - ptA.x) * frac;
+          p.y = ptA.y + (ptB.y - ptA.y) * frac;
+          p.z = ptA.z + (ptB.z - ptA.z) * frac;
 
-          const driftAngle = Math.random() * Math.PI * 2;
-          const driftSpeed = 0.25 + Math.random() * 0.65;
-          p.vx = Math.cos(driftAngle) * driftSpeed;
-          p.vy = Math.sin(driftAngle) * driftSpeed + 0.15; // subtle upward buoyancy
-          p.vz = (Math.random() - 0.5) * 0.2;
-          p.life = 1.0;
-          p.decay = 1.8 + Math.random() * 1.6; // Progressive fade over ~0.3-0.5s
-          p.size = 0.022 + Math.random() * 0.020;
+          const sprayAngle = Math.random() * Math.PI * 2;
+          const spraySpeed = 0.6 + Math.random() * 1.4;
+          p.vx = Math.cos(sprayAngle) * spraySpeed;
+          p.vy = Math.sin(sprayAngle) * spraySpeed + 0.35; // gentle upward buoyancy
+          p.vz = (Math.random() - 0.5) * 0.4;
+          p.maxLife = 0.25 + Math.random() * 0.25;
+          p.life = p.maxLife;
+          p.size = 0.038 + Math.random() * 0.032;
         }
       } else {
-        // Integrate position with slight drag
         p.x += p.vx * clampedDt;
         p.y += p.vy * clampedDt;
         p.z += p.vz * clampedDt;
-        p.vx *= 0.94;
-        p.vy *= 0.94;
-        p.vz *= 0.94;
+        p.vx *= 0.92;
+        p.vy *= 0.92;
+        p.vz *= 0.92;
       }
 
-      const idx = i * 6;
       if (p.life > 0) {
-        const streakTailX = p.x - p.vx * p.size;
-        const streakTailY = p.y - p.vy * p.size;
-        const streakTailZ = p.z - p.vz * p.size;
+        const lifeFrac = p.life / p.maxLife;
+        const pSize = p.size * lifeFrac * energy;
 
-        particlePositions[idx] = p.x;
-        particlePositions[idx + 1] = p.y;
-        particlePositions[idx + 2] = p.z;
-        particlePositions[idx + 3] = streakTailX;
-        particlePositions[idx + 4] = streakTailY;
-        particlePositions[idx + 5] = streakTailZ;
+        // Billboard diamond quad
+        sparkPositions[sIdx] = p.x - pSize;
+        sparkPositions[sIdx + 1] = p.y;
+        sparkPositions[sIdx + 2] = p.z;
+
+        sparkPositions[sIdx + 3] = p.x;
+        sparkPositions[sIdx + 4] = p.y + pSize;
+        sparkPositions[sIdx + 5] = p.z;
+
+        sparkPositions[sIdx + 6] = p.x;
+        sparkPositions[sIdx + 7] = p.y - pSize;
+        sparkPositions[sIdx + 8] = p.z;
+
+        sparkPositions[sIdx + 9] = p.x;
+        sparkPositions[sIdx + 10] = p.y + pSize;
+        sparkPositions[sIdx + 11] = p.z;
+
+        sparkPositions[sIdx + 12] = p.x + pSize;
+        sparkPositions[sIdx + 13] = p.y;
+        sparkPositions[sIdx + 14] = p.z;
+
+        sparkPositions[sIdx + 15] = p.x;
+        sparkPositions[sIdx + 16] = p.y - pSize;
+        sparkPositions[sIdx + 17] = p.z;
       } else {
-        particlePositions[idx] = targetCursor.x;
-        particlePositions[idx + 1] = targetCursor.y;
-        particlePositions[idx + 2] = targetCursor.z;
-        particlePositions[idx + 3] = targetCursor.x;
-        particlePositions[idx + 4] = targetCursor.y;
-        particlePositions[idx + 5] = targetCursor.z;
+        for (let k = 0; k < 18; k++) sparkPositions[sIdx + k] = 0;
       }
+      sIdx += 18;
     }
 
-    // 8. Tapering Endpoint & Emitter Node
-    // Clearly defined logo emitter node
-    emitterBead.position.copy(originWorld);
-    const emitterScale = 0.7 + energy * 0.5;
-    emitterBead.scale.set(emitterScale, emitterScale, emitterScale);
+    // 9. Update GPU Attributes
+    innerMesh.geometry.attributes.position.needsUpdate = true;
+    outerMesh.geometry.attributes.position.needsUpdate = true;
+    branchMesh.geometry.attributes.position.needsUpdate = true;
+    sparkMesh.geometry.attributes.position.needsUpdate = true;
 
-    // Smooth soft contact node at cursor (eliminates abrupt pixelated endings)
-    contactHalo.position.copy(targetCursor);
-    const haloScale = (0.5 + Math.min(0.8, cursorSpeed * 0.05)) * energy;
-    contactHalo.scale.set(haloScale, haloScale, haloScale);
+    // 10. Terminal Halos (Apex Emitter + Cursor Flare)
+    const apexPulse = 1 + Math.sin(now * 18.0) * 0.18;
+    emitGlow.position.copy(originWorld);
+    emitGlow.scale.setScalar((0.26 + energy * 0.14) * apexPulse);
 
-    // 9. Update GPU Buffers
-    outerGlow.geometry.attributes.position.needsUpdate = true;
-    innerCore.geometry.attributes.position.needsUpdate = true;
-    particleMesh.geometry.attributes.position.needsUpdate = true;
+    emitCore.position.copy(originWorld);
+    emitCore.scale.setScalar(0.09 * apexPulse);
 
-    // 10. Update Opacities with Progressive Fade
-    (outerGlow.material as THREE.LineBasicMaterial).opacity = Math.min(0.85, energy * 0.9);
-    (innerCore.material as THREE.LineBasicMaterial).opacity = Math.min(1.0, energy * 1.15);
-    (particleMesh.material as THREE.LineBasicMaterial).opacity = Math.min(0.9, energy * 1.0);
-    (contactHalo.material as THREE.MeshBasicMaterial).opacity = Math.min(0.8, energy * 0.95);
-    (emitterBead.material as THREE.MeshBasicMaterial).opacity = Math.min(0.9, energy * 1.0);
+    const cursorPulse = 1 + Math.sin(now * 24.0) * 0.22;
+    curFlare.position.copy(targetCursor);
+    curFlare.scale.setScalar((0.32 + energy * 0.18) * cursorPulse);
 
-    // 11. Point Light Illumination
-    pointLight.position.set(
-      targetCursor.x * 0.65 + originWorld.x * 0.35,
-      targetCursor.y * 0.65 + originWorld.y * 0.35,
-      0.65
+    curCore.position.copy(targetCursor);
+    curCore.scale.setScalar(0.11 * cursorPulse);
+
+    // 11. Opacity Updates with Additive Radiance
+    (innerMesh.material as THREE.MeshBasicMaterial).opacity = Math.min(1.0, energy * 1.1);
+    (outerMesh.material as THREE.MeshBasicMaterial).opacity = Math.min(0.88, energy * 0.85);
+    (branchMesh.material as THREE.MeshBasicMaterial).opacity = Math.min(0.85, energy * 0.8);
+    (sparkMesh.material as THREE.MeshBasicMaterial).opacity = Math.min(0.95, energy * 0.95);
+    (emitGlow.material as THREE.MeshBasicMaterial).opacity = Math.min(0.85, energy * 0.85);
+    (emitCore.material as THREE.MeshBasicMaterial).opacity = Math.min(1.0, energy);
+    (curFlare.material as THREE.MeshBasicMaterial).opacity = Math.min(0.9, energy * 0.9);
+    (curCore.material as THREE.MeshBasicMaterial).opacity = Math.min(1.0, energy);
+
+    // 12. Dynamic Point Light casting realistic cyan specular reflections
+    light.position.set(
+      targetCursor.x * 0.55 + originWorld.x * 0.45,
+      targetCursor.y * 0.55 + originWorld.y * 0.45,
+      0.85
     );
-    pointLight.intensity = energy * 6.0;
+    light.intensity = energy * 14.0;
   });
 
   return (
     <group>
-      {/* Dynamic Specular Point Light casting cyan reflections */}
-      <pointLight ref={pointLightRef} color="#00FFE0" distance={6.0} decay={2.0} intensity={0} />
+      {/* Dynamic Specular Point Light casting cyan reflections on monument facets */}
+      <pointLight ref={pointLightRef} color="#00FFE0" distance={8.0} decay={2.0} intensity={0} />
 
-      {/* Clearly Defined Starting Point Emitter Node */}
-      <mesh ref={emitterBeadRef} renderOrder={46}>
-        <sphereGeometry args={[0.045, 16, 16]} />
+      {/* --- APEX EMITTER TERMINAL --- */}
+      {/* Outer Cyan Corona */}
+      <mesh ref={emitterGlowRef} renderOrder={51}>
+        <circleGeometry args={[1, 32]} />
         <meshBasicMaterial
           color="#00FFE0"
           transparent
           opacity={0}
           depthWrite={false}
-          blending={THREE.NormalBlending}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+      {/* Inner White-Hot Core */}
+      <mesh ref={emitterCoreRef} renderOrder={52}>
+        <circleGeometry args={[1, 32]} />
+        <meshBasicMaterial
+          color="#FFFFFF"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
         />
       </mesh>
 
-      {/* Outer Cyan Glow Sheath (#00A89F) */}
-      <lineSegments ref={outerGlowLineRef} renderOrder={41}>
+      {/* --- CURSOR CONTACT FLARE --- */}
+      {/* Outer Cyan Plasma Flare */}
+      <mesh ref={cursorFlareRef} renderOrder={53}>
+        <circleGeometry args={[1, 32]} />
+        <meshBasicMaterial
+          color="#00FFE0"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+      {/* Inner White-Hot Core */}
+      <mesh ref={cursorCoreRef} renderOrder={54}>
+        <circleGeometry args={[1, 32]} />
+        <meshBasicMaterial
+          color="#FFFFFF"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+
+      {/* --- VOLUMETRIC BILLBOARD LIGHTNING RIBBONS (PURE WEBGL GEOMETRY) --- */}
+      {/* Layer 1: Wide Plasma Glow Sheath (#00FFE0 / #00FFFF) */}
+      <mesh ref={outerGlowMeshRef} renderOrder={45}>
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
             args={[outerGlowPositions, 3]}
-            count={SPLINE_FLOATS / 3}
+            count={RIBBON_FLOATS / 3}
           />
         </bufferGeometry>
-        <lineBasicMaterial
-          color="#00A89F"
-          transparent
-          opacity={0}
-          depthWrite={false}
-          blending={THREE.NormalBlending}
-          linewidth={3}
-        />
-      </lineSegments>
-
-      {/* Inner High-Energy Cyan Core (#00FFE0) */}
-      <lineSegments ref={innerCoreLineRef} renderOrder={42}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            args={[innerCorePositions, 3]}
-            count={SPLINE_FLOATS / 3}
-          />
-        </bufferGeometry>
-        <lineBasicMaterial
-          color="#00FFE0"
-          transparent
-          opacity={0}
-          depthWrite={false}
-          blending={THREE.NormalBlending}
-          linewidth={1.5}
-        />
-      </lineSegments>
-
-      {/* Progressively Fading Flying Energy Motes */}
-      <lineSegments ref={particleLineRef} renderOrder={43}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            args={[particlePositions, 3]}
-            count={PARTICLE_FLOATS / 3}
-          />
-        </bufferGeometry>
-        <lineBasicMaterial
-          color="#00FFE0"
-          transparent
-          opacity={0}
-          depthWrite={false}
-          blending={THREE.NormalBlending}
-          linewidth={2}
-        />
-      </lineSegments>
-
-      {/* Smooth Soft Contact Halo Node (Eliminates Abrupt Pixelated Ending) */}
-      <mesh ref={contactHaloRef} renderOrder={44}>
-        <circleGeometry args={[0.08, 20]} />
         <meshBasicMaterial
           color="#00FFE0"
           transparent
           opacity={0}
           depthWrite={false}
-          blending={THREE.NormalBlending}
+          blending={THREE.AdditiveBlending}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Layer 2: Ultra-Bright Incandescent White-Hot Core (#FFFFFF) */}
+      <mesh ref={innerCoreMeshRef} renderOrder={46}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[innerCorePositions, 3]}
+            count={RIBBON_FLOATS / 3}
+          />
+        </bufferGeometry>
+        <meshBasicMaterial
+          color="#FFFFFF"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Layer 3: Secondary Crackling Fork Arc */}
+      <mesh ref={branchMeshRef} renderOrder={47}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[branchPositions, 3]}
+            count={BRANCH_FLOATS / 3}
+          />
+        </bufferGeometry>
+        <meshBasicMaterial
+          color="#00FFE0"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Layer 4: Flying Electric Spark Embers */}
+      <mesh ref={sparkParticlesRef} renderOrder={48}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[sparkPositions, 3]}
+            count={SPARK_FLOATS / 3}
+          />
+        </bufferGeometry>
+        <meshBasicMaterial
+          color="#FFFFFF"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          side={THREE.DoubleSide}
         />
       </mesh>
     </group>
@@ -890,14 +1122,12 @@ function OfficialLogoMonument({
   const canopyRef = useRef<THREE.Group>(null);
   const pillarRef = useRef<THREE.Group>(null);
   const flapRef = useRef<THREE.Group>(null);
-  const coreRef = useRef<THREE.Group>(null);
 
-  const { pillarShape, flapShape, ribbonShape, coreShape } = useMemo(() => {
+  const { pillarShape, flapShape, ribbonShape } = useMemo(() => {
     return {
       pillarShape: makeShape(PILLAR_POINTS),
       flapShape: makeShape(FLAP_POINTS),
       ribbonShape: makeShape(BLACK_RIBBON_POINTS),
-      coreShape: makeShape(CORE_POINTS),
     };
   }, []);
 
@@ -935,17 +1165,6 @@ function OfficialLogoMonument({
       ...uniformBevel,
     }),
     [uniformBevel]
-  );
-
-  const coreExtrude = useMemo(
-    () => ({
-      depth: 0.38,
-      bevelEnabled: true,
-      bevelThickness: 0.025,
-      bevelSize: 0.018,
-      bevelSegments: 8,
-    }),
-    []
   );
 
   useFrame((state, dt) => {
@@ -1009,12 +1228,6 @@ function OfficialLogoMonument({
       pillarRef.current.position.z = THREE.MathUtils.damp(pillarRef.current.position.z, -0.22 - explode * 0.3, 4.0, dt);
       pillarRef.current.rotation.y = THREE.MathUtils.damp(pillarRef.current.rotation.y, explode * 0.14, 4.0, dt);
     }
-
-    if (coreRef.current) {
-      const coreScale = 0.85 + explode * 0.28;
-      coreRef.current.scale.setScalar(THREE.MathUtils.damp(coreRef.current.scale.x, coreScale, 4.0, dt));
-      coreRef.current.position.z = THREE.MathUtils.damp(coreRef.current.position.z, -0.20 + explode * 0.22, 4.0, dt);
-    }
   });
 
   return (
@@ -1026,16 +1239,16 @@ function OfficialLogoMonument({
         <mesh castShadow receiveShadow>
           <extrudeGeometry args={[ribbonShape, ribbonExtrude]} />
           <meshPhysicalMaterial
-            color="#1E2328"
-            roughness={0.22}
-            metalness={0.35}
+            color="#141B20"
+            roughness={0.15}
+            metalness={0.55}
             clearcoat={1.0}
-            clearcoatRoughness={0.06}
-            sheen={0.9}
-            sheenColor="#00E6D2"
-            sheenRoughness={0.25}
-            reflectivity={0.94}
-            envMapIntensity={1.3}
+            clearcoatRoughness={0.04}
+            sheen={1.0}
+            sheenColor="#00FFE0"
+            sheenRoughness={0.18}
+            reflectivity={0.98}
+            envMapIntensity={1.8}
           />
         </mesh>
       </group>
@@ -1082,29 +1295,7 @@ function OfficialLogoMonument({
       </group>
 
       {/* ========================================================
-          PART 04: OPTICAL CRYSTAL GLASS INNER CORE (Revealed On Scroll)
-          ======================================================== */}
-      <group ref={coreRef} position={[-0.1, 0.25, -0.20]}>
-        <mesh castShadow receiveShadow>
-          <extrudeGeometry args={[coreShape, coreExtrude]} />
-          <meshPhysicalMaterial
-            color="#E8FBFB"
-            emissive="#1F9D9A"
-            emissiveIntensity={0.15}
-            roughness={0.04}
-            metalness={0.05}
-            transmission={0.94}
-            thickness={1.0}
-            ior={1.54}
-            clearcoat={1.0}
-            transparent
-            opacity={0.88}
-          />
-        </mesh>
-      </group>
-
-      {/* ========================================================
-          PART 05: ATOMIC TECH ORBITS
+          PART 04: ATOMIC TECH ORBITS
           ======================================================== */}
       <AtomicTechOrbits />
 
@@ -1155,11 +1346,14 @@ export default function HeroScene({ active }: { active: boolean }) {
           shadow-bias={-0.0001}
         />
 
+        {/* Crisp Front Fill Light to sculpt 3D chamfers and bevels */}
+        <directionalLight position={[0.5, 3.0, 7.5]} intensity={1.4} color="#FFFFFF" />
+
         {/* Dedicated Teal/Cyan Rim Light producing cyan reflections on black surfaces */}
         <directionalLight
-          position={[-5.5, -2.2, 4.0]}
-          intensity={2.0}
-          color="#00D4C4"
+          position={[-5.5, -1.8, 4.5]}
+          intensity={2.8}
+          color="#00FFE0"
         />
 
         {/* Soft Uplight bounce */}
