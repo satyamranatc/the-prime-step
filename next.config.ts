@@ -130,13 +130,19 @@ const nextConfig: NextConfig = {
       { source: "/artificial-intelligence-ai-course-training-in-indore", destination: "/artificial-intelligence-and-machine-learning-course", permanent: true },
       { source: "/artificial-intelligence-ai-course-training-in-indore-2", destination: "/artificial-intelligence-and-machine-learning-course", permanent: true },
       { source: "/artificial-intelligence-explained-the-prime-step", destination: "/artificial-intelligence-and-machine-learning-course", permanent: true },
+      { source: "/ai-and-machine-learning-are-changing-the-job-market", destination: "/artificial-intelligence-and-machine-learning-course", permanent: true },
+      { source: "/ai-trends-2025-best-ai-courses-at-the-prime-step-indore", destination: "/artificial-intelligence-and-machine-learning-course", permanent: true },
+      { source: "/the-new-artificial-intelligence-is-a-powerful-asset-for-job-automation", destination: "/artificial-intelligence-and-machine-learning-course", permanent: true },
       { source: "/machine-learning-course-in-indore", destination: "/artificial-intelligence-and-machine-learning-course", permanent: true },
       { source: "/machine-learning-course", destination: "/artificial-intelligence-and-machine-learning-course", permanent: true },
       { source: "/generative-ai", destination: "/artificial-intelligence-and-machine-learning-course", permanent: true },
       { source: "/affordable-ai-courses-for-college-students-learn-smartly", destination: "/artificial-intelligence-and-machine-learning-course", permanent: true },
       { source: "/top-5-ai-tools-students-must-learn-before-2026", destination: "/artificial-intelligence-and-machine-learning-course", permanent: true },
 
-      // Data Science & Power BI
+      // Data Science & Analytics & Power BI
+      { source: "/data-science-course-in-indore", destination: "/data-science-and-analytics-courses-in-indore", permanent: true },
+      { source: "/future-of-data-science", destination: "/data-science-and-analytics-courses-in-indore", permanent: true },
+      { source: "/data-analytics-roadmap-for-beginners-2026", destination: "/data-analytics-course-in-indore", permanent: true },
       { source: "/courses/data-science-analytics", destination: "/data-science-and-analytics-courses-in-indore", permanent: true },
       { source: "/courses/data-science-and-analytics-courses-in-indore", destination: "/data-science-and-analytics-courses-in-indore", permanent: true },
       { source: "/power-bi-course", destination: "/power-bi-course-in-indore", permanent: true },
@@ -144,7 +150,9 @@ const nextConfig: NextConfig = {
 
       // Digital Marketing
       { source: "/courses/digital-marketing-classes-in-indore", destination: "/digital-marketing-course-in-indore", permanent: true },
+      { source: "/courses/digital-marketing", destination: "/digital-marketing-course-in-indore", permanent: true },
       { source: "/digital-marketing-course-your-path-to-success", destination: "/digital-marketing-course-in-indore", permanent: true },
+      { source: "/google-ads-vs-social-media-ads-best-roi-in-2025", destination: "/digital-marketing-course-in-indore", permanent: true },
       { source: "/top-digital-marketing-tools-every-student-should-master", destination: "/digital-marketing-course-in-indore", permanent: true },
       { source: "/top-digital-marketing-trends-in-indore", destination: "/digital-marketing-course-in-indore", permanent: true },
       { source: "/how-to-make-money-online-through-affiliate-marketing", destination: "/digital-marketing-course-in-indore", permanent: true },
@@ -167,26 +175,32 @@ const nextConfig: NextConfig = {
       { source: "/which-programming-language-to-learn-first-in-2024", destination: "/blog/best-programming-languages-to-learn", permanent: true },
       { source: "/category/blog/excels-top-10-formulas-blog", destination: "/blog/top-10-excel-formulas-functions", permanent: true },
       { source: "/excel-formulas-functions-to-boost-productivity", destination: "/blog/top-10-excel-formulas-functions", permanent: true },
+      { source: "/how-to-build-a-high-quality-expert-blog-for-seo-success", destination: "/blog", permanent: true },
+      { source: "/the-ultimate-guide-to-writing-high-quality-blog-articles-for-seo-success", destination: "/blog", permanent: true },
+      { source: "/the-ultimate-guide-to-reading-news-online-in-the-usa", destination: "/blog", permanent: true },
 
-      // English & Corporate Training
+      // English & Corporate Training & IoT
       { source: "/courses/spoken-english", destination: "/english-courses", permanent: true },
       { source: "/courses/foundation-english-speaking-course", destination: "/english-courses", permanent: true },
       { source: "/spoken-english-classes-in-indore", destination: "/english-courses", permanent: true },
       { source: "/personal-development", destination: "/corporate-training", permanent: true },
       { source: "/courses/corporate-training", destination: "/corporate-training", permanent: true },
+      { source: "/iot", destination: "/corporate-training", permanent: true },
 
       // Placement & Career Courses
       { source: "/placement", destination: "/career-courses", permanent: true },
       { source: "/placement-institute", destination: "/career-courses", permanent: true },
       { source: "/computer-classes-and-placement-in-vijay-nagar-indore", destination: "/career-courses", permanent: true },
       { source: "/best-computer-courses-for-placement-in-indore-2025", destination: "/career-courses", permanent: true },
+      { source: "/best-computer-courses-in-indore-in-2026", destination: "/career-courses", permanent: true },
       { source: "/how-the-prime-step-institute-ensures-top-tech-company-placements", destination: "/career-courses", permanent: true },
       { source: "/student-success-stories", destination: "/career-courses", permanent: true },
       { source: "/courses/career-courses", destination: "/career-courses", permanent: true },
 
-      // Dedicated /faq and /blog Hubs
+      // Dedicated /faq and /blog Hubs & Thank you
       { source: "/pricing-faq", destination: "/faq", permanent: true },
       { source: "/blog-page", destination: "/blog", permanent: true },
+      { source: "/thank-you", destination: "/contact-us", permanent: true },
 
       // General, Directory & Fallbacks
       { source: "/all-courses", destination: "/courses", permanent: true },
@@ -197,6 +211,8 @@ const nextConfig: NextConfig = {
       { source: "/top-10-it-and-computer-course-after-10-class", destination: "/courses", permanent: true },
       { source: "/the-world-of-online-coding-classes", destination: "/courses", permanent: true },
       { source: "/services", destination: "/courses", permanent: true },
+      { source: "/courses/python-programming-classes", destination: "/python-programming-classes", permanent: true },
+      { source: "/courses/graphic-designing-courses-in-indore", destination: "/courses", permanent: true },
       { source: "/category/:slug*", destination: "/courses", permanent: true },
       { source: "/courses/:slug*", destination: "/courses", permanent: true },
     ];
