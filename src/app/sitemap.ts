@@ -10,7 +10,6 @@ const STATIC_SEO_ROUTES = [
   { path: "/contact-us", priority: 0.9 },
   { path: "/corporate-training", priority: 0.9 },
   { path: "/courses", priority: 0.95 },
-  { path: "/roadmap", priority: 0.85 },
   { path: "/faq", priority: 0.9 },
   { path: "/blog", priority: 0.85 },
   { path: "/blog/best-computer-courses-in-indore-in-2026", priority: 0.85 },
@@ -23,36 +22,39 @@ const STATIC_SEO_ROUTES = [
   { path: "/annapurna", priority: 0.9 },
 ] as const;
 
+const normalizePath = (path: string) => {
+  const clean = path.replace(/^\/+|\/+$/g, "");
+  return clean ? `/${clean}` : "";
+};
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = SITE.url; // "https://www.theprimestep.com"
-  const now = new Date();
+  const baseUrl = SITE.url.replace(/\/+$/, "");
 
-  const routes: MetadataRoute.Sitemap = STATIC_SEO_ROUTES.map((r) => ({
-    url: `${baseUrl}${r.path}`,
-    lastModified: now,
-    changeFrequency: "weekly",
-    priority: r.priority,
-  }));
+  const entries = [
+    ...STATIC_SEO_ROUTES.map((route) => ({
+      path: normalizePath(route.path),
+      priority: route.priority,
+    })),
 
-  // All 14 Dedicated Course Pages
-  Object.keys(COURSE_PAGES).forEach((slug) => {
-    routes.push({
-      url: `${baseUrl}/${slug}`,
-      lastModified: now,
-      changeFrequency: "weekly",
+    ...Object.keys(COURSE_PAGES).map((slug) => ({
+      path: normalizePath(slug),
       priority: 0.95,
-    });
-  });
+    })),
 
-  // Dynamic Course Roadmap Pages
-  Object.keys(ROADMAP_COURSES).forEach((courseId) => {
-    routes.push({
-      url: `${baseUrl}/roadmap/${courseId}`,
-      lastModified: now,
-      changeFrequency: "weekly",
+    ...Object.keys(ROADMAP_COURSES).map((courseId) => ({
+      path: normalizePath(`/roadmap/${courseId}`),
       priority: 0.85,
-    });
-  });
+    })),
+  ];
 
-  return routes;
+  // Prevent duplicate URLs in sitemap.xml
+  const uniqueEntries = new Map(
+    entries.map((entry) => [entry.path, entry])
+  );
+
+  return [...uniqueEntries.values()].map((entry) => ({
+    url: `${baseUrl}${entry.path}`,
+    changeFrequency: "weekly",
+    priority: entry.priority,
+  }));
 }

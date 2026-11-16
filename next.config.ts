@@ -101,9 +101,6 @@ const nextConfig: NextConfig = {
       // Python
       { source: "/courses/best-python-training-institute-in-indore", destination: "/python-programming-classes", permanent: true },
       { source: "/courses/python-core-advanced", destination: "/python-programming-classes", permanent: true },
-      { source: "/which-programming-language-to-learn-first-in-2024", destination: "/python-programming-classes", permanent: true },
-      { source: "/top-5-programming-languages-2025-indore", destination: "/python-programming-classes", permanent: true },
-      { source: "/top-8-programming-languages-of-2024", destination: "/python-programming-classes", permanent: true },
 
       // Java
       { source: "/java-full-stack-developer-course-in-indore", destination: "/java-full-stack-developer", permanent: true },
@@ -174,11 +171,10 @@ const nextConfig: NextConfig = {
       // Restored Blog Articles (1:1 301 Redirects preserving old rankings)
       { source: "/top-digital-marketing-careers-you-need-to-know-in-2025", destination: "/blog/top-digital-marketing-careers", permanent: true },
       { source: "/which-programming-language-to-learn-first-in-2024", destination: "/blog/best-programming-languages-to-learn", permanent: true },
+      { source: "/top-5-programming-languages-2025-indore", destination: "/blog/best-programming-languages-to-learn", permanent: true },
+      { source: "/top-8-programming-languages-of-2024", destination: "/blog/best-programming-languages-to-learn", permanent: true },
       { source: "/category/blog/excels-top-10-formulas-blog", destination: "/blog/top-10-excel-formulas-functions", permanent: true },
       { source: "/excel-formulas-functions-to-boost-productivity", destination: "/blog/top-10-excel-formulas-functions", permanent: true },
-      { source: "/how-to-build-a-high-quality-expert-blog-for-seo-success", destination: "/blog", permanent: true },
-      { source: "/the-ultimate-guide-to-writing-high-quality-blog-articles-for-seo-success", destination: "/blog", permanent: true },
-      { source: "/the-ultimate-guide-to-reading-news-online-in-the-usa", destination: "/blog", permanent: true },
 
       // English & Corporate Training & IoT
       { source: "/courses/spoken-english", destination: "/english-courses", permanent: true },
