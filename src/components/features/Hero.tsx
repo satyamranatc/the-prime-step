@@ -4,10 +4,11 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { sceneState } from "@/lib/scroll";
-import { BRANCHES, PERSONAS, SITE, type PersonaId } from "@/lib/content";
+import { BRANCHES } from "@/lib/content";
 import CTA from "@/components/ui/CTA";
 import Logo from "@/components/ui/Logo";
 import TypingHeadline from "./TypingHeadline";
+import HeroShootingStars from "./HeroShootingStars";
 
 const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
 
@@ -47,9 +48,6 @@ export default function Hero() {
   const heroStage = useRef<HTMLDivElement>(null);
   const [gl, setGl] = useState<boolean>(false);
   const [inView, setInView] = useState(true);
-  const [personaId, setPersonaId] = useState<PersonaId>("student");
-  const [showHindi, setShowHindi] = useState(false);
-  const activePersona = PERSONAS.find((p) => p.id === personaId) ?? PERSONAS[0];
 
   useEffect(() => {
     // Only mount WebGL 3D scene on desktop viewports after browser idle to protect mobile LCP/INP
@@ -123,175 +121,63 @@ export default function Hero() {
       {/* ========================================================
           SCENE 01: HERO PRODUCT REVEAL
           ======================================================== */}
-      <div
-        ref={heroStage}
-        className="relative min-h-[100svh] flex flex-col justify-between px-4 sm:px-6 pt-24 sm:pt-28 pb-8 md:px-12 md:pt-32 md:pb-12 max-w-[1520px] mx-auto bg-paper"
-      >
-        {/* 3D Architectural Monument Canvas (Desktop) / Static Poster (Mobile & Pre-Idle) */}
-        <div
-          data-scene
-          className="relative mx-auto h-[38svh] w-full max-w-lg md:pointer-events-auto md:absolute md:top-[4svh] md:right-[-2%] md:left-[38%] md:h-[88svh] md:max-w-[920px] md:ml-auto z-10"
-        >
-          {gl ? <HeroScene active={inView} /> : <StaticMonumentPoster />}
-        </div>
+      <div ref={heroStage} className="relative overflow-hidden min-h-[100svh] w-full bg-paper">
+        {/* Hyper-Realistic Full-Bleed Sky, Volumetric White Clouds, Vapor Smoke & Shooting Stars */}
+        <HeroShootingStars active={inView} />
 
-        {/* Hero Typography & Actions */}
-        <div className="my-auto max-w-2xl py-4 md:py-10 z-20">
-          <p className="eyebrow text-brand mb-3 sm:mb-4" data-hero-sub>
-            Software Architecture &amp; Technology · Indore
-          </p>
-
-          <h1
-            id="hero-title"
-            data-hero-headline
-            className="display text-[11.5vw] text-deep sm:text-[8.6vw] md:text-[5.8vw] leading-[0.96] break-words"
-          >
-            <TypingHeadline />
-          </h1>
-
-          <p
-            data-hero-sub
-            className="mt-5 sm:mt-6 max-w-lg text-sm sm:text-base md:text-xl leading-relaxed text-deep/85 font-normal"
-          >
-            Master modern full stack development, cloud microservices, and applied AI. Built on practical lab engineering, 1-on-1 mentorship, and placement readiness.
-          </p>
-
-          <div data-hero-cta className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
-            <CTA href="/courses" label="Explore Programs" className="w-full sm:w-auto justify-center text-center" />
-            <CTA href="#campuses" label="Campus Tour" variant="ghost" className="w-full sm:w-auto justify-center text-center" />
-          </div>
-        </div>
-
-        {/* Minimal Bottom Editorial Bar */}
-        <div data-rule className="border-t border-pale/70 pt-5 z-20">
-          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-xs md:text-sm text-deep/80">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-deep">Indore Campuses:</span>
-              <span>{BRANCHES.map((b) => b.name).join("  ·  ")}</span>
-            </div>
-
-            <div className="hidden min-[900px]:flex items-center gap-2 text-brand font-medium">
-              <span>Scroll to deconstruct</span>
-              <span className="text-base">↓</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ========================================================
-          SCENE 02: PERSONALIZED PATHWAYS
-          ======================================================== */}
-      <div className="relative border-t border-pale/60 bg-soft/60 py-24 md:py-32 px-6 md:px-12">
-        <div className="mx-auto max-w-[1480px]">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div className="max-w-3xl">
-              <p className="eyebrow text-brand">Personalized Trajectory</p>
-              <h2 className="display mt-3 text-4xl md:text-6xl text-deep">
-                Choose your <span className="text-brand">starting point.</span>
-              </h2>
-              <p className="mt-4 text-base md:text-lg text-deep/80">
-                Select your current background to view the recommended learning path designed for your goals.
-              </p>
-            </div>
-
-            {/* Intentional EN / Hinglish Toggle */}
-            <div
-              role="group"
-              aria-label="Language subtitle toggle"
-              className="inline-flex items-center rounded-full border border-deep/20 bg-paper p-1 text-xs font-semibold"
-            >
-              <button
-                type="button"
-                onClick={() => setShowHindi(false)}
-                aria-pressed={!showHindi}
-                className={`rounded-full px-3.5 py-1.5 transition-colors ${
-                  !showHindi ? "bg-deep text-paper" : "text-deep hover:bg-soft"
-                }`}
-              >
-                EN
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowHindi(true)}
-                aria-pressed={showHindi}
-                className={`rounded-full px-3.5 py-1.5 transition-colors ${
-                  showHindi ? "bg-deep text-paper" : "text-deep hover:bg-soft"
-                }`}
-              >
-                EN + हिं
-              </button>
-            </div>
-          </div>
-
-          {/* Segmented Persona Selector */}
+        <div className="relative min-h-[100svh] flex flex-col justify-between px-4 sm:px-6 pt-24 sm:pt-26 pb-7 md:px-12 md:pt-28 md:pb-10 max-w-[1520px] mx-auto">
+          {/* 3D Architectural Monument Canvas (Desktop) / Static Poster (Mobile & Pre-Idle) */}
           <div
-            role="tablist"
-            aria-label="Visitor background"
-            className="mt-10 flex flex-wrap gap-2.5"
+            data-scene
+            className="relative mx-auto h-[38svh] w-full max-w-lg md:pointer-events-auto md:absolute md:top-[53%] md:-translate-y-1/2 md:right-[-2%] md:left-[38%] md:h-[82svh] md:max-w-[900px] md:ml-auto z-10"
           >
-            {PERSONAS.map((p) => {
-              const selected = p.id === personaId;
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={selected}
-                  onClick={() => setPersonaId(p.id)}
-                  className={`rounded-full px-5 py-2.5 text-xs md:text-sm font-semibold transition-all duration-300 ${
-                    selected
-                      ? "bg-deep text-paper shadow-sm"
-                      : "bg-paper border border-deep/20 text-deep hover:border-brand"
-                  }`}
-                >
-                  {p.label}
-                </button>
-              );
-            })}
+            {gl ? <HeroScene active={inView} /> : <StaticMonumentPoster />}
           </div>
 
-          {/* Clean Focused Content Showcase */}
-          <div className="mt-8 rounded-3xl bg-paper border border-pale/90 p-8 md:p-12 shadow-xs grid md:grid-cols-[1.4fr_1fr_auto] items-center gap-8">
-            <div>
-              <p className="eyebrow text-brand">
-                {showHindi ? activePersona.hindi : `Pathway · ${activePersona.label}`}
-              </p>
-              <h3 className="display mt-2 text-3xl md:text-4xl text-deep">
-                {activePersona.headline}
-              </h3>
-              <p className="mt-3 text-sm md:text-base leading-relaxed text-deep/85 max-w-xl">
-                {activePersona.sub}
-              </p>
-            </div>
+          {/* Hero Typography & Actions */}
+          <div className="my-auto max-w-2xl py-4 md:py-6 z-20">
+            <p className="eyebrow text-brand mb-3 sm:mb-4" data-hero-sub>
+              Software Architecture &amp; Technology · Indore
+            </p>
 
-            <div>
-              <p className="eyebrow text-deep/80">Recommended Curricula</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {activePersona.recommended.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-full bg-soft border border-brand/25 px-4 py-1.5 text-xs font-semibold text-deep"
-                  >
-                    {item}
-                  </span>
-                ))}
+            <h1
+              id="hero-title"
+              data-hero-headline
+              className="display text-[11.5vw] text-deep sm:text-[8.6vw] md:text-[5.8vw] leading-[0.96] break-words"
+            >
+              <TypingHeadline />
+            </h1>
+
+            <p
+              data-hero-sub
+              className="mt-5 sm:mt-6 max-w-lg text-sm sm:text-base md:text-xl leading-relaxed text-deep/85 font-normal"
+            >
+              Master modern full stack development, cloud microservices, and applied AI. Built on practical lab engineering, 1-on-1 mentorship, and placement readiness.
+            </p>
+
+            <div data-hero-cta className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+              <CTA href="#programs" label="Explore Courses" className="w-full sm:w-auto justify-center text-center" />
+              <CTA href="#campuses" label="Campus Tour" variant="ghost" className="w-full sm:w-auto justify-center text-center" />
+            </div>
+          </div>
+
+          {/* Minimal Bottom Editorial Bar */}
+          <div data-rule className="border-t border-pale/70 pt-5 z-20">
+            <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-xs md:text-sm text-deep/80">
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-deep">Indore Campuses:</span>
+                <span>{BRANCHES.map((b) => b.name).join("  ·  ")}</span>
+              </div>
+
+              <div className="hidden min-[900px]:flex items-center gap-2 text-brand font-medium">
+                <span>Scroll to explore</span>
+                <span className="text-base">↓</span>
               </div>
             </div>
-
-            <div className="flex flex-col sm:flex-row md:flex-col items-start md:items-end gap-3 md:justify-self-end">
-              <CTA
-                href={`${SITE.whatsappHref}?text=${encodeURIComponent(`Hi The Prime Step! I am a ${activePersona.label} and would like to talk to a career counselor.`)}`}
-                label={activePersona.cta}
-              />
-              <CTA
-                href={SITE.phoneHref}
-                label={`Call ${SITE.phoneDisplay}`}
-                variant="ghost"
-              />
-            </div>
           </div>
         </div>
       </div>
+
     </section>
   );
 }

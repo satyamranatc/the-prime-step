@@ -6,6 +6,7 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { setLenis } from "@/lib/scroll";
 import Loader from "./Loader";
 import Nav from "./Nav";
+import Cursor from "./Cursor";
 import StickyLeadBar from "@/components/ui/StickyLeadBar";
 
 /**
@@ -77,8 +78,20 @@ export default function Experience({ children }: { children: ReactNode }) {
     document.fonts.ready.then(refresh);
     window.addEventListener("load", refresh);
 
+    const onSpotlightMove = (e: PointerEvent) => {
+      const card = (e.target as HTMLElement | null)?.closest?.(".spotlight-card") as HTMLElement | null;
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty("--spot-x", `${e.clientX - rect.left}px`);
+      card.style.setProperty("--spot-y", `${e.clientY - rect.top}px`);
+    };
+    if (finePointer && !calm) {
+      window.addEventListener("pointermove", onSpotlightMove, { passive: true });
+    }
+
     return () => {
       window.removeEventListener("load", refresh);
+      window.removeEventListener("pointermove", onSpotlightMove);
       mm.revert();
       if (tick) gsap.ticker.remove(tick);
       lenis?.destroy();
@@ -89,6 +102,7 @@ export default function Experience({ children }: { children: ReactNode }) {
   return (
     <>
       <Loader />
+      <Cursor />
       <Nav />
       {children}
       <StickyLeadBar />

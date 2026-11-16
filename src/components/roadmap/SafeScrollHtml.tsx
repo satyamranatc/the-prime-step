@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { createPortal } from "react-dom";
 import { useScroll } from "@react-three/drei";
 
@@ -18,22 +18,12 @@ export default function SafeScrollHtml({
   className?: string;
 }) {
   const scroll = useScroll();
-  const [targetEl] = useState<HTMLDivElement | null>(() => {
-    if (typeof document === "undefined") return null;
-    return document.createElement("div");
-  });
+  if (!scroll?.fixed) return null;
 
-  useEffect(() => {
-    if (!targetEl || !scroll?.fixed) return;
-    if (className) targetEl.className = className;
-    if (style) Object.assign(targetEl.style, style);
-    scroll.fixed.appendChild(targetEl);
-    return () => {
-      targetEl.remove();
-    };
-  }, [scroll?.fixed, targetEl, className, style]);
-
-  if (!targetEl) return null;
-  return createPortal(children, targetEl);
+  return createPortal(
+    <div className={className} style={style}>
+      {children}
+    </div>,
+    scroll.fixed
+  );
 }
-

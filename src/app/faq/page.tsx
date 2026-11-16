@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SITE, BRANCHES } from "@/lib/content";
+import { SITE } from "@/lib/content";
 import PageShell from "@/components/pages/PageShell";
 
 export const metadata: Metadata = {

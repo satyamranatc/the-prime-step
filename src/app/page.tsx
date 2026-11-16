@@ -1,11 +1,14 @@
 import Experience from "@/components/features/Experience";
 import Hero from "@/components/features/Hero";
-import Programs from "@/components/features/Programs";
-import Learning from "@/components/features/Learning";
+import TrustStrip from "@/components/home/TrustStrip";
+import CourseCatalog from "@/components/home/CourseCatalog";
+import Pathways from "@/components/home/Pathways";
+import WhyUs from "@/components/home/WhyUs";
 import Build from "@/components/features/Build";
-import Careers from "@/components/features/Careers";
-import TrustAndFAQ from "@/components/features/TrustAndFAQ";
-import NextStep from "@/components/features/NextStep";
+import PopularPrograms from "@/components/home/PopularPrograms";
+import TrainingPlacement from "@/components/home/TrainingPlacement";
+import CampusesAndFAQ from "@/components/home/CampusesAndFAQ";
+import FinalCTA from "@/components/home/FinalCTA";
 import Footer from "@/components/features/Footer";
 
 export default function Home() {
@@ -13,12 +16,15 @@ export default function Home() {
     <Experience>
       <main>
         <Hero />
-        <Programs />
-        <Learning />
+        <TrustStrip />
+        <CourseCatalog />
+        <Pathways />
+        <WhyUs />
         <Build />
-        <Careers />
-        <TrustAndFAQ />
-        <NextStep />
+        <PopularPrograms />
+        <TrainingPlacement />
+        <CampusesAndFAQ />
+        <FinalCTA />
       </main>
       <Footer />
     </Experience>

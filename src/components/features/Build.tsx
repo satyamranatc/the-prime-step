@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap";
 import { BUILD_STEPS } from "@/lib/content";
-import Chapter from "@/components/ui/Chapter";
 import Split from "@/components/ui/Split";
 
 const LAST = BUILD_STEPS.length - 1;
@@ -20,7 +19,7 @@ function Preview({ active }: { active: number }) {
           <i className="size-2 rounded-full bg-pale" />
         </span>
         <span className="ml-2 flex-1 truncate rounded-full bg-soft px-3 py-1 font-mono text-[0.68rem]">
-          {active >= 2 ? "yourname.dev" : "localhost:3000"}
+          {active >= 2 ? "yourname.dev" : "yourname.dev/preview"}
         </span>
         <span
           className={`rounded-full bg-brand px-2 py-0.5 font-mono text-[0.6rem] text-paper transition-opacity duration-500 ${active >= 2 ? "opacity-100" : "opacity-0"}`}
@@ -65,7 +64,7 @@ function Preview({ active }: { active: number }) {
   );
 }
 
-/** Chapter 04 — split screen: code on the left, the real page assembling on the right. */
+/** Learning journey — split screen: code on the left, the real page assembling on the right. */
 export default function Build() {
   const section = useRef<HTMLElement>(null);
   const [active, setActive] = useState(LAST);
@@ -98,9 +97,9 @@ export default function Build() {
     <section ref={section} id="build" aria-labelledby="build-title" className="relative min-h-[100svh] bg-deep text-paper">
       <div className="mx-auto grid min-h-[100svh] max-w-[1480px] items-center gap-8 sm:gap-10 px-4 sm:px-6 py-16 sm:py-24 md:grid-cols-[0.8fr_1.4fr] md:gap-14 md:px-10">
         <div>
-          <Chapter n="04" title="Learn by building" dark />
-          <h2 id="build-title" className="display mt-6 sm:mt-8 text-[13vw] sm:text-[14vw] text-paper md:text-[5.2vw] break-words">
-            <Split text="Don't just learn it.|*Ship* *it.*" dark />
+          <p className="eyebrow text-pale" data-fade>Your learning journey</p>
+          <h2 id="build-title" className="display mt-6 sm:mt-8 text-[11vw] sm:text-[9vw] text-paper md:text-[4.4vw] break-words">
+            <Split text="Learn it. Build it.|*Get* *ready* *for* *work.*" dark />
           </h2>
 
           <div className="relative mt-6 sm:mt-8 pl-6 sm:pl-8">
@@ -111,7 +110,7 @@ export default function Build() {
               {BUILD_STEPS.map((s, i) => (
                 <li
                   key={s.n}
-                  className={`transition-opacity duration-500 ${i <= active ? "opacity-100" : "opacity-60"}`}
+                  className={`transition-opacity duration-500 ${i <= active ? "opacity-100" : "opacity-70"}`}
                   aria-current={i === active ? "step" : undefined}
                 >
                   <div className="flex items-baseline gap-3 sm:gap-4">

@@ -34,57 +34,61 @@ export default function TypingHeadline() {
     if (typeof window === "undefined") return;
 
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mq.matches);
+    const onMqChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mq.addEventListener("change", onMqChange);
 
-    if (document.documentElement.dataset.ready) {
-      setPageReady(true);
-    } else {
-      const handleReady = () => setPageReady(true);
-      window.addEventListener("pps-ready", handleReady, { once: true });
-      const fallbackTimer = setTimeout(() => setPageReady(true), 1600);
-      return () => {
-        window.removeEventListener("pps-ready", handleReady);
-        clearTimeout(fallbackTimer);
-      };
-    }
+    const initTimer = setTimeout(() => {
+      if (mq.matches) setReducedMotion(true);
+      if (document.documentElement.dataset.ready) setPageReady(true);
+    }, 0);
+
+    const handleReady = () => setPageReady(true);
+    window.addEventListener("pps-ready", handleReady, { once: true });
+    const fallbackTimer = setTimeout(() => setPageReady(true), 1600);
+
+    return () => {
+      mq.removeEventListener("change", onMqChange);
+      window.removeEventListener("pps-ready", handleReady);
+      clearTimeout(initTimer);
+      clearTimeout(fallbackTimer);
+    };
   }, []);
 
   useEffect(() => {
     if (reducedMotion || !pageReady) return;
 
-    let timer: NodeJS.Timeout;
+    const fullLen = currentPhrase.text.length;
+    let delay = 50;
 
     if (isPaused) {
-      const isComplete = charCount === currentPhrase.text.length;
-      const pauseDuration = isComplete ? 3400 : 380;
+      delay = charCount === fullLen ? 3400 : 380;
+    } else if (isDeleting) {
+      delay = charCount > 0 ? 22 : 10;
+    } else {
+      delay = charCount < fullLen ? 46 + ((charCount * 7) % 18) : 10;
+    }
 
-      timer = setTimeout(() => {
+    const timer = setTimeout(() => {
+      if (isPaused) {
         setIsPaused(false);
-        if (isComplete) {
+        if (charCount === fullLen) {
           setIsDeleting(true);
         } else {
           setPhraseIndex((prev) => (prev + 1) % PHRASES.length);
           setIsDeleting(false);
         }
-      }, pauseDuration);
-    } else if (isDeleting) {
-      if (charCount > 0) {
-        timer = setTimeout(() => {
+      } else if (isDeleting) {
+        if (charCount > 0) {
           setCharCount((prev) => prev - 1);
-        }, 22);
+        } else {
+          setIsPaused(true);
+        }
+      } else if (charCount < fullLen) {
+        setCharCount((prev) => prev + 1);
       } else {
         setIsPaused(true);
       }
-    } else {
-      if (charCount < currentPhrase.text.length) {
-        const jitter = Math.floor(Math.random() * 18);
-        timer = setTimeout(() => {
-          setCharCount((prev) => prev + 1);
-        }, 46 + jitter);
-      } else {
-        setIsPaused(true);
-      }
-    }
+    }, delay);
 
     return () => clearTimeout(timer);
   }, [charCount, isDeleting, isPaused, phraseIndex, currentPhrase.text.length, reducedMotion, pageReady]);

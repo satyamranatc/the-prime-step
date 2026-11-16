@@ -161,6 +161,94 @@ html.lenis body {
   animation: caret-blink 0.95s ease-in-out infinite;
 }
 
+/* Homepage course cards: soft rise when the filter changes (content is never hidden at rest) */
+@keyframes course-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.course-card-in {
+  animation: course-card-in 0.55s var(--ease-out) backwards;
+}
+
+/* Tactile micro-interaction surface: cursor-tracked radial spotlight + spring press */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+  --spot-x: 50%;
+  --spot-y: 50%;
+}
+.spotlight-card::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    460px circle at var(--spot-x) var(--spot-y),
+    rgba(20, 122, 119, 0.085),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-out);
+  z-index: 0;
+}
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+.spotlight-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Crisp spring press on interactive buttons and chips */
+.press-scale {
+  transition:
+    transform 0.25s var(--ease-out),
+    background-color 0.25s var(--ease-out),
+    border-color 0.25s var(--ease-out),
+    color 0.25s var(--ease-out),
+    box-shadow 0.25s var(--ease-out);
+}
+.press-scale:active {
+  transform: scale(0.97);
+}
+
+/* Animated underline slide for inline links */
+.link-slide {
+  position: relative;
+}
+.link-slide::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s var(--ease-out);
+}
+.link-slide:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .course-card-in {
+    animation: none;
+  }
+  .spotlight-card::before {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .glyph-float,
   .caret,
