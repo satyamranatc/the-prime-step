@@ -4,7 +4,7 @@ import { SITE } from "@/lib/content";
 import PageShell from "@/components/pages/PageShell";
 
 export const metadata: Metadata = {
-  title: "Top Digital Marketing Careers & Roles You Need to Know (2026 Guide) | The Prime Step",
+  title: "Top Digital Marketing Careers & Salaries You Need to Know (2026 Guide)",
   description:
     "Explore the most lucrative digital marketing careers in 2026. From Performance Marketing to SEO and AI-driven growth strategies, discover skills and salaries in Indore.",
   alternates: {

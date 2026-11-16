@@ -4,7 +4,7 @@ import { SITE } from "@/lib/content";
 import PageShell from "@/components/pages/PageShell";
 
 export const metadata: Metadata = {
-  title: "Which Programming Language to Learn First in 2026? | The Prime Step",
+  title: "Which Programming Language to Learn First in 2026? (Python vs Java vs C++)",
   description:
     "Confused between Python, Java, C++, and JavaScript? Compare learning difficulty, job demand, and starting salary in Indore to pick your ideal first coding language.",
   alternates: {

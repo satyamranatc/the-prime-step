@@ -4,7 +4,7 @@ import { SITE } from "@/lib/content";
 import PageShell from "@/components/pages/PageShell";
 
 export const metadata: Metadata = {
-  title: "Excel's Top 10 Power Formulas Every Student & Analyst Must Master | The Prime Step",
+  title: "Excel's Top 10 Power Formulas Every Student & Analyst Must Master",
   description:
     "Master the most powerful Microsoft Excel formulas: XLOOKUP, INDEX/MATCH, Dynamic Arrays, Nested IF, SUMIFS, and Pivot Tables. Step-by-step practical guide from The Prime Step Indore.",
   alternates: {

@@ -13,6 +13,8 @@ const STATIC_SEO_ROUTES = [
   { path: "/roadmap", priority: 0.85 },
   { path: "/faq", priority: 0.9 },
   { path: "/blog", priority: 0.85 },
+  { path: "/blog/best-computer-courses-in-indore-in-2026", priority: 0.85 },
+  { path: "/blog/data-analytics-roadmap-for-beginners-2026", priority: 0.85 },
   { path: "/blog/top-digital-marketing-careers", priority: 0.8 },
   { path: "/blog/best-programming-languages-to-learn", priority: 0.8 },
   { path: "/blog/top-10-excel-formulas-functions", priority: 0.8 },

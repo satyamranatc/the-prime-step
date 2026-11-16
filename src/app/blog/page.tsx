@@ -4,7 +4,7 @@ import { SITE } from "@/lib/content";
 import PageShell from "@/components/pages/PageShell";
 
 export const metadata: Metadata = {
-  title: "Tech Career & Skills Blog | The Prime Step Indore",
+  title: "Tech Career & Skills Blog",
   description:
     "Expert tech career guides, programming language comparisons, Excel productivity tutorials, and digital marketing insights from senior mentors at The Prime Step Indore.",
   alternates: {
@@ -22,6 +22,26 @@ export const metadata: Metadata = {
 };
 
 const BLOG_POSTS = [
+  {
+    slug: "best-computer-courses-in-indore-in-2026",
+    title: "Best Computer Courses in Indore in 2026: Career, Skills & Job Opportunities",
+    date: "Updated for 2026",
+    readingTime: "12 min read",
+    category: "Career Guide",
+    excerpt:
+      "A complete guide to the top 10 job-oriented IT courses in Indore for 2026. Compare AI, Data Analytics, Python, MERN Stack, Java, and Power BI by hiring demand, expected salaries, and syllabus.",
+    href: "/blog/best-computer-courses-in-indore-in-2026",
+  },
+  {
+    slug: "data-analytics-roadmap-for-beginners-2026",
+    title: "Data Analytics Roadmap for Beginners (2026): A Step-by-Step Guide to Get Hired",
+    date: "Updated for 2026",
+    readingTime: "10 min read",
+    category: "Career Roadmap",
+    excerpt:
+      "From Excel formulas and SQL queries to interactive Power BI dashboards and Python EDA, follow our step-by-step 5-stage progression to start your career as a Data Analyst.",
+    href: "/blog/data-analytics-roadmap-for-beginners-2026",
+  },
   {
     slug: "top-digital-marketing-careers",
     title: "Top Digital Marketing Careers & Salaries You Need to Know (2026 Guide)",

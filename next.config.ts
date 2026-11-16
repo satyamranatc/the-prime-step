@@ -33,6 +33,7 @@ const nextConfig: NextConfig = {
   compress: true,
   cacheComponents: true,
   partialPrefetching: true,
+  skipTrailingSlashRedirect: true,
 
   images: {
     formats: ["image/avif", "image/webp"],
@@ -89,7 +90,7 @@ const nextConfig: NextConfig = {
       // About Us
       { source: "/about", destination: "/about-us", permanent: true },
       { source: "/about-us-2", destination: "/about-us", permanent: true },
-      { source: "/about-us-2/:slug*", destination: "/about-us", permanent: true },
+      { source: "/about-us-2/:slug+", destination: "/about-us", permanent: true },
       { source: "/why-the-prime-step-institute-is-indores-most-trusted-it-training-center", destination: "/about-us", permanent: true },
       { source: "/instructors", destination: "/about-us", permanent: true },
 
@@ -142,7 +143,7 @@ const nextConfig: NextConfig = {
       // Data Science & Analytics & Power BI
       { source: "/data-science-course-in-indore", destination: "/data-science-and-analytics-courses-in-indore", permanent: true },
       { source: "/future-of-data-science", destination: "/data-science-and-analytics-courses-in-indore", permanent: true },
-      { source: "/data-analytics-roadmap-for-beginners-2026", destination: "/data-analytics-course-in-indore", permanent: true },
+      { source: "/data-analytics-roadmap-for-beginners-2026", destination: "/blog/data-analytics-roadmap-for-beginners-2026", permanent: true },
       { source: "/courses/data-science-analytics", destination: "/data-science-and-analytics-courses-in-indore", permanent: true },
       { source: "/courses/data-science-and-analytics-courses-in-indore", destination: "/data-science-and-analytics-courses-in-indore", permanent: true },
       { source: "/power-bi-course", destination: "/power-bi-course-in-indore", permanent: true },
@@ -192,7 +193,7 @@ const nextConfig: NextConfig = {
       { source: "/placement-institute", destination: "/career-courses", permanent: true },
       { source: "/computer-classes-and-placement-in-vijay-nagar-indore", destination: "/career-courses", permanent: true },
       { source: "/best-computer-courses-for-placement-in-indore-2025", destination: "/career-courses", permanent: true },
-      { source: "/best-computer-courses-in-indore-in-2026", destination: "/career-courses", permanent: true },
+      { source: "/best-computer-courses-in-indore-in-2026", destination: "/blog/best-computer-courses-in-indore-in-2026", permanent: true },
       { source: "/how-the-prime-step-institute-ensures-top-tech-company-placements", destination: "/career-courses", permanent: true },
       { source: "/student-success-stories", destination: "/career-courses", permanent: true },
       { source: "/courses/career-courses", destination: "/career-courses", permanent: true },
@@ -213,8 +214,8 @@ const nextConfig: NextConfig = {
       { source: "/services", destination: "/courses", permanent: true },
       { source: "/courses/python-programming-classes", destination: "/python-programming-classes", permanent: true },
       { source: "/courses/graphic-designing-courses-in-indore", destination: "/courses", permanent: true },
-      { source: "/category/:slug*", destination: "/courses", permanent: true },
-      { source: "/courses/:slug*", destination: "/courses", permanent: true },
+      { source: "/category/:slug+", destination: "/courses", permanent: true },
+      { source: "/courses/:slug+", destination: "/courses", permanent: true },
     ];
   },
 
