@@ -139,13 +139,6 @@ const jsonLd = {
         SITE.social.youtube,
         SITE.social.facebook,
       ],
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.9",
-        reviewCount: "2390",
-        bestRating: "5",
-        worstRating: "1",
-      },
       address: {
         "@type": "PostalAddress",
         streetAddress: BRANCHES[0].address,

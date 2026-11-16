@@ -50,11 +50,6 @@ export default function BranchLandingTemplate({
       latitude: branchKey === "Vijay Nagar" ? 22.7533 : branchKey === "Bhawarkua" ? 22.6926 : 22.6978,
       longitude: branchKey === "Vijay Nagar" ? 75.8937 : branchKey === "Bhawarkua" ? 75.8676 : 75.8362,
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "850",
-    },
   };
 
   return (
