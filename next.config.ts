@@ -203,6 +203,11 @@ const nextConfig: NextConfig = {
       { source: "/blog-page", destination: "/blog", permanent: true },
       { source: "/thank-you", destination: "/contact-us", permanent: true },
 
+      // Legacy WordPress Media / Logos
+      { source: "/wp-content/uploads/2023/12/LOGO-3.png", destination: "/brand/logo.png", permanent: true },
+      { source: "/wp-content/uploads/2025/03/cropped-The-prime-step-11.png", destination: "/brand/logo.png", permanent: true },
+      { source: "/wp-content/uploads/2022/11/Logo_Tps-removebg-preview.png", destination: "/brand/logo.png", permanent: true },
+
       // General, Directory & Fallbacks
       { source: "/all-courses", destination: "/courses", permanent: true },
       { source: "/computer-basic", destination: "/courses", permanent: true },
