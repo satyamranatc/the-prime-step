@@ -170,7 +170,7 @@ export default function CareerCoursesPage() {
 
       {/* 3. Target Roles — Minimal Editorial List (Matches Homepage Chapter 05) */}
       <section className="bg-paper py-20 md:py-28">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
+        <div className="mx-auto max-w-[1320px] px-6 md:px-10">
           <Chapter n="02" title="Target Job Roles" />
           <h2 className="display mt-6 max-w-3xl text-4xl md:text-6xl text-deep">
             What role are you <span className="text-brand">preparing for?</span>
@@ -219,7 +219,7 @@ export default function CareerCoursesPage() {
 
       {/* 4. 4-Stage Placement Readiness */}
       <section className="bg-soft/60 py-20 md:py-28 border-t border-pale/60">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
+        <div className="mx-auto max-w-[1320px] px-6 md:px-10">
           <Chapter n="03" title="Placement Cell & Readiness" />
           <div className="mt-8 grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div>

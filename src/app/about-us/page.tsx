@@ -135,7 +135,7 @@ export default function AboutUsPage() {
 
       {/* 2. Teaching Philosophy & Pillars */}
       <section className="border-t border-pale/60 bg-soft py-16 sm:py-20 md:py-28">
-        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
+        <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10">
           <Chapter n="01" title="Our Pedagogy & Values" />
           <div className="mt-6 max-w-2xl">
             <h2 className="display text-3xl sm:text-4xl md:text-6xl text-deep break-words">
@@ -167,7 +167,7 @@ export default function AboutUsPage() {
 
       {/* 3. How Every Student Learns (4 Steps) */}
       <section className="bg-deep py-16 sm:py-20 text-paper md:py-28">
-        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
+        <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10">
           <Chapter n="02" title="The 4-Stage Learning Loop" dark />
           <h2 className="display mt-6 max-w-3xl text-3xl sm:text-4xl md:text-6xl text-paper break-words">
             From your first line of code to a live portfolio.
@@ -203,7 +203,7 @@ export default function AboutUsPage() {
 
       {/* 4. Our 3 Indore Campuses */}
       <section className="bg-paper py-16 sm:py-20 md:py-28">
-        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
+        <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10">
           <Chapter n="03" title="Our Indore Campuses" />
           <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl">

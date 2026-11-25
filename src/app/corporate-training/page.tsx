@@ -139,7 +139,7 @@ export default function CorporateTrainingPage() {
 
       {/* 2. Corporate Upskilling Domains */}
       <section className="border-t border-pale/60 bg-soft py-16 sm:py-20 md:py-28">
-        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
+        <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10">
           <Chapter n="01" title="Enterprise Training Tracks" />
           <div className="mt-6 max-w-2xl">
             <h2 className="display text-3xl sm:text-4xl md:text-6xl text-deep break-words">
@@ -185,7 +185,7 @@ export default function CorporateTrainingPage() {
 
       {/* 3. Delivery Formats */}
       <section className="bg-paper py-16 sm:py-20 md:py-28">
-        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
+        <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10">
           <Chapter n="02" title="Flexible Delivery Formats" />
           <h2 className="display mt-6 max-w-3xl text-3xl sm:text-4xl md:text-6xl text-deep break-words">
             Built around your team&apos;s schedule.
@@ -213,7 +213,7 @@ export default function CorporateTrainingPage() {
 
       {/* 4. Hire From The Prime Step */}
       <section className="bg-deep py-16 sm:py-20 text-paper md:py-28">
-        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
+        <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10">
           <Chapter n="03" title="Zero-Cost Campus Hiring" dark />
           <div className="mt-6 grid gap-8 sm:gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div>

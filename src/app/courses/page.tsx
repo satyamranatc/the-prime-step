@@ -95,7 +95,7 @@ export default function CoursesPage() {
 
       {/* 3. Concise Admission FAQs */}
       <section className="bg-paper py-20 md:py-28">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
+        <div className="mx-auto max-w-[1320px] px-6 md:px-10">
           <Chapter n="02" title="Admission Essentials" />
           <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
             <h2 className="display max-w-2xl text-4xl md:text-6xl text-deep">

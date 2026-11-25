@@ -42,7 +42,7 @@ export default function StickyLeadBar() {
             href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1.5 rounded-full bg-[#147a77] py-2.5 text-xs font-semibold text-white active:scale-98"
+            className="flex items-center justify-center gap-1.5 rounded-full bg-brand py-2.5 text-xs font-semibold text-white active:scale-98"
           >
             <span>WhatsApp</span>
           </a>

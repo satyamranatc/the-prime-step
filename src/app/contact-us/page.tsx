@@ -148,7 +148,7 @@ export default function ContactUsPage() {
 
       {/* 2. Three Indore Campuses */}
       <section className="border-t border-pale/60 bg-soft py-16 sm:py-20 md:py-28">
-        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
+        <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10">
           <Chapter n="01" title="Indore Campus Locations" />
           <div className="mt-6 max-w-2xl">
             <h2 className="display text-3xl sm:text-4xl md:text-6xl text-deep break-words">
@@ -203,7 +203,7 @@ export default function ContactUsPage() {
 
       {/* 3. Admissions FAQs */}
       <section className="bg-paper py-16 sm:py-20 md:py-28">
-        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10">
+        <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10">
           <Chapter n="02" title="Admissions FAQ" />
           <h2 className="display mt-4 text-2xl sm:text-3xl md:text-5xl text-deep break-words">
             Before you visit our campus.
