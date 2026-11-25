@@ -49,9 +49,9 @@ export default function AdminLoginForm({
       <div className="w-full max-w-md rounded-[16px] border border-hairline bg-surface p-6 shadow-[var(--elevation-1)] sm:p-8">
         <div className="flex flex-col items-center text-center">
           <Logo height={50} variant="color" />
-          <h1 className="display mt-5 text-2xl text-ink">Certificate Admin</h1>
+          <h1 className="display mt-5 text-2xl text-ink">The Prime Step Admin</h1>
           <p className="mt-1.5 text-sm text-ink-muted">
-            Sign in with your administrator credentials to manage certificates.
+            Sign in with your administrator credentials to manage leads, reviews, and certificates.
           </p>
         </div>
 

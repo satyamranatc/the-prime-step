@@ -142,6 +142,38 @@ export default function Footer() {
                 </a>
               ))}
             </div>
+
+            {/* Street-Level Building Location Guide Short */}
+            <div className="mt-6 max-w-[230px] rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+              <div className="flex items-center justify-between gap-2">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#5eead4]">
+                  <span className="size-1.5 rounded-full bg-[#5eead4]" />
+                  Location Guide
+                </span>
+                <a
+                  href="https://www.youtube.com/shorts/B_JTvOQeGEM"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] font-medium text-white/60 transition-colors hover:text-[#5eead4]"
+                >
+                  YouTube ↗
+                </a>
+              </div>
+              <p className="mt-1 text-[11.5px] leading-snug text-white/65">
+                Quick street guide to find our building.
+              </p>
+              <div className="mt-2.5 aspect-[9/16] w-full overflow-hidden rounded-xl border border-white/10 bg-black">
+                <iframe
+                  src="https://www.youtube-nocookie.com/embed/B_JTvOQeGEM?rel=0&modestbranding=1"
+                  title="Street-level location guide to find The Prime Step building"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  className="h-full w-full border-0"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Direct Contact */}

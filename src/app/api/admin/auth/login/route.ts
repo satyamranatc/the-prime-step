@@ -14,6 +14,13 @@ const loginSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  if (request.headers.get("sec-fetch-site") === "cross-site") {
+    return NextResponse.json(
+      { ok: false, error: "Cross-site login attempts are not permitted." },
+      { status: 403 },
+    );
+  }
+
   if (!isAuthConfigured()) {
     return NextResponse.json(
       {

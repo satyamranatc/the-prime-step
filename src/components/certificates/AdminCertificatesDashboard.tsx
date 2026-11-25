@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Logo from "@/components/ui/Logo";
+import AdminShell from "@/components/admin/AdminShell";
 import { buildVerificationUrl } from "@/lib/certificates/validation";
 import BulkCsvImportModal from "./BulkCsvImportModal";
 import type { AdminCertificateItem, AuditLogItem } from "@/lib/certificates/types";
@@ -172,11 +172,6 @@ export default function AdminCertificatesDashboard({
     }, 0);
     return () => window.clearTimeout(id);
   }, [activeTab, fetchAuditLogs]);
-
-  const handleLogout = async () => {
-    await fetch("/api/admin/auth/logout", { method: "POST" });
-    router.refresh();
-  };
 
   const handleCopyUrl = async (certId: string) => {
     const url = buildVerificationUrl(certId, window.location.origin);
@@ -360,44 +355,20 @@ export default function AdminCertificatesDashboard({
   })();
 
   return (
-    <div className="min-h-screen bg-canvas text-ink">
-      {/* Admin Top Bar */}
-      <header className="sticky top-0 z-40 border-b border-hairline bg-surface">
-        <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
-            <Link href="/" aria-label="The Prime Step Home">
-              <Logo height={38} variant="color" />
-            </Link>
-            <span className="hidden h-5 w-px bg-hairline sm:inline-block" aria-hidden="true" />
-            <span className="hidden text-sm font-semibold text-ink sm:inline-block">
-              Certificate Registry
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link
-              href="/verify-certificate"
-              target="_blank"
-              className="hidden rounded-[8px] border border-hairline bg-canvas px-3 py-1.5 text-xs font-semibold text-ink hover:border-ink md:inline-flex"
-            >
-              Public Portal ↗
-            </Link>
-            <span className="hidden text-xs text-ink-muted sm:inline">
-              Signed in as <strong className="text-ink">{adminId}</strong>
-            </span>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="rounded-[8px] border border-hairline bg-surface px-3 py-1.5 text-xs font-semibold text-ink hover:border-status-danger hover:text-status-danger"
-            >
-              Sign out
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Workspace */}
-      <main className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-8">
+    <AdminShell
+      adminId={adminId}
+      headerTitle="Certificate Registry"
+      headerAction={
+        <Link
+          href="/verify-certificate"
+          target="_blank"
+          className="inline-flex h-9 items-center rounded-full bg-[#0B1215] px-4 text-xs font-semibold text-white hover:opacity-90"
+        >
+          Public Verify ↗
+        </Link>
+      }
+    >
+      <div>
         {/* Page Heading + Primary Actions */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
@@ -747,7 +718,7 @@ export default function AdminCertificatesDashboard({
             </table>
           </div>
         )}
-      </main>
+      </div>
 
       {/* ADD CERTIFICATE MODAL */}
       {showAddModal && (
@@ -1238,6 +1209,6 @@ export default function AdminCertificatesDashboard({
           {toast}
         </div>
       )}
-    </div>
+    </AdminShell>
   );
 }

@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/content";
 import { ROADMAP_COURSES } from "@/lib/roadmapCourses";
 import { COURSE_PAGES } from "@/lib/seoPages";
+import { getPublishedCmsBlogPosts } from "@/lib/blog";
 
 const STATIC_SEO_ROUTES = [
   { path: "", priority: 1.0 },
@@ -27,13 +28,19 @@ const normalizePath = (path: string) => {
   return clean ? `/${clean}` : "";
 };
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE.url.replace(/\/+$/, "");
+  const cmsBlogPosts = await getPublishedCmsBlogPosts();
 
   const entries = [
     ...STATIC_SEO_ROUTES.map((route) => ({
       path: normalizePath(route.path),
       priority: route.priority,
+    })),
+
+    ...cmsBlogPosts.map((post) => ({
+      path: normalizePath(`/blog/${post.slug}`),
+      priority: 0.8,
     })),
 
     ...Object.keys(COURSE_PAGES).map((slug) => ({
@@ -48,9 +55,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   // Prevent duplicate URLs in sitemap.xml
-  const uniqueEntries = new Map(
-    entries.map((entry) => [entry.path, entry])
-  );
+  const uniqueEntries = new Map(entries.map((entry) => [entry.path, entry]));
 
   return [...uniqueEntries.values()].map((entry) => ({
     url: `${baseUrl}${entry.path}`,

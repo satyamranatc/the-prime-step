@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
+import { connection, NextResponse } from "next/server";
 
 export const SESSION_COOKIE_NAME = "tps_admin_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 12; // 12 hours
@@ -48,10 +48,12 @@ export function verifyAdminCredentials(username: string, password: string): stri
 
   const storedHash = process.env.ADMIN_PASSWORD_HASH?.trim();
   if (storedHash) {
-    const parts = storedHash.split("$");
+    const delimiter = storedHash.includes(":") ? ":" : "$";
+    const parts = storedHash.split(delimiter);
     if (parts.length !== 3 || parts[0] !== "scrypt") return null;
     const salt = Buffer.from(parts[1], "hex");
     const key = Buffer.from(parts[2], "hex");
+    if (salt.length === 0 || key.length === 0) return null;
     const derived = crypto.scryptSync(password, salt, key.length);
     if (derived.length !== key.length || !crypto.timingSafeEqual(derived, key)) {
       return null;
@@ -123,6 +125,7 @@ export function verifySessionToken(token: string | undefined): AdminSession | nu
 }
 
 export async function getAdminSession(): Promise<AdminSession | null> {
+  await connection();
   const cookieStore = await cookies();
   if (!isAuthConfigured()) return null;
   const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
@@ -171,12 +174,24 @@ export async function requireAdminApi(
   // Same-origin CSRF verification for state-changing requests
   const method = request.method.toUpperCase();
   if (method !== "GET" && method !== "HEAD" && method !== "OPTIONS") {
+    const fetchSite = request.headers.get("sec-fetch-site");
+    if (fetchSite === "cross-site") {
+      return {
+        error: NextResponse.json(
+          { ok: false, error: "Cross-site requests are not permitted." },
+          { status: 403 },
+        ),
+      };
+    }
+
     const origin = request.headers.get("origin");
+    const referer = request.headers.get("referer");
     const host = request.headers.get("host");
-    if (origin && host) {
+    const sourceUrl = origin || referer;
+    if (sourceUrl && host) {
       try {
-        const originHost = new URL(origin).host;
-        if (originHost !== host) {
+        const sourceHost = new URL(sourceUrl).host;
+        if (sourceHost !== host) {
           return {
             error: NextResponse.json(
               { ok: false, error: "Invalid request origin." },

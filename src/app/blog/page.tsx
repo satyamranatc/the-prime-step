@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { connection } from "next/server";
+import { Suspense } from "react";
 import { SITE } from "@/lib/content";
+import { getPublishedCmsBlogPosts, STATIC_BLOG_POSTS } from "@/lib/blog";
 import PageShell from "@/components/pages/PageShell";
 
 export const metadata: Metadata = {
@@ -21,58 +24,83 @@ export const metadata: Metadata = {
   },
 };
 
-const BLOG_POSTS = [
-  {
-    slug: "best-computer-courses-in-indore-in-2026",
-    title: "Best Computer Courses in Indore in 2026: Career, Skills & Job Opportunities",
-    date: "Updated for 2026",
-    readingTime: "12 min read",
-    category: "Career Guide",
-    excerpt:
-      "A complete guide to the top 10 job-oriented IT courses in Indore for 2026. Compare AI, Data Analytics, Python, MERN Stack, Java, and Power BI by hiring demand, expected salaries, and syllabus.",
-    href: "/blog/best-computer-courses-in-indore-in-2026",
-  },
-  {
-    slug: "data-analytics-roadmap-for-beginners-2026",
-    title: "Data Analytics Roadmap for Beginners (2026): A Step-by-Step Guide to Get Hired",
-    date: "Updated for 2026",
-    readingTime: "10 min read",
-    category: "Career Roadmap",
-    excerpt:
-      "From Excel formulas and SQL queries to interactive Power BI dashboards and Python EDA, follow our step-by-step 5-stage progression to start your career as a Data Analyst.",
-    href: "/blog/data-analytics-roadmap-for-beginners-2026",
-  },
-  {
-    slug: "top-digital-marketing-careers",
-    title: "Top Digital Marketing Careers & Salaries You Need to Know (2026 Guide)",
-    date: "Updated for 2026",
-    readingTime: "6 min read",
-    category: "Career Guidance",
-    excerpt:
-      "Explore the highest-paying digital marketing roles in 2026—from Performance Marketers and SEO Strategists to AI Content Specialists—and discover how practical training unlocks top opportunities.",
-    href: "/blog/top-digital-marketing-careers",
-  },
-  {
-    slug: "best-programming-languages-to-learn",
-    title: "Which Programming Language to Learn First in 2026? (Python vs Java vs JavaScript)",
-    date: "Updated for 2026",
-    readingTime: "8 min read",
-    category: "Programming & Code",
-    excerpt:
-      "A complete roadmap for beginners in Indore. Compare Python, Java, C++, and JavaScript by job demand, starting salaries, and learning curve to pick your ideal first coding language.",
-    href: "/blog/best-programming-languages-to-learn",
-  },
-  {
-    slug: "top-10-excel-formulas-functions",
-    title: "Excel's Top 10 Power Formulas Every Student & Analyst Must Master",
-    date: "Updated for 2026",
-    readingTime: "7 min read",
-    category: "Office & Analytics",
-    excerpt:
-      "Master the indispensable spreadsheet functions—XLOOKUP, INDEX/MATCH, Dynamic Arrays, Nested IF, and SUMIFS—with practical business examples to 10x your workplace productivity.",
-    href: "/blog/top-10-excel-formulas-functions",
-  },
-];
+function BlogCard({
+  href,
+  category,
+  date,
+  readingTime,
+  title,
+  excerpt,
+  author,
+}: {
+  href: string;
+  category: string;
+  date: string;
+  readingTime: string;
+  title: string;
+  excerpt: string;
+  author: string;
+}) {
+  return (
+    <article className="group flex flex-col justify-between rounded-3xl border border-pale/80 bg-paper p-5 transition-all hover:-translate-y-1 hover:border-brand/40 hover:shadow-lg sm:p-8">
+      <div className="space-y-4">
+        <div className="flex flex-wrap items-center gap-2 text-xs font-semibold sm:gap-3">
+          <span className="rounded-full bg-soft px-3 py-1 text-brand">
+            {category}
+          </span>
+          <span className="text-deep/50">•</span>
+          <span className="text-deep/60">{date}</span>
+          <span className="text-deep/50">•</span>
+          <span className="text-deep/60">{readingTime}</span>
+        </div>
+
+        <h2 className="break-words text-xl font-bold tracking-tight text-deep transition-colors group-hover:text-brand sm:text-2xl md:text-3xl">
+          <Link href={href}>{title}</Link>
+        </h2>
+
+        <p className="text-sm leading-relaxed text-deep/75 sm:text-base">
+          {excerpt}
+        </p>
+      </div>
+
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-2 border-t border-pale pt-4">
+        <Link
+          href={href}
+          className="flex items-center gap-1 text-sm font-semibold text-brand group-hover:underline"
+        >
+          Read Full Article <span>→</span>
+        </Link>
+        <span className="text-xs font-medium text-deep/50">By {author}</span>
+      </div>
+    </article>
+  );
+}
+
+async function CmsPublishedBlogCards() {
+  await connection();
+  const cmsPosts = await getPublishedCmsBlogPosts();
+  if (cmsPosts.length === 0) return null;
+
+  return (
+    <>
+      {cmsPosts.map((post) => (
+        <BlogCard
+          key={post.id}
+          href={`/blog/${post.slug}`}
+          category={post.category}
+          date={new Date(post.publishedAt || post.createdAt).toLocaleDateString(
+            "en-IN",
+            { day: "numeric", month: "short", year: "numeric" },
+          )}
+          readingTime={post.readingTime}
+          title={post.title}
+          excerpt={post.excerpt}
+          author={post.author}
+        />
+      ))}
+    </>
+  );
+}
 
 export default function BlogListingPage() {
   return (
@@ -83,62 +111,42 @@ export default function BlogListingPage() {
     >
       <section className="mx-auto max-w-4xl space-y-8 sm:space-y-10">
         <div className="grid gap-6 sm:gap-8">
-          {BLOG_POSTS.map((post) => (
-            <article
+          <Suspense fallback={null}>
+            <CmsPublishedBlogCards />
+          </Suspense>
+
+          {STATIC_BLOG_POSTS.map((post) => (
+            <BlogCard
               key={post.slug}
-              className="group rounded-3xl border border-pale/80 bg-paper p-5 sm:p-8 transition-all hover:-translate-y-1 hover:border-brand/40 hover:shadow-lg flex flex-col justify-between"
-            >
-              <div className="space-y-4">
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs font-semibold">
-                  <span className="rounded-full bg-soft px-3 py-1 text-brand">
-                    {post.category}
-                  </span>
-                  <span className="text-deep/50">•</span>
-                  <span className="text-deep/60">{post.date}</span>
-                  <span className="text-deep/50">•</span>
-                  <span className="text-deep/60">{post.readingTime}</span>
-                </div>
-
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-deep group-hover:text-brand transition-colors break-words">
-                  <Link href={post.href}>{post.title}</Link>
-                </h2>
-
-                <p className="text-sm sm:text-base text-deep/75 leading-relaxed">
-                  {post.excerpt}
-                </p>
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-pale flex flex-wrap items-center justify-between gap-2">
-                <Link
-                  href={post.href}
-                  className="text-sm font-semibold text-brand group-hover:underline flex items-center gap-1"
-                >
-                  Read Full Article <span>→</span>
-                </Link>
-                <span className="text-xs text-deep/50 font-medium">
-                  By The Prime Step Faculty
-                </span>
-              </div>
-            </article>
+              href={post.href}
+              category={post.category}
+              date={post.date}
+              readingTime={post.readingTime}
+              title={post.title}
+              excerpt={post.excerpt}
+              author="The Prime Step Faculty"
+            />
           ))}
         </div>
 
         {/* Career Counseling CTA */}
-        <div className="rounded-3xl border border-brand/20 bg-soft p-5 sm:p-8 md:p-12 text-center">
-          <h3 className="text-xl sm:text-2xl font-bold text-deep">Ready to launch your tech career?</h3>
-          <p className="mt-3 text-sm sm:text-base text-deep/70 max-w-xl mx-auto">
+        <div className="rounded-3xl border border-brand/20 bg-soft p-5 text-center sm:p-8 md:p-12">
+          <h3 className="text-xl font-bold text-deep sm:text-2xl">
+            Ready to launch your tech career?
+          </h3>
+          <p className="mx-auto mt-3 max-w-xl text-sm text-deep/70 sm:text-base">
             Book a free 1-on-1 counseling session with our senior mentors across our Vijay Nagar, Bhawarkua, or Annapurna campuses.
           </p>
-          <div className="mt-6 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-2.5 sm:gap-4 w-full sm:w-auto">
+          <div className="mt-6 flex w-full flex-col flex-wrap items-stretch justify-center gap-2.5 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
             <Link
               href="/courses"
-              className="rounded-full bg-deep px-7 py-3 sm:px-8 sm:py-3.5 text-xs sm:text-sm font-semibold text-paper text-center transition-all hover:bg-brand w-full sm:w-auto"
+              className="w-full rounded-full bg-deep px-7 py-3 text-center text-xs font-semibold text-paper transition-all hover:bg-brand sm:w-auto sm:px-8 sm:py-3.5 sm:text-sm"
             >
               Explore Job-Oriented Courses
             </Link>
             <Link
               href="/contact-us"
-              className="rounded-full border border-deep/20 bg-paper px-7 py-3 sm:px-8 sm:py-3.5 text-xs sm:text-sm font-semibold text-deep text-center transition-all hover:border-brand w-full sm:w-auto"
+              className="w-full rounded-full border border-deep/20 bg-paper px-7 py-3 text-center text-xs font-semibold text-deep transition-all hover:border-brand sm:w-auto sm:px-8 sm:py-3.5 sm:text-sm"
             >
               Contact Counselors
             </Link>
@@ -148,4 +156,3 @@ export default function BlogListingPage() {
     </PageShell>
   );
 }
-
