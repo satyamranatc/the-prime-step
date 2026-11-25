@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { BRANCHES, SITE } from "@/lib/content";
+import { EASE_OUT } from "@/components/ui/Motion";
 import { WhatsAppIcon } from "@/components/ui/SocialIcons";
 
 const COURSE_OPTIONS = [
@@ -177,38 +179,52 @@ export default function ContactInquiryForm() {
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-brand px-7 py-3.5 sm:py-4 text-sm font-semibold text-white transition-colors hover:bg-deep cursor-pointer disabled:opacity-60"
+          className="press-scale inline-flex min-h-[48px] w-full cursor-pointer items-center justify-center gap-2.5 rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-white shadow-[0_10px_24px_-8px_rgba(14,110,107,0.5)] transition-all hover:bg-deep disabled:cursor-not-allowed disabled:opacity-65 sm:py-4"
         >
+          {submitting && (
+            <span
+              aria-hidden="true"
+              className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white"
+            />
+          )}
           <span>{submitting ? "Saving Inquiry..." : "Request Free 2-Day Demo Slot"}</span>
         </button>
 
-        {submitted && (
-          <div className="rounded-2xl border border-brand/35 bg-paper p-4 sm:p-5 space-y-3">
-            <p className="text-sm font-semibold text-deep">
-              ✓ Inquiry saved! Our {branch} counselor will reach out shortly.
-            </p>
-            <p className="text-xs text-deep/75">
-              Want an immediate reply right now? Connect with our counselor directly:
-            </p>
-            <div className="flex flex-col sm:flex-row flex-wrap gap-2.5 pt-1">
-              <a
-                href={buildWhatsAppUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-[#147a77] px-4 py-2.5 text-xs font-semibold text-white hover:bg-deep"
-              >
-                <WhatsAppIcon className="size-3.5 fill-current" />
-                <span>Confirm on WhatsApp</span>
-              </a>
-              <a
-                href={SITE.phoneHref}
-                className="inline-flex w-full sm:w-auto items-center justify-center gap-1.5 rounded-full border border-deep/20 px-4 py-2.5 text-xs font-semibold text-deep hover:border-brand"
-              >
-                <span>Call {SITE.phoneDisplay}</span>
-              </a>
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {submitted && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.3, ease: EASE_OUT }}
+              className="space-y-3 rounded-2xl border border-brand/35 bg-paper p-4 shadow-xs sm:p-5"
+            >
+              <p className="text-sm font-semibold text-deep">
+                ✓ Inquiry saved! Our {branch} counselor will reach out shortly.
+              </p>
+              <p className="text-xs text-deep/75">
+                Want an immediate reply right now? Connect with our counselor directly:
+              </p>
+              <div className="flex flex-col flex-wrap gap-2.5 pt-1 sm:flex-row">
+                <a
+                  href={buildWhatsAppUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="press-scale inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full bg-brand px-4 py-2.5 text-xs font-semibold text-white hover:bg-deep sm:w-auto"
+                >
+                  <WhatsAppIcon className="size-3.5 fill-current" />
+                  <span>Confirm on WhatsApp</span>
+                </a>
+                <a
+                  href={SITE.phoneHref}
+                  className="press-scale inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-full border border-deep/20 px-4 py-2.5 text-xs font-semibold text-deep hover:border-brand sm:w-auto"
+                >
+                  <span>Call {SITE.phoneDisplay}</span>
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </form>
   );

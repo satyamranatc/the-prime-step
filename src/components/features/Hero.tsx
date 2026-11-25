@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "motion/react";
+import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
 import { scrollToId } from "@/lib/scroll";
 import { BRANCHES, SITE } from "@/lib/content";
 import { GOOGLE_RATING } from "@/lib/homepage";
@@ -114,6 +114,7 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
   const orbitParallaxY = useTransform(scrollYProgress, [0, 1], [0, -34]);
+  const portalParallaxY = useTransform(scrollYProgress, [0, 1], [0, -14]);
 
   return (
     <section
@@ -333,6 +334,7 @@ export default function Hero() {
 
         {/* Bottom-Emerging Frosted White 3-Column Learning Portal Preview */}
         <motion.div
+          style={{ y: portalParallaxY }}
           initial={{ opacity: 0, y: 26 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.24, ease: EASE_OUT }}
@@ -512,27 +514,36 @@ export default function Hero() {
                         </Link>
                       </div>
 
-                      <div className="mt-2.5 divide-y divide-hairline/70">
-                        {DASHBOARD_TRACKS.map((t) => (
-                          <Link
-                            key={t.title}
-                            href={listMode === "syllabus" ? t.href : t.roadmap}
-                            className="group flex items-center justify-between gap-3 py-2.5 text-left transition-colors hover:bg-canvas/70"
-                          >
-                            <div className="min-w-0">
-                              <p className="truncate text-xs font-semibold text-ink group-hover:text-brand">
-                                {t.title}
-                              </p>
-                              <p className="truncate text-[11px] text-ink-subtle">
-                                {t.meta}
-                              </p>
-                            </div>
-                            <span className="shrink-0 text-[11px] font-semibold text-brand">
-                              {listMode === "syllabus" ? `${t.duration} →` : "3D View ↗"}
-                            </span>
-                          </Link>
-                        ))}
-                      </div>
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={listMode}
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -4 }}
+                          transition={{ duration: 0.2, ease: EASE_OUT }}
+                          className="mt-2.5 divide-y divide-hairline/70"
+                        >
+                          {DASHBOARD_TRACKS.map((t) => (
+                            <Link
+                              key={t.title}
+                              href={listMode === "syllabus" ? t.href : t.roadmap}
+                              className="group flex items-center justify-between gap-3 rounded-lg px-1.5 py-2.5 text-left transition-colors hover:bg-canvas/80 active:scale-[0.99]"
+                            >
+                              <div className="min-w-0">
+                                <p className="truncate text-xs font-semibold text-ink group-hover:text-brand">
+                                  {t.title}
+                                </p>
+                                <p className="truncate text-[11px] text-ink-subtle">
+                                  {t.meta}
+                                </p>
+                              </div>
+                              <span className="shrink-0 text-[11px] font-semibold text-brand transition-transform duration-200 group-hover:translate-x-0.5">
+                                {listMode === "syllabus" ? `${t.duration} →` : "3D View ↗"}
+                              </span>
+                            </Link>
+                          ))}
+                        </motion.div>
+                      </AnimatePresence>
                     </div>
                   </>
                 ) : (

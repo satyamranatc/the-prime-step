@@ -3,7 +3,7 @@
 import { useEffect, useState, type MouseEvent } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
 import { SITE, SOCIAL_LINKS } from "@/lib/content";
 import { scrollToId } from "@/lib/scroll";
 import { EASE_OUT } from "@/components/ui/Motion";
@@ -104,6 +104,12 @@ export default function Nav() {
   const [coursesOpen, setCoursesOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 240,
+    damping: 32,
+    restDelta: 0.001,
+  });
 
   const darkSurface = false;
 
@@ -189,6 +195,8 @@ export default function Nav() {
                   >
                     <Link
                       href={item.href}
+                      aria-haspopup="menu"
+                      aria-expanded={coursesOpen}
                       className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-[14px] font-medium transition-colors ${linkTone}`}
                     >
                       <span>{item.label}</span>
@@ -353,6 +361,12 @@ export default function Nav() {
             </button>
           </div>
         </nav>
+        {/* Subtle 1.5px teal reading-progress hairline */}
+        <motion.div
+          aria-hidden="true"
+          style={{ scaleX, transformOrigin: "0% 50%" }}
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[1.5px] bg-gradient-to-r from-brand via-light to-brand/70"
+        />
       </header>
 
       {/* Mobile Fullscreen Drawer */}

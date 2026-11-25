@@ -1,5 +1,6 @@
 import { TRUST_ITEMS } from "@/lib/homepage";
 import { Reveal } from "@/components/ui/Motion";
+import AnimatedCounter from "@/components/ui/AnimatedCounter";
 
 const QUICK_TRACKS = [
   { label: "Java Full Stack", meta: "Spring Boot · React", href: "/java-full-stack-developer" },
@@ -33,7 +34,7 @@ export default function TrustStrip() {
                   {item.label}
                 </dt>
                 <dd className="display mt-2 text-3xl font-bold text-ink sm:text-4xl">
-                  {item.value}
+                  <AnimatedCounter value={item.value} />
                 </dd>
                 <p className="mt-1 text-xs leading-relaxed text-ink-muted">
                   {item.note}
