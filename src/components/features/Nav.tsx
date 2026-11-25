@@ -16,17 +16,9 @@ import {
   WhatsAppIcon,
 } from "@/components/ui/SocialIcons";
 
-const TOP_NAV = [
-  { href: "/courses", label: "Courses", hasDropdown: true },
-  { href: "/career-courses", label: "Career Tracks" },
-  { href: "/corporate-training", label: "Corporate" },
-  { href: "/english-courses", label: "English" },
-  { href: "/about-us", label: "About" },
-  { href: "/blog", label: "Blog" },
-  { href: "/contact-us", label: "Contact" },
-] as const;
+type MenuId = "programs" | "campuses" | "resources" | null;
 
-const COURSE_DROPDOWN = [
+const PROGRAM_ITEMS = [
   {
     href: "/java-full-stack-developer",
     title: "Java Full Stack Developer",
@@ -97,13 +89,88 @@ const COURSE_DROPDOWN = [
     title: "Tally Prime + GST Mastery",
     meta: "Tally Prime · GST Filing · Accounting",
   },
+  {
+    href: "/english-courses",
+    title: "Spoken English & Communication",
+    meta: "Fluency · GD · HR Interview Prep",
+  },
 ] as const;
 
+const CAMPUS_ITEMS = [
+  {
+    href: "/vijay-nagar",
+    title: "Vijay Nagar Campus",
+    meta: "Head Office · Shagun Tower, AB Road",
+  },
+  {
+    href: "/bhawarkua",
+    title: "Bhawarkua Campus",
+    meta: "Student Hub · Indrapuri Main Road",
+  },
+  {
+    href: "/annapurna",
+    title: "Annapurna Campus",
+    meta: "West Indore · Kalyan Tower, Annapurna Rd",
+  },
+  {
+    href: "/corporate-training",
+    title: "Corporate & College Training",
+    meta: "Custom workshops & upskilling programs",
+  },
+] as const;
+
+const RESOURCE_ITEMS = [
+  {
+    href: "/blog",
+    title: "Tech Career Blog",
+    meta: "Roadmaps, salaries & practical guides",
+  },
+  {
+    href: "/roadmap/java",
+    title: "3D Course Roadmaps",
+    meta: "Interactive week-by-week syllabus view",
+  },
+  {
+    href: "/faq",
+    title: "Frequently Asked Questions",
+    meta: "Batches, fees, demos & placement support",
+  },
+  {
+    href: "/verify-certificate",
+    title: "Verify Certificate",
+    meta: "Official student credential verification",
+  },
+] as const;
+
+function Chevron({ open }: { open: boolean }) {
+  return (
+    <svg
+      width="11"
+      height="11"
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden="true"
+      className={`transition-transform duration-200 ${
+        open ? "rotate-180 text-brand" : "text-ink-subtle"
+      }`}
+    >
+      <path
+        d="M2.5 4.5L6 8L9.5 4.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export default function Nav() {
-  const [open, setOpen] = useState(false);
-  const [coursesOpen, setCoursesOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<MenuId>(null);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 240,
@@ -111,21 +178,19 @@ export default function Nav() {
     restDelta: 0.001,
   });
 
-  const darkSurface = false;
-
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    document.documentElement.style.overflow = open ? "hidden" : "";
+    document.documentElement.style.overflow = mobileOpen ? "hidden" : "";
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setOpen(false);
-        setCoursesOpen(false);
+        setMobileOpen(false);
+        setActiveMenu(null);
       }
     };
     window.addEventListener("keydown", onKey);
@@ -133,181 +198,260 @@ export default function Nav() {
       window.removeEventListener("keydown", onKey);
       document.documentElement.style.overflow = "";
     };
-  }, [open]);
+  }, [mobileOpen]);
 
   const onLogoClick = (e: MouseEvent) => {
-    setOpen(false);
+    setMobileOpen(false);
+    setActiveMenu(null);
     if (pathname === "/") {
       e.preventDefault();
       scrollToId("top");
     }
   };
 
+  const isProgramsActive =
+    pathname === "/courses" || PROGRAM_ITEMS.some((c) => c.href === pathname);
+  const isCampusesActive = CAMPUS_ITEMS.some((c) => c.href === pathname);
+  const isResourcesActive =
+    RESOURCE_ITEMS.some((r) => pathname.startsWith(r.href)) ||
+    pathname.startsWith("/roadmap");
+
   return (
     <>
       <header
         className={`fixed inset-x-0 top-0 z-[120] transition-all duration-300 ${
-          darkSurface
-            ? "border-b border-white/[0.06] bg-[#06090b]/55 backdrop-blur-md"
-            : scrolled
-              ? "border-b border-hairline bg-paper/92 backdrop-blur-xl shadow-[0_1px_16px_rgba(11,18,21,0.05)]"
-              : "border-b border-transparent bg-paper/80 backdrop-blur-md"
+          scrolled
+            ? "border-b border-hairline bg-paper/92 backdrop-blur-xl shadow-[0_1px_16px_rgba(11,18,21,0.05)]"
+            : "border-b border-transparent bg-paper/80 backdrop-blur-md"
         }`}
       >
         <nav
           aria-label="Primary"
-          className="mx-auto flex h-[72px] max-w-[1380px] items-center justify-between px-4 sm:px-6 lg:px-10"
+          className="mx-auto flex h-[74px] max-w-[1320px] items-center justify-between px-4 sm:px-6 lg:px-10"
         >
-          {/* Brand */}
+          {/* Left: Brand */}
           <Link
             href="/"
             onClick={onLogoClick}
             className="relative z-[130] flex items-center"
             aria-label={`${SITE.name} — Home`}
           >
-            <Logo height={48} variant={open || darkSurface ? "light" : "color"} />
+            <Logo height={46} variant={mobileOpen ? "light" : "color"} />
           </Link>
 
-          {/* Center Navigation */}
-          <ul className="hidden items-center gap-1 lg:flex">
-            {TOP_NAV.map((item) => {
-              const isActive =
-                pathname === item.href ||
-                ("hasDropdown" in item &&
-                  item.hasDropdown &&
-                  COURSE_DROPDOWN.some((c) => c.href === pathname));
+          {/* Center: Clean 5-Item Spacious Navigation */}
+          <ul className="hidden items-center gap-2 lg:flex">
+            {/* 1. Programs Mega-Menu */}
+            <li
+              className="relative py-3"
+              onMouseEnter={() => setActiveMenu("programs")}
+              onMouseLeave={() => setActiveMenu(null)}
+            >
+              <Link
+                href="/courses"
+                aria-haspopup="menu"
+                aria-expanded={activeMenu === "programs"}
+                className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-[14px] font-medium transition-colors ${
+                  isProgramsActive
+                    ? "bg-accent-soft text-brand"
+                    : "text-ink-muted hover:bg-canvas hover:text-ink"
+                }`}
+              >
+                <span>Programs</span>
+                <Chevron open={activeMenu === "programs"} />
+              </Link>
 
-              const linkTone = darkSurface
-                ? isActive
-                  ? "bg-white/10 text-white"
-                  : "text-white/75 hover:bg-white/[0.07] hover:text-white"
-                : isActive
-                  ? "bg-accent-soft text-brand"
-                  : "text-ink-muted hover:bg-canvas hover:text-ink";
-
-              if ("hasDropdown" in item && item.hasDropdown) {
-                return (
-                  <li
-                    key={item.href}
-                    className="relative py-3"
-                    onMouseEnter={() => setCoursesOpen(true)}
-                    onMouseLeave={() => setCoursesOpen(false)}
+              <AnimatePresence>
+                {activeMenu === "programs" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.99 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.99 }}
+                    transition={{ duration: 0.18, ease: EASE_OUT }}
+                    className="absolute top-full left-1/2 w-[700px] -translate-x-1/2 pt-2"
                   >
-                    <Link
-                      href={item.href}
-                      aria-haspopup="menu"
-                      aria-expanded={coursesOpen}
-                      className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-[14px] font-medium transition-colors ${linkTone}`}
-                    >
-                      <span>{item.label}</span>
-                      <svg
-                        width="11"
-                        height="11"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        aria-hidden="true"
-                        className={`transition-transform duration-200 ${
-                          coursesOpen
-                            ? "rotate-180 text-light"
-                            : darkSurface
-                              ? "text-white/50"
-                              : "text-ink-subtle"
-                        }`}
-                      >
-                        <path
-                          d="M2.5 4.5L6 8L9.5 4.5"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </Link>
-
-                    <AnimatePresence>
-                      {coursesOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 8, scale: 0.99 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 6, scale: 0.99 }}
-                          transition={{ duration: 0.2, ease: EASE_OUT }}
-                          className="absolute top-full left-1/2 w-[680px] -translate-x-1/2 pt-2"
+                    <div className="max-h-[78vh] overflow-y-auto rounded-2xl border border-hairline bg-paper p-5 text-ink shadow-[0_28px_64px_-12px_rgba(11,18,21,0.18)]">
+                      <div className="mb-3.5 flex items-center justify-between border-b border-hairline pb-3">
+                        <div>
+                          <span className="eyebrow text-brand">Academic Catalog</span>
+                          <p className="mt-0.5 text-xs text-ink-muted">
+                            15 practical offline &amp; hybrid career programs
+                          </p>
+                        </div>
+                        <Link
+                          href="/courses"
+                          onClick={() => setActiveMenu(null)}
+                          className="rounded-lg bg-canvas px-3 py-1.5 text-xs font-semibold text-ink transition-colors hover:bg-accent-soft hover:text-brand"
                         >
-                          <div className="max-h-[78vh] overflow-y-auto rounded-2xl border border-hairline bg-paper p-5 text-ink shadow-[0_28px_64px_-12px_rgba(11,18,21,0.22)]">
-                            <div className="mb-3.5 flex items-center justify-between border-b border-hairline pb-3">
-                              <div>
-                                <span className="eyebrow text-brand">Academic Catalog</span>
-                                <p className="mt-0.5 text-xs text-ink-muted">
-                                  15 lab-based programs across 3 Indore campuses
-                                </p>
-                              </div>
-                              <div className="flex items-center gap-3">
-                                <Link
-                                  href="/roadmap/java"
-                                  onClick={() => setCoursesOpen(false)}
-                                  className="text-xs font-semibold text-ink-muted transition-colors hover:text-brand"
-                                >
-                                  3D Roadmaps
-                                </Link>
-                                <Link
-                                  href="/courses"
-                                  onClick={() => setCoursesOpen(false)}
-                                  className="rounded-lg bg-canvas px-3 py-1.5 text-xs font-semibold text-ink transition-colors hover:bg-accent-soft hover:text-brand"
-                                >
-                                  All Courses →
-                                </Link>
-                              </div>
-                            </div>
+                          All 15 Programs →
+                        </Link>
+                      </div>
 
-                            <div className="grid grid-cols-2 gap-1">
-                              {COURSE_DROPDOWN.map((c) => (
-                                <Link
-                                  key={c.href}
-                                  href={c.href}
-                                  onClick={() => setCoursesOpen(false)}
-                                  className="group rounded-xl px-3 py-2.5 transition-colors hover:bg-canvas"
-                                >
-                                  <p className="text-[13.5px] font-semibold text-ink transition-colors group-hover:text-brand">
-                                    {c.title}
-                                  </p>
-                                  <p className="mt-0.5 font-mono text-[11px] text-ink-subtle">
-                                    {c.meta}
-                                  </p>
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </li>
-                );
-              }
+                      <div className="grid grid-cols-2 gap-1">
+                        {PROGRAM_ITEMS.map((c) => (
+                          <Link
+                            key={c.href}
+                            href={c.href}
+                            onClick={() => setActiveMenu(null)}
+                            className="group rounded-xl px-3 py-2.5 transition-colors hover:bg-canvas"
+                          >
+                            <p className="text-[13.5px] font-semibold text-ink transition-colors group-hover:text-brand">
+                              {c.title}
+                            </p>
+                            <p className="mt-0.5 text-[11.5px] text-ink-subtle">
+                              {c.meta}
+                            </p>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </li>
 
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={`rounded-lg px-3.5 py-2 text-[14px] font-medium transition-colors ${linkTone}`}
+            {/* 2. Career Tracks */}
+            <li>
+              <Link
+                href="/career-courses"
+                className={`rounded-lg px-3.5 py-2 text-[14px] font-medium transition-colors ${
+                  pathname === "/career-courses"
+                    ? "bg-accent-soft text-brand"
+                    : "text-ink-muted hover:bg-canvas hover:text-ink"
+                }`}
+              >
+                Career Tracks
+              </Link>
+            </li>
+
+            {/* 3. Campuses Dropdown */}
+            <li
+              className="relative py-3"
+              onMouseEnter={() => setActiveMenu("campuses")}
+              onMouseLeave={() => setActiveMenu(null)}
+            >
+              <Link
+                href="/vijay-nagar"
+                aria-haspopup="menu"
+                aria-expanded={activeMenu === "campuses"}
+                className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-[14px] font-medium transition-colors ${
+                  isCampusesActive
+                    ? "bg-accent-soft text-brand"
+                    : "text-ink-muted hover:bg-canvas hover:text-ink"
+                }`}
+              >
+                <span>Campuses</span>
+                <Chevron open={activeMenu === "campuses"} />
+              </Link>
+
+              <AnimatePresence>
+                {activeMenu === "campuses" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.99 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.99 }}
+                    transition={{ duration: 0.18, ease: EASE_OUT }}
+                    className="absolute top-full left-1/2 w-[340px] -translate-x-1/2 pt-2"
                   >
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
+                    <div className="rounded-2xl border border-hairline bg-paper p-3 text-ink shadow-[0_24px_56px_-12px_rgba(11,18,21,0.16)]">
+                      {CAMPUS_ITEMS.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setActiveMenu(null)}
+                          className="group block rounded-xl px-3.5 py-2.5 transition-colors hover:bg-canvas"
+                        >
+                          <p className="text-[13.5px] font-semibold text-ink transition-colors group-hover:text-brand">
+                            {item.title}
+                          </p>
+                          <p className="mt-0.5 text-[11.5px] text-ink-subtle">
+                            {item.meta}
+                          </p>
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </li>
+
+            {/* 4. Resources Dropdown */}
+            <li
+              className="relative py-3"
+              onMouseEnter={() => setActiveMenu("resources")}
+              onMouseLeave={() => setActiveMenu(null)}
+            >
+              <Link
+                href="/blog"
+                aria-haspopup="menu"
+                aria-expanded={activeMenu === "resources"}
+                className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-[14px] font-medium transition-colors ${
+                  isResourcesActive
+                    ? "bg-accent-soft text-brand"
+                    : "text-ink-muted hover:bg-canvas hover:text-ink"
+                }`}
+              >
+                <span>Resources</span>
+                <Chevron open={activeMenu === "resources"} />
+              </Link>
+
+              <AnimatePresence>
+                {activeMenu === "resources" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.99 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.99 }}
+                    transition={{ duration: 0.18, ease: EASE_OUT }}
+                    className="absolute top-full left-1/2 w-[340px] -translate-x-1/2 pt-2"
+                  >
+                    <div className="rounded-2xl border border-hairline bg-paper p-3 text-ink shadow-[0_24px_56px_-12px_rgba(11,18,21,0.16)]">
+                      {RESOURCE_ITEMS.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setActiveMenu(null)}
+                          className="group block rounded-xl px-3.5 py-2.5 transition-colors hover:bg-canvas"
+                        >
+                          <p className="text-[13.5px] font-semibold text-ink transition-colors group-hover:text-brand">
+                            {item.title}
+                          </p>
+                          <p className="mt-0.5 text-[11.5px] text-ink-subtle">
+                            {item.meta}
+                          </p>
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </li>
+
+            {/* 5. About */}
+            <li>
+              <Link
+                href="/about-us"
+                className={`rounded-lg px-3.5 py-2 text-[14px] font-medium transition-colors ${
+                  pathname === "/about-us"
+                    ? "bg-accent-soft text-brand"
+                    : "text-ink-muted hover:bg-canvas hover:text-ink"
+                }`}
+              >
+                About
+              </Link>
+            </li>
           </ul>
 
-          {/* Right Actions */}
-          <div className="flex items-center gap-2.5">
+          {/* Right: Quiet Contact Link + Single Primary Pill CTA (Spacious room for future Student Login) */}
+          <div className="flex items-center gap-4">
             <Link
-              href="/roadmap/java"
-              className={`hidden rounded-full border px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-wider transition-colors xl:inline-flex ${
-                darkSurface
-                  ? "border-white/20 text-white/85 hover:border-white/50 hover:text-white"
-                  : "border-hairline text-ink-muted hover:border-ink/40 hover:text-ink"
+              href="/contact-us"
+              className={`hidden text-[14px] font-medium transition-colors lg:inline-block ${
+                pathname === "/contact-us"
+                  ? "text-brand"
+                  : "text-ink-muted hover:text-ink"
               }`}
             >
-              3D Roadmaps
+              Contact
             </Link>
 
             <Link
@@ -318,11 +462,7 @@ export default function Nav() {
                   scrollToId("admission");
                 }
               }}
-              className={`press-scale hidden items-center gap-2 rounded-full px-5 py-2.5 text-[13px] font-semibold lg:inline-flex ${
-                darkSurface
-                  ? "border border-white/25 bg-white text-ink hover:bg-accent-soft"
-                  : "bg-ink text-white hover:bg-brand"
-              }`}
+              className="press-scale hidden items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-[13.5px] font-semibold text-white transition-colors hover:bg-brand lg:inline-flex"
             >
               <span>Book Free Demo</span>
               <span aria-hidden="true">→</span>
@@ -330,37 +470,30 @@ export default function Nav() {
 
             <button
               type="button"
-              aria-expanded={open}
+              aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
-              aria-label={open ? "Close menu" : "Open menu"}
-              onClick={() => setOpen((v) => !v)}
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              onClick={() => setMobileOpen((v) => !v)}
               className={`relative z-[130] grid size-11 place-items-center rounded-full border transition-colors lg:hidden ${
-                open || darkSurface
+                mobileOpen
                   ? "border-white/25 bg-white/10"
                   : "border-hairline bg-paper hover:border-ink/40"
               }`}
             >
               <span
                 className={`absolute h-[1.5px] w-4.5 transition-transform duration-300 ${
-                  open
-                    ? "rotate-45 bg-white"
-                    : darkSurface
-                      ? "-translate-y-1.5 bg-white"
-                      : "-translate-y-1.5 bg-ink"
+                  mobileOpen ? "rotate-45 bg-white" : "-translate-y-1.5 bg-ink"
                 }`}
               />
               <span
                 className={`absolute h-[1.5px] w-4.5 transition-transform duration-300 ${
-                  open
-                    ? "-rotate-45 bg-white"
-                    : darkSurface
-                      ? "translate-y-1.5 bg-white"
-                      : "translate-y-1.5 bg-ink"
+                  mobileOpen ? "-rotate-45 bg-white" : "translate-y-1.5 bg-ink"
                 }`}
               />
             </button>
           </div>
         </nav>
+
         {/* Subtle 1.5px teal reading-progress hairline */}
         <motion.div
           aria-hidden="true"
@@ -371,7 +504,7 @@ export default function Nav() {
 
       {/* Mobile Fullscreen Drawer */}
       <AnimatePresence>
-        {open && (
+        {mobileOpen && (
           <motion.div
             id="mobile-menu"
             initial={{ opacity: 0, y: -12 }}
@@ -382,21 +515,22 @@ export default function Nav() {
           >
             <div className="space-y-6">
               <ul className="divide-y divide-white/10">
-                <li>
-                  <Link
-                    href="/"
-                    onClick={() => setOpen(false)}
-                    className="display block py-3.5 text-2xl text-white transition-colors hover:text-light"
-                  >
-                    Home
-                  </Link>
-                </li>
-                {TOP_NAV.map((item) => (
+                {[
+                  { href: "/", label: "Home" },
+                  { href: "/courses", label: "Programs" },
+                  { href: "/career-courses", label: "Career Tracks" },
+                  { href: "/corporate-training", label: "Corporate Training" },
+                  { href: "/english-courses", label: "Spoken English" },
+                  { href: "/blog", label: "Tech Career Blog" },
+                  { href: "/verify-certificate", label: "Verify Certificate" },
+                  { href: "/about-us", label: "About Us" },
+                  { href: "/contact-us", label: "Contact" },
+                ].map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      onClick={() => setOpen(false)}
-                      className="display block py-3.5 text-2xl text-white transition-colors hover:text-light"
+                      onClick={() => setMobileOpen(false)}
+                      className="display block py-3 text-xl text-white transition-colors hover:text-light"
                     >
                       {item.label}
                     </Link>
@@ -405,14 +539,14 @@ export default function Nav() {
               </ul>
 
               <div className="pt-2">
-                <p className="eyebrow mb-3 text-white/60">Flagship Courses</p>
+                <p className="eyebrow mb-3 text-white/60">Indore Campuses</p>
                 <div className="flex flex-wrap gap-2">
-                  {COURSE_DROPDOWN.slice(0, 8).map((c) => (
+                  {CAMPUS_ITEMS.slice(0, 3).map((c) => (
                     <Link
                       key={c.href}
                       href={c.href}
-                      onClick={() => setOpen(false)}
-                      className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/90 hover:border-light hover:text-white"
+                      onClick={() => setMobileOpen(false)}
+                      className="rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-white/90 hover:border-light hover:text-white"
                     >
                       {c.title}
                     </Link>
@@ -425,7 +559,7 @@ export default function Nav() {
               <div className="flex flex-wrap gap-3">
                 <a
                   href={SITE.phoneHref}
-                  className="inline-flex flex-1 items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-ink"
+                  className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-ink"
                 >
                   Call {SITE.phoneDisplay}
                 </a>
@@ -433,7 +567,7 @@ export default function Nav() {
                   href={SITE.whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white"
+                  className="inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white"
                 >
                   <WhatsAppIcon className="size-4 fill-current" />
                   <span>WhatsApp</span>

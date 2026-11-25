@@ -111,22 +111,25 @@ export default function CorporateTrainingPage() {
       />
 
       {/* 1. Hero */}
-      <section className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10 pt-6 sm:pt-8 pb-16 md:pb-28">
+      <section className="mx-auto max-w-[1320px] pt-6 pb-16 md:pt-10 md:pb-24">
         <p className="eyebrow text-brand">Enterprise &amp; Institutional Upskilling</p>
-        <h1 className="display mt-4 max-w-4xl text-[11.5vw] text-deep sm:text-[7.5vw] md:text-[5.4vw] leading-[0.95] break-words">
-          Corporate Training engineered for <span className="italic text-brand">measurable impact.</span>
+        <h1 className="display mt-4 max-w-3xl text-[clamp(2.25rem,4.8vw,3.85rem)] font-bold leading-[1.06] text-ink break-words">
+          Corporate Training engineered for{" "}
+          <span className="bg-gradient-to-r from-[#0a5654] via-brand to-light bg-clip-text text-transparent">
+            measurable impact.
+          </span>
         </h1>
-        <p className="mt-6 max-w-2xl text-base sm:text-lg md:text-xl leading-relaxed text-deep/85">
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-ink-muted md:text-lg">
           We partner with IT companies, growing enterprises, and colleges across Indore and Central India to upskill teams through customized, project-driven workshops in Full Stack Engineering, Data Analytics, Python AI, and Business Communication.
         </p>
 
-        <div className="mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
-          <CTA href="/contact-us" label="Request Custom Proposal" className="w-full sm:w-auto text-center justify-center" />
+        <div className="mt-8 flex w-full flex-col flex-wrap items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-3.5">
+          <CTA href="/contact-us" label="Request Custom Proposal" className="w-full justify-center text-center sm:w-auto" />
           <a
             href={SITE.whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-deep/25 bg-soft px-6 py-3 text-sm font-medium text-deep transition-colors hover:border-brand hover:text-brand w-full sm:w-auto text-center"
+            className="press-scale inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full border border-hairline bg-canvas px-6 text-sm font-semibold text-ink transition-colors hover:border-brand hover:text-brand sm:w-auto"
           >
             <WhatsAppIcon className="size-4 fill-current text-brand" />
             <span>Speak with Training Director</span>

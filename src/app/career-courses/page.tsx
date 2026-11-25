@@ -4,7 +4,6 @@ import { CAREER_STAGES, ROLES, SITE } from "@/lib/content";
 import { ALL_CATALOG_COURSES, buildBreadcrumbJsonLd } from "@/lib/seoPages";
 import Chapter from "@/components/ui/Chapter";
 import CTA from "@/components/ui/CTA";
-import Split from "@/components/ui/Split";
 import PageShell from "@/components/pages/PageShell";
 
 const pageTitle = "Career Courses & Job-Oriented IT Programs in Indore | The Prime Step";
@@ -65,21 +64,21 @@ export default function CareerCoursesPage() {
       />
 
       {/* 1. Focused Hero */}
-      <section className="mx-auto max-w-[1480px] px-6 pt-8 pb-20 md:px-10 md:pt-12 md:pb-28">
-        <p className="eyebrow text-brand" data-fade>
+      <section className="mx-auto max-w-[1320px] pt-6 pb-16 md:pt-10 md:pb-24">
+        <p className="eyebrow text-brand">
           Placement-Focused Career Tracks · Indore
         </p>
-        <h1 className="display mt-4 max-w-4xl text-[11vw] text-deep sm:text-[7.2vw] md:text-[5.2vw] leading-[0.95]">
-          <Split text="Built around real|*hiring* *roles.*" as="span" />
+        <h1 className="display mt-4 max-w-3xl text-[clamp(2.25rem,4.8vw,3.85rem)] font-bold leading-[1.06] text-ink">
+          Built around real{" "}
+          <span className="bg-gradient-to-r from-[#0a5654] via-brand to-light bg-clip-text text-transparent">
+            hiring roles.
+          </span>
         </h1>
-        <p
-          className="mt-6 max-w-2xl text-base md:text-xl leading-relaxed text-deep/80"
-          data-fade
-        >
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-ink-muted md:text-lg">
           Companies hire people who can build working systems and explain their logic clearly. Every Career Course combines practical lab projects, 1-on-1 personal training, and dedicated placement preparation.
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center gap-4" data-fade>
+        <div className="mt-8 flex flex-wrap items-center gap-3.5">
           <CTA href="#career-tracks" label="Explore Flagship Tracks" />
           <CTA
             href={`${SITE.whatsappHref}?text=${encodeURIComponent("Hi The Prime Step! I want to talk to a career counselor about your placement-focused Career Courses.")}`}
@@ -90,18 +89,18 @@ export default function CareerCoursesPage() {
       </section>
 
       {/* 2. Flagship Career Tracks */}
-      <section id="career-tracks" className="border-t border-pale/60 bg-soft/60 py-20 md:py-28 scroll-mt-24">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-10">
+      <section id="career-tracks" className="-mx-4 scroll-mt-24 border-t border-hairline bg-canvas px-4 py-16 sm:-mx-6 sm:px-6 md:py-24 lg:-mx-10 lg:px-10">
+        <div className="mx-auto max-w-[1320px]">
           <Chapter n="01" title="Flagship Career Programs" />
-          <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
-            <h2 className="display max-w-2xl text-4xl md:text-6xl text-deep">
+          <div className="mt-5 flex flex-wrap items-end justify-between gap-6">
+            <h2 className="display max-w-2xl text-[clamp(1.85rem,3.6vw,3rem)] text-ink">
               Seven high-growth <span className="text-brand">career tracks.</span>
             </h2>
             <Link
               href="/courses"
               className="eyebrow text-brand hover:underline"
             >
-              View All 14 Courses →
+              View All {ALL_CATALOG_COURSES.length} Courses →
             </Link>
           </div>
 

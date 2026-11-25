@@ -68,14 +68,18 @@ export default function ContactUsPage() {
       />
 
       {/* 1. Hero & Direct Contact Grid */}
-      <section className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10 pt-6 sm:pt-8 pb-16 md:pb-28">
-        <div className="grid gap-8 sm:gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+      <section className="mx-auto max-w-[1320px] pt-6 pb-16 md:pt-10 md:pb-24">
+        <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start lg:gap-12">
           <div>
             <p className="eyebrow text-brand">Admissions, Demo Classes &amp; Counseling</p>
-            <h1 className="display mt-4 text-[11.5vw] text-deep sm:text-[7.5vw] md:text-[5.2vw] leading-[0.95] break-words">
-              Let&apos;s plan your <span className="italic text-brand">next step</span> in Indore.
+            <h1 className="display mt-4 text-[clamp(2.25rem,4.6vw,3.75rem)] font-bold leading-[1.06] text-ink break-words">
+              Let&apos;s plan your{" "}
+              <span className="bg-gradient-to-r from-[#0a5654] via-brand to-light bg-clip-text text-transparent">
+                next step
+              </span>{" "}
+              in Indore.
             </h1>
-            <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-deep/85">
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-ink-muted md:text-lg">
               Have questions about which course fits your background, batch timings, or 0% interest installment options? Speak directly with our career counselors or walk into any of our three Indore campuses.
             </p>
 

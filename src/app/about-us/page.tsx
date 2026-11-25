@@ -102,29 +102,32 @@ export default function AboutUsPage() {
       />
 
       {/* 1. Editorial Hero */}
-      <section className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-10 pt-6 sm:pt-8 pb-16 md:pb-28">
+      <section className="mx-auto max-w-[1320px] pt-6 pb-16 md:pt-10 md:pb-24">
         <p className="eyebrow text-brand">Est. {SITE.established} · {SITE.city}</p>
-        <h1 className="display mt-4 max-w-4xl text-[11.5vw] text-deep sm:text-[7.5vw] md:text-[5.4vw] leading-[0.95] break-words">
-          A classroom isn&apos;t a place you sit. <span className="italic text-brand">It&apos;s a place you build.</span>
+        <h1 className="display mt-4 max-w-3xl text-[clamp(2.25rem,4.8vw,3.85rem)] font-bold leading-[1.06] text-ink break-words">
+          A classroom isn&apos;t a place you sit.{" "}
+          <span className="bg-gradient-to-r from-[#0a5654] via-brand to-light bg-clip-text text-transparent">
+            It&apos;s a place you build.
+          </span>
         </h1>
-        <p className="mt-6 max-w-2xl text-base sm:text-lg md:text-xl leading-relaxed text-deep/85">
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-ink-muted md:text-lg">
           Founded in {SITE.established} in Indore, The Prime Step was built on a single conviction: bridge the gap between academic theory and what software companies actually expect on day one of the job.
         </p>
 
         {/* Verified Stats Grid */}
-        <div className="mt-10 sm:mt-14 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 md:gap-8">
+        <div className="mt-10 grid grid-cols-2 gap-4 md:mt-14 md:grid-cols-4 md:gap-5">
           {INSTITUTE_STATS.map((s) => (
             <div
               key={s.label}
-              className="rounded-3xl border border-pale/85 bg-soft p-4 sm:p-6 md:p-8"
+              className="rounded-2xl border border-hairline bg-canvas p-5 sm:p-6"
             >
-              <div className="display text-2xl sm:text-3xl md:text-5xl font-bold text-brand">
+              <div className="display text-2xl font-bold text-brand sm:text-3xl md:text-4xl">
                 {s.value}
               </div>
-              <div className="mt-1.5 sm:mt-2 text-xs sm:text-sm md:text-base font-semibold text-deep">
+              <div className="mt-2 text-sm font-semibold text-ink">
                 {s.label}
               </div>
-              <div className="mt-0.5 sm:mt-1 text-[11px] sm:text-xs text-deep/70">{s.note}</div>
+              <div className="mt-1 text-xs text-ink-muted">{s.note}</div>
             </div>
           ))}
         </div>
