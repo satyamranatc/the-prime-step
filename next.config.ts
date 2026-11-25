@@ -215,6 +215,18 @@ const nextConfig: NextConfig = {
       { source: "/services", destination: "/courses", permanent: true },
       { source: "/courses/python-programming-classes", destination: "/python-programming-classes", permanent: true },
       { source: "/courses/graphic-designing-courses-in-indore", destination: "/courses", permanent: true },
+
+      // Verified Legacy WordPress URLs & _wp_old_slug Redirects (Migration Audit)
+      { source: "/best-computer-classes-in-vijay-nagar-indore", destination: "/vijay-nagar", permanent: true },
+      { source: "/the-prime-step-institute-2", destination: "/", permanent: true },
+      { source: "/courses/advance-excel", destination: "/ms-office-and-excel-course-in-indore", permanent: true },
+      { source: "/courses/microsoft-excel", destination: "/ms-office-and-excel-course-in-indore", permanent: true },
+      { source: "/courses/ms-office-best-ms-office-classes-in-indore", destination: "/ms-office-and-excel-course-in-indore", permanent: true },
+      { source: "/courses/react-js", destination: "/mern-stack-developer-course", permanent: true },
+      { source: "/courses/python-programming-course", destination: "/python-programming-classes", permanent: true },
+      { source: "/excels-power-top-10-formulas-you-need-to-master", destination: "/blog/top-10-excel-formulas-functions", permanent: true },
+      { source: "/courses/graphics-designing", destination: "/courses", permanent: true },
+
       { source: "/category/:slug+", destination: "/courses", permanent: true },
       { source: "/courses/:slug+", destination: "/courses", permanent: true },
     ];
