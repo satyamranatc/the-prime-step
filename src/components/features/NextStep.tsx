@@ -1,132 +1,61 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
+import Link from "next/link";
 import { SITE } from "@/lib/content";
 import Chapter from "@/components/ui/Chapter";
-import Split from "@/components/ui/Split";
 import CTA from "@/components/ui/CTA";
+import { Reveal } from "@/components/ui/Motion";
 import { WhatsAppIcon } from "@/components/ui/SocialIcons";
 
-const N = 8;
-const fills = ["fill-soft", "fill-pale", "fill-pale", "fill-light", "fill-light", "fill-light", "fill-paper", "fill-brand"];
-const desktopHeights = [20, 42, 70, 108, 156, 214, 280, 350];
-const mobileHeights = [10, 20, 34, 52, 74, 100, 130, 164];
-
-/** Chapter 06 — the stairs assemble as you scroll; the last step is yours. */
 export default function NextStep() {
-  const section = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const sec = section.current;
-    if (!sec) return;
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      const steps = sec.querySelectorAll("[data-step]");
-      const tl = gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: sec,
-            start: "top 80%",
-            end: "bottom bottom",
-            scrub: 1,
-          },
-        })
-        .from(steps, { yPercent: 90, stagger: 0.1, ease: "power2.out" }, 0)
-        .from("[data-sun]", { yPercent: 45, opacity: 0.2, ease: "power2.out" }, 0.2)
-        .from("[data-cta]", { opacity: 0, y: 24, ease: "power2.out" }, 0.4);
-      return () => {
-        tl.kill();
-      };
-    });
-    return () => mm.revert();
-  }, []);
-
   return (
     <section
-      ref={section}
       id="admission"
       aria-labelledby="admission-title"
-      className="relative min-h-[100svh] overflow-hidden bg-deep text-paper"
+      className="relative overflow-hidden border-t border-white/10 bg-obsidian py-20 text-white md:py-28"
     >
-      {/* Desktop Horizon + sun + stairs (exponential curve keeps left side open) */}
-      <svg
-        viewBox="0 0 1200 700"
-        preserveAspectRatio="xMaxYMax slice"
-        className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
+      <div
         aria-hidden="true"
-      >
-        <circle data-sun cx="930" cy="240" r="190" className="fill-brand" />
-        <line x1="0" y1="670" x2="1200" y2="670" className="stroke-light/50" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-        {Array.from({ length: N }).map((_, i) => {
-          const w = 150;
-          const h = desktopHeights[i];
-          return (
-            <rect
-              key={i}
-              data-step
-              x={i * w}
-              y={670 - h}
-              width={w}
-              height={h}
-              className={`${fills[i]} stroke-deep`}
-              strokeWidth="1"
-              vectorEffect="non-scaling-stroke"
+        className="arch-grid-dark pointer-events-none absolute inset-0 opacity-60"
+      />
+      <div className="relative z-10 mx-auto max-w-[1380px] px-4 sm:px-6 lg:px-10">
+        <Reveal className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+          <div>
+            <Chapter n="07" title="Admissions & Free Demo" dark />
+            <h2
+              id="admission-title"
+              className="display mt-5 max-w-2xl text-[clamp(2rem,4.5vw,3.75rem)] text-white"
+            >
+              Attend two real lab sessions before you decide.
+            </h2>
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-white/75 md:text-lg">
+              Visit our Vijay Nagar, Bhawarkua, or Annapurna campus, meet the faculty, and test our teaching style first-hand — completely free.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:justify-end">
+            <CTA
+              href={SITE.phoneHref}
+              label={`Call ${SITE.phoneDisplay}`}
+              variant="light"
+              className="w-full sm:w-auto"
             />
-          );
-        })}
-      </svg>
-
-      {/* Mobile Horizon + sun + stairs (proportional for mobile viewports) */}
-      <svg
-        viewBox="0 0 400 700"
-        preserveAspectRatio="xMidYMax slice"
-        className="pointer-events-none absolute inset-0 block h-full w-full md:hidden"
-        aria-hidden="true"
-      >
-        <circle data-sun cx="330" cy="200" r="130" className="fill-brand" />
-        <line x1="0" y1="660" x2="400" y2="660" className="stroke-light/50" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-        {Array.from({ length: N }).map((_, i) => {
-          const w = 50;
-          const h = mobileHeights[i];
-          return (
-            <rect
-              key={`m-${i}`}
-              data-step
-              x={i * w}
-              y={660 - h}
-              width={w}
-              height={h}
-              className={`${fills[i]} stroke-deep`}
-              strokeWidth="1"
-              vectorEffect="non-scaling-stroke"
+            <CTA
+              href={SITE.whatsappHref}
+              label="WhatsApp Admissions"
+              variant="ghost-light"
+              icon={<WhatsAppIcon className="size-4 fill-current text-light" />}
+              className="w-full sm:w-auto"
             />
-          );
-        })}
-      </svg>
-
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1480px] flex-col justify-start px-4 sm:px-6 pt-14 pb-12 md:px-10 md:pt-20 lg:pt-24">
-        <Chapter n="07" title="The next step" dark />
-        <h2 id="admission-title" className="display mt-4 sm:mt-5 text-[12vw] sm:text-[14vw] leading-[0.92] text-paper md:mt-6 md:text-[7.5vw] lg:text-[6.5vw] break-words">
-          <Split text="The next step|is *yours.*" dark />
-        </h2>
-        <p className="mt-3.5 sm:mt-4 max-w-md text-sm sm:text-base leading-relaxed text-pale md:text-lg" data-fade>
-          Speak with our admissions team about the right program for you.
-        </p>
-
-        <div data-cta className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4 max-w-xl">
-          <CTA href={SITE.phoneHref} label={`Call ${SITE.phoneDisplay}`} variant="light" className="w-full sm:w-auto justify-center text-center" />
-          <CTA
-            href={SITE.whatsappHref}
-            label="WhatsApp Admissions"
-            variant="primary"
-            icon={<WhatsAppIcon className="size-4 fill-current text-white" />}
-            className="w-full sm:w-auto justify-center text-center"
-          />
-          <CTA href={`mailto:${SITE.email}`} label="Email admissions" variant="ghost-light" className="w-full sm:w-auto justify-center text-center" />
-        </div>
+            <Link
+              href="/contact-us"
+              className="inline-flex min-h-[48px] items-center justify-center rounded-full px-5 text-sm font-semibold text-white/80 underline-offset-4 transition-colors hover:text-white hover:underline"
+            >
+              View campus addresses →
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
 }
-

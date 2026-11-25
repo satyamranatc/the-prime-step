@@ -1,58 +1,41 @@
 import Link from "next/link";
 import { ALL_CATALOG_COURSES } from "@/lib/seoPages";
-import { ROADMAP_COURSES } from "@/lib/roadmapCourses";
-import { SITE } from "@/lib/content";
-import { CATEGORY_LABEL } from "@/lib/homepage";
-import SectionHeading from "./SectionHeading";
-import CourseGrid, { type HomeCourse } from "./CourseGrid";
+import Chapter from "@/components/ui/Chapter";
+import { Reveal } from "@/components/ui/Motion";
+import CourseGrid from "./CourseGrid";
 
-/** Chapter: every course the institute teaches, visible and crawlable on first paint. */
 export default function CourseCatalog() {
-  const courses: HomeCourse[] = ALL_CATALOG_COURSES.map((c) => ({
-    title: c.title,
-    category: c.category,
-    categoryLabel: CATEGORY_LABEL[c.category],
-    duration: c.duration,
-    level: c.level,
-    description: c.description,
-    tags: c.tags.slice(0, 3),
-    href: c.href,
-    roadmapHref: c.roadmapId in ROADMAP_COURSES ? `/roadmap/${c.roadmapId}` : null,
-    whatsappHref: `${SITE.whatsappHref}?text=${encodeURIComponent(
-      `Hi The Prime Step! I'd like details about the ${c.title} (fees, batch timings and demo class).`,
-    )}`,
-  }));
-
   return (
     <section
-      id="programs"
-      aria-labelledby="programs-title"
-      className="relative scroll-mt-20 bg-paper py-20 sm:py-24 md:py-32"
+      id="courses"
+      aria-labelledby="courses-title"
+      className="bg-paper py-20 md:py-28"
     >
-      <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-12">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <SectionHeading
-            id="programs-title"
-            eyebrow={`Courses · ${courses.length} programs`}
-            title={
-              <>
-                Computer courses in Indore, <span className="text-brand">built around real jobs.</span>
-              </>
-            }
-            lead="Pick a course to see the full syllabus, duration and projects. Every program starts from the basics — no prior coding needed."
-          />
+      <div className="mx-auto max-w-[1380px] px-4 sm:px-6 lg:px-10">
+        <Reveal className="flex flex-col justify-between gap-6 border-b border-hairline pb-8 md:flex-row md:items-end">
+          <div className="max-w-2xl">
+            <Chapter n="01" title="Academic Programs" />
+            <h2
+              id="courses-title"
+              className="display mt-4 text-[clamp(2rem,4vw,3.25rem)] text-ink"
+            >
+              Structured courses for every stage of your tech career.
+            </h2>
+            <p className="mt-3 text-base leading-relaxed text-ink-muted">
+              Filter by track or search by technology. Every course is taught hands-on in our Indore computer labs with project milestones.
+            </p>
+          </div>
+
           <Link
             href="/courses"
-            className="group hidden shrink-0 items-center gap-2 text-sm font-semibold text-brand hover:text-deep md:inline-flex"
+            className="inline-flex items-center gap-2 self-start rounded-full border border-hairline bg-canvas px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-brand hover:text-brand md:self-auto"
           >
-            Full course catalogue
-            <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
-              →
-            </span>
+            <span>Full Course Directory</span>
+            <span aria-hidden="true">→</span>
           </Link>
-        </div>
+        </Reveal>
 
-        <CourseGrid courses={courses} />
+        <CourseGrid courses={ALL_CATALOG_COURSES} />
       </div>
     </section>
   );

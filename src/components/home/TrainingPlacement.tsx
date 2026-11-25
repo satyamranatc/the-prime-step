@@ -1,138 +1,166 @@
 "use client";
 
 import { useState } from "react";
-import { ROLES, SITE } from "@/lib/content";
-import { HIRING_PARTNERS, PLACEMENT_STEPS } from "@/lib/homepage";
-import CTA from "@/components/ui/CTA";
-import SectionHeading from "./SectionHeading";
+import Link from "next/link";
+import { PLACEMENT_STEPS } from "@/lib/homepage";
+import Chapter from "@/components/ui/Chapter";
+import { Reveal } from "@/components/ui/Motion";
 
-/** Training & Placement — career role explorer + 4-stage placement support. */
+const ROLE_SPECS = [
+  {
+    id: "fullstack",
+    role: "Full Stack Engineer",
+    stack: "Java / Spring Boot or MERN · SQL · REST APIs · Git",
+    deliverables: [
+      "Deployed production web app with auth & role permissions",
+      "Clean GitHub commit history & architecture README",
+      "DSA + system design mock technical rounds",
+    ],
+    href: "/mern-stack-developer-course",
+  },
+  {
+    id: "data",
+    role: "Data & BI Analyst",
+    stack: "SQL · Power BI · Advanced Excel · Python EDA",
+    deliverables: [
+      "Interactive executive Power BI dashboards with DAX",
+      "SQL business case queries & automated Excel MIS",
+      "Case-study interview walkthroughs & portfolio",
+    ],
+    href: "/data-analytics-course-in-indore",
+  },
+  {
+    id: "python",
+    role: "Python & AI Developer",
+    stack: "Python · Django / FastAPI · Pandas · ML & GenAI",
+    deliverables: [
+      "API backend + automated data pipeline projects",
+      "Applied ML / NLP notebook & live demo app",
+      "Code review & problem-solving interview drills",
+    ],
+    href: "/python-programming-classes",
+  },
+  {
+    id: "business",
+    role: "Accounts, Office & Marketing",
+    stack: "Tally Prime + GST · Advanced Excel · SEO & Performance Ads",
+    deliverables: [
+      "Live GST returns, balance sheets & MIS sheets",
+      "Real campaign audits, GA4 tracking & reporting",
+      "Spoken English, GD & HR interview readiness",
+    ],
+    href: "/tally-gst-mastery-course",
+  },
+] as const;
+
 export default function TrainingPlacement() {
-  const [activeRoleIndex, setActiveRoleIndex] = useState(0);
-  const activeRole = ROLES[activeRoleIndex] ?? ROLES[0];
+  const [selectedRole, setSelectedRole] = useState<string>(ROLE_SPECS[0].id);
+  const activeRole =
+    ROLE_SPECS.find((r) => r.id === selectedRole) ?? ROLE_SPECS[0];
 
   return (
     <section
-      id="careers"
-      aria-labelledby="careers-title"
-      className="relative scroll-mt-20 border-t border-pale/60 bg-paper py-20 sm:py-24 md:py-32"
+      id="placement"
+      aria-labelledby="placement-title"
+      className="relative overflow-hidden bg-obsidian py-20 text-white md:py-28"
     >
-      <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-12">
-        <SectionHeading
-          id="careers-title"
-          eyebrow="Training & placement support"
-          title={
-            <>
-              From classroom practice <span className="text-brand">to interview readiness.</span>
-            </>
-          }
-          lead="Every program includes dedicated career preparation: building a real project portfolio, resume & LinkedIn refinement, mock interview rounds, and placement assistance."
-        />
+      <div
+        aria-hidden="true"
+        className="arch-grid-dark pointer-events-none absolute inset-0 opacity-60"
+      />
 
-        {/* 4-Stage Placement Process */}
-        <ol className="mt-10 grid gap-4 sm:grid-cols-2 md:mt-14 lg:grid-cols-4 lg:gap-6">
-          {PLACEMENT_STEPS.map((s) => (
-            <li
-              key={s.n}
-              data-fade
-              className="spotlight-card group flex flex-col justify-between rounded-2xl border border-pale/90 bg-soft/60 p-6 transition-all duration-500 [transition-timing-function:var(--ease-out)] hover:-translate-y-1 hover:border-brand/50 hover:bg-paper hover:shadow-[0_20px_40px_-20px_rgba(15,82,80,0.3)] sm:p-7"
+      <div className="relative z-10 mx-auto max-w-[1380px] px-4 sm:px-6 lg:px-10">
+        <Reveal className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+          <div>
+            <Chapter n="04" title="Career & Placement Cell" dark />
+            <h2
+              id="placement-title"
+              className="display mt-4 max-w-2xl text-[clamp(2rem,4vw,3.35rem)] text-white"
             >
-              <div>
-                <span className="font-mono text-xs font-semibold text-brand">Step {s.n}</span>
-                <h3 className="display mt-3 text-xl text-deep transition-colors duration-300 group-hover:text-brand sm:text-2xl">
-                  {s.title}
-                </h3>
-                <p className="mt-2.5 text-sm leading-relaxed text-deep/80">{s.text}</p>
-              </div>
-              <div
-                className="mt-6 h-1 w-10 rounded-full bg-brand/30 transition-all duration-500 [transition-timing-function:var(--ease-out)] group-hover:w-20 group-hover:bg-brand"
-                aria-hidden="true"
-              />
-            </li>
-          ))}
-        </ol>
-
-        {/* Interactive Career Role Explorer */}
-        <div className="mt-14 rounded-3xl border border-pale/90 bg-soft/50 p-6 sm:p-8 md:mt-20 md:p-12" data-fade>
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="eyebrow text-brand">Roles our courses prepare you for</p>
-              <h3 className="display mt-2 text-2xl text-deep sm:text-3xl">
-                What will you actually do on the job?
-              </h3>
-            </div>
-            <div role="tablist" aria-label="Career roles" className="flex flex-wrap gap-2">
-              {ROLES.map((r, i) => {
-                const selected = i === activeRoleIndex;
-                return (
-                  <button
-                    key={r.role}
-                    type="button"
-                    role="tab"
-                    aria-selected={selected}
-                    onClick={() => setActiveRoleIndex(i)}
-                    className={`rounded-full px-4 py-2 text-xs font-semibold transition-all duration-300 sm:text-[13px] ${
-                      selected
-                        ? "bg-deep text-paper shadow-xs"
-                        : "border border-deep/15 bg-paper text-deep hover:border-brand"
-                    }`}
-                  >
-                    {r.role}
-                  </button>
-                );
-              })}
-            </div>
+              Training ends only when you are ready to sit the interview.
+            </h2>
           </div>
 
-          <div
-            key={activeRole.role}
-            className="course-card-in spotlight-card mt-8 grid items-center gap-6 rounded-2xl border border-pale/80 bg-paper p-6 sm:p-8 md:grid-cols-[1.5fr_1fr]"
-          >
-            <div>
-              <span className="eyebrow text-brand">{activeRole.from}</span>
-              <h4 className="display mt-2 text-2xl text-deep sm:text-4xl">{activeRole.role}</h4>
-              <p className="mt-3 text-base font-medium text-deep/90 sm:text-lg">{activeRole.what}</p>
-              <p className="mt-4 border-t border-pale/70 pt-4 text-sm leading-relaxed text-deep/80">
-                <strong className="text-deep">In a normal workday:</strong> {activeRole.day}
+          <p className="max-w-lg text-sm leading-relaxed text-white/75 md:text-base">
+            We don&apos;t hand out fake job guarantees. Instead, we build the exact proof recruiters evaluate: working code on GitHub, sharp technical fundamentals, and realistic mock interviews.
+          </p>
+        </Reveal>
+
+        {/* 4-Stage Architectural Hairline Pipeline */}
+        <div className="mt-12 grid divide-y divide-white/12 border-y border-white/12 md:grid-cols-4 md:divide-x md:divide-y-0">
+          {PLACEMENT_STEPS.map((step) => (
+            <div
+              key={step.n}
+              className="py-7 md:px-6 md:py-8 md:first:pl-0 md:last:pr-0"
+            >
+              <span className="font-mono text-xs font-semibold text-light">
+                {step.n}
+              </span>
+              <h3 className="mt-3 text-lg font-bold tracking-[-0.015em] text-white">
+                {step.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-white/70">
+                {step.text}
               </p>
             </div>
-
-            <div className="flex flex-col justify-between gap-4 rounded-xl bg-soft/70 p-5 sm:p-6">
-              <div>
-                <p className="eyebrow text-deep/70">Recommended training</p>
-                <p className="mt-1.5 text-sm font-semibold text-deep sm:text-base">{activeRole.from}</p>
-              </div>
-              <div className="flex flex-wrap gap-2.5">
-                <CTA href="#programs" label="See matching courses" className="w-full sm:w-auto justify-center" />
-                <CTA
-                  href={`${SITE.whatsappHref}?text=${encodeURIComponent(
-                    `Hi The Prime Step! I want to prepare for a ${activeRole.role} role. Please guide me.`,
-                  )}`}
-                  label="Ask a counsellor"
-                  variant="ghost"
-                  className="w-full sm:w-auto justify-center"
-                />
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* Optional verified hiring partners row — hidden when empty */}
-        {HIRING_PARTNERS.length > 0 && (
-          <div className="mt-12">
-            <p className="eyebrow text-center text-deep/70">Companies where our alumni work</p>
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-6">
-              {HIRING_PARTNERS.map((p) => (
-                <span
-                  key={p.name}
-                  className="rounded-full border border-pale bg-soft px-4 py-2 text-xs font-semibold text-deep"
+        {/* Interactive Target Role Spec Viewer */}
+        <div className="mt-12 rounded-2xl border border-white/12 bg-white/[0.03] p-6 md:p-8">
+          <div className="flex flex-col justify-between gap-4 border-b border-white/12 pb-5 md:flex-row md:items-center">
+            <span className="eyebrow text-light">
+              Interview Readiness Blueprint
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {ROLE_SPECS.map((spec) => (
+                <button
+                  key={spec.id}
+                  type="button"
+                  onClick={() => setSelectedRole(spec.id)}
+                  className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+                    spec.id === activeRole.id
+                      ? "bg-white text-ink"
+                      : "border border-white/15 text-white/75 hover:border-white/40 hover:text-white"
+                  }`}
                 >
-                  {p.name}
-                </span>
+                  {spec.role}
+                </button>
               ))}
             </div>
           </div>
-        )}
+
+          <div className="mt-6 grid gap-6 md:grid-cols-[1fr_1.2fr] md:items-center">
+            <div>
+              <h3 className="display text-2xl text-white">{activeRole.role}</h3>
+              <p className="mt-2 font-mono text-xs text-light">
+                {activeRole.stack}
+              </p>
+              <Link
+                href={activeRole.href}
+                className="mt-5 inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-light hover:text-ink"
+              >
+                <span>View Recommended Track</span>
+                <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+
+            <ul className="space-y-3">
+              {activeRole.deliverables.map((d) => (
+                <li
+                  key={d}
+                  className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white/85"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="mt-1.5 size-1.5 shrink-0 rounded-full bg-light"
+                  />
+                  <span>{d}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
   );

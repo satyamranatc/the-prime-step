@@ -2,13 +2,14 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { sceneState } from "@/lib/scroll";
-import { BRANCHES } from "@/lib/content";
-import CTA from "@/components/ui/CTA";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { gsap } from "@/lib/gsap";
+import { sceneState, scrollToId } from "@/lib/scroll";
+import { BRANCHES, SITE } from "@/lib/content";
+import { GOOGLE_RATING } from "@/lib/homepage";
+import { EASE_OUT } from "@/components/ui/Motion";
 import Logo from "@/components/ui/Logo";
-import TypingHeadline from "./TypingHeadline";
-import HeroShootingStars from "./HeroShootingStars";
 
 const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
 
@@ -21,163 +22,266 @@ function webglOK() {
   }
 }
 
-/** Clean architectural monument poster for mobile & pre-idle state */
-function StaticMonumentPoster() {
+function StaticMarkStage() {
   return (
-    <div className="relative flex h-full w-full items-center justify-center p-4 sm:p-6">
-      <div className="pointer-events-none absolute size-48 sm:size-64 rounded-full bg-brand/10 blur-3xl" />
-      <div className="relative flex flex-col items-center">
-        <Logo mark height={175} className="drop-shadow-[0_18px_36px_rgba(15,82,80,0.14)] max-h-[220px]" />
-        <div className="mt-4 sm:mt-6 flex flex-wrap justify-center gap-1.5 sm:gap-2">
-          {["Python", "Java", "React", "AI / ML", "AWS"].map((tech) => (
-            <span
-              key={tech}
-              className="rounded-full border border-pale bg-paper/90 px-2.5 sm:px-3 py-1 font-mono text-[10px] sm:text-[11px] font-semibold text-deep shadow-2xs"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
+    <div className="flex h-full w-full flex-col items-center justify-center p-8">
+      <Logo
+        mark
+        height={176}
+        className="max-h-[190px] drop-shadow-[0_24px_48px_rgba(14,110,107,0.18)]"
+      />
+      <div className="mt-6 flex flex-wrap justify-center gap-2">
+        {["Java", "MERN", "Python", "Data & AI", "DevOps"].map((tech) => (
+          <span
+            key={tech}
+            className="rounded-full border border-hairline bg-paper px-3 py-1 font-mono text-[11px] font-medium text-ink-muted"
+          >
+            {tech}
+          </span>
+        ))}
       </div>
     </div>
   );
 }
 
+const HERO_PILLARS = [
+  { label: "Lab-First Curriculum", value: "100% Practical Workstations" },
+  { label: "Mentorship", value: "1-on-1 Code Reviews" },
+  { label: "Career Cell", value: "Mocks, GitHub & Referrals" },
+] as const;
+
 export default function Hero() {
-  const root = useRef<HTMLElement>(null);
-  const heroStage = useRef<HTMLDivElement>(null);
-  const [gl, setGl] = useState<boolean>(false);
+  const rootRef = useRef<HTMLElement>(null);
+  const [gl, setGl] = useState(false);
   const [inView, setInView] = useState(true);
+  const [exploded, setExploded] = useState(false);
 
   useEffect(() => {
-    // Only mount WebGL 3D scene on desktop viewports after browser idle to protect mobile LCP/INP
     const isDesktop = window.matchMedia("(min-width: 900px)").matches;
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!isDesktop || calm || !webglOK()) return;
 
-    const timer = window.setTimeout(() => {
-      setGl(true);
-    }, 180);
+    const timer = window.setTimeout(() => setGl(true), 120);
     return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    const el = root.current;
+    const el = rootRef.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { rootMargin: "100px" });
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { rootMargin: "120px" },
+    );
     io.observe(el);
     return () => io.disconnect();
   }, []);
 
   useEffect(() => {
-    const stage = heroStage.current;
-    if (!stage) return;
-    const mm = gsap.matchMedia();
-    let off: (() => void) | undefined;
-
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      const tl = gsap
-        .timeline({ paused: true, defaults: { ease: "expo.out" } })
-        .from("[data-hero-headline]", { y: 32, opacity: 0, duration: 1.1 })
-        .from("[data-hero-sub]", { y: 20, opacity: 0, duration: 0.95 }, "-=0.8")
-        .from("[data-hero-cta]", { y: 16, opacity: 0, duration: 0.85 }, "-=0.75")
-        .from("[data-scene]", { opacity: 0, scale: 0.96, duration: 1.0 }, "<-0.2")
-        .from("[data-rule]", { opacity: 0, duration: 0.9 }, "-=0.7");
-
-      const play = () => tl.play();
-      if (document.documentElement.dataset.ready) play();
-      else window.addEventListener("pps-ready", play, { once: true });
-      off = () => window.removeEventListener("pps-ready", play);
-    });
-
-    // Desktop-only pinned 3D deconstruction (no scroll-jacking on mobile)
-    mm.add("(min-width: 900px) and (prefers-reduced-motion: no-preference)", () => {
-      ScrollTrigger.create({
-        trigger: stage,
-        start: "top top",
-        end: "+=110%",
-        pin: true,
-        scrub: 0.7,
-        onUpdate: (self) => {
-          sceneState.progress = self.progress;
-        },
-      });
-    });
-
     return () => {
-      off?.();
-      mm.revert();
       sceneState.progress = 0;
     };
   }, []);
 
+  const toggleExplode = () => {
+    setExploded((prev) => {
+      const next = !prev;
+      gsap.to(sceneState, {
+        progress: next ? 0.62 : 0,
+        duration: 0.9,
+        ease: "expo.out",
+      });
+      return next;
+    });
+  };
+
   return (
     <section
-      ref={root}
+      ref={rootRef}
       id="top"
-      className="relative bg-paper text-deep"
       aria-labelledby="hero-title"
+      className="relative overflow-hidden bg-paper pt-24 pb-16 sm:pt-28 sm:pb-20 lg:pt-32 lg:pb-24"
     >
-      {/* ========================================================
-          SCENE 01: HERO PRODUCT REVEAL
-          ======================================================== */}
-      <div ref={heroStage} className="relative overflow-hidden min-h-[100svh] w-full bg-paper">
-        {/* Hyper-Realistic Full-Bleed Sky, Volumetric White Clouds, Vapor Smoke & Shooting Stars */}
-        <HeroShootingStars active={inView} />
+      {/* Subtle architectural hairline grid with radial fade */}
+      <div
+        aria-hidden="true"
+        className="arch-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_75%_65%_at_50%_15%,#000_45%,transparent_100%)]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-24 right-[-10%] h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(14,110,107,0.08)_0%,transparent_70%)]"
+      />
 
-        <div className="relative min-h-[100svh] flex flex-col justify-between px-4 sm:px-6 pt-24 sm:pt-26 pb-7 md:px-12 md:pt-28 md:pb-10 max-w-[1520px] mx-auto">
-          {/* 3D Architectural Monument Canvas (Desktop) / Static Poster (Mobile & Pre-Idle) */}
-          <div
-            data-scene
-            className="relative mx-auto h-[38svh] w-full max-w-lg md:pointer-events-auto md:absolute md:top-[53%] md:-translate-y-1/2 md:right-[-2%] md:left-[38%] md:h-[82svh] md:max-w-[900px] md:ml-auto z-10"
+      <div className="relative z-10 mx-auto max-w-[1380px] px-4 sm:px-6 lg:px-10">
+        {/* Institutional Status Row */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: EASE_OUT }}
+          className="mb-8 flex flex-wrap items-center justify-between gap-3 border-b border-hairline pb-4"
+        >
+          <div className="inline-flex items-center gap-2.5">
+            <span className="size-2 rounded-full bg-brand" />
+            <span className="font-mono text-[11.5px] font-semibold uppercase tracking-[0.1em] text-ink">
+              Indore · {BRANCHES.map((b) => b.name).join(" · ")}
+            </span>
+          </div>
+
+          <a
+            href={GOOGLE_RATING.reviewsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-hairline bg-paper px-3 py-1 font-mono text-[11px] font-medium text-ink-muted transition-colors hover:border-brand/40 hover:text-ink"
           >
-            {gl ? <HeroScene active={inView} /> : <StaticMonumentPoster />}
-          </div>
+            <span className="font-semibold text-amber-600">★ {GOOGLE_RATING.rating}</span>
+            <span className="text-hairline">|</span>
+            <span>{GOOGLE_RATING.countLabel}</span>
+          </a>
+        </motion.div>
 
-          {/* Hero Typography & Actions */}
-          <div className="my-auto max-w-2xl py-4 md:py-6 z-20">
-            <p className="eyebrow text-brand mb-3 sm:mb-4" data-hero-sub>
-              Software Architecture &amp; Technology · Indore
-            </p>
+        {/* Main 12-Column Asymmetric Hero Split */}
+        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12">
+          {/* Left: Authoritative Institutional Messaging (Immediate HTML, Zero Typing Delay) */}
+          <div>
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.05, ease: EASE_OUT }}
+              className="eyebrow text-brand"
+            >
+              IT &amp; Software Engineering Institute · Est. {SITE.established}
+            </motion.p>
 
-            <h1
+            <motion.h1
               id="hero-title"
-              data-hero-headline
-              className="display text-[11.5vw] text-deep sm:text-[8.6vw] md:text-[5.8vw] leading-[0.96] break-words"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.1, ease: EASE_OUT }}
+              className="display mt-4 text-[clamp(2.5rem,5.4vw,4.6rem)] font-extrabold leading-[1.01] tracking-[-0.036em] text-ink"
             >
-              <TypingHeadline />
-            </h1>
+              Practical software engineering.{" "}
+              <span className="text-brand">Built in Indore.</span>
+            </motion.h1>
 
-            <p
-              data-hero-sub
-              className="mt-5 sm:mt-6 max-w-lg text-sm sm:text-base md:text-xl leading-relaxed text-deep/85 font-normal"
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.16, ease: EASE_OUT }}
+              className="prose-measure mt-6 text-base leading-[1.68] text-ink-muted sm:text-lg"
             >
-              Master modern full stack development, cloud microservices, and applied AI. Built on practical lab engineering, 1-on-1 mentorship, and placement readiness.
-            </p>
+              Master Java Full Stack, MERN, Python, Data Analytics, Power BI, AI &amp; Cloud on dedicated lab workstations — with one-on-one mentor code reviews, real production projects, and structured placement preparation.
+            </motion.p>
 
-            <div data-hero-cta className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
-              <CTA href="#programs" label="Explore Courses" className="w-full sm:w-auto justify-center text-center" />
-              <CTA href="#campuses" label="Campus Tour" variant="ghost" className="w-full sm:w-auto justify-center text-center" />
-            </div>
+            {/* Primary & Secondary Actions */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.22, ease: EASE_OUT }}
+              className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
+            >
+              <a
+                href="#admission"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToId("admission");
+                }}
+                className="press-scale group inline-flex min-h-[52px] items-center justify-center gap-2.5 rounded-full bg-ink px-7 text-[15px] font-semibold text-white hover:bg-brand"
+              >
+                <span>Book a Free 2-Day Demo</span>
+                <span
+                  aria-hidden="true"
+                  className="transition-transform duration-200 group-hover:translate-x-0.5"
+                >
+                  →
+                </span>
+              </a>
+
+              <a
+                href="#courses"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToId("courses");
+                }}
+                className="press-scale inline-flex min-h-[52px] items-center justify-center rounded-full border border-hairline bg-paper px-6 text-[15px] font-semibold text-ink hover:border-ink/40 hover:bg-canvas"
+              >
+                Explore 15 Programs
+              </a>
+
+              <Link
+                href="/roadmap/java"
+                className="inline-flex min-h-[44px] items-center justify-center px-2 text-sm font-semibold text-ink-muted underline-offset-4 transition-colors hover:text-brand hover:underline"
+              >
+                Interactive 3D Roadmaps ↗
+              </Link>
+            </motion.div>
+
+            {/* Crisp 3-Column Architectural Specification Strip */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.28, ease: EASE_OUT }}
+              className="mt-10 grid gap-4 border-t border-hairline pt-6 sm:grid-cols-3"
+            >
+              {HERO_PILLARS.map((item) => (
+                <div key={item.label}>
+                  <span className="block font-mono text-[11px] uppercase tracking-wider text-ink-subtle">
+                    {item.label}
+                  </span>
+                  <span className="mt-1 block text-sm font-semibold text-ink">
+                    {item.value}
+                  </span>
+                </div>
+              ))}
+            </motion.div>
           </div>
 
-          {/* Minimal Bottom Editorial Bar */}
-          <div data-rule className="border-t border-pale/70 pt-5 z-20">
-            <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-xs md:text-sm text-deep/80">
+          {/* Right: Architectural 3D Mark Studio Frame */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.14, ease: EASE_OUT }}
+            className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-hairline bg-canvas p-4 shadow-[0_24px_60px_-28px_rgba(11,18,21,0.14)] sm:p-5"
+          >
+            {/* Frame Header */}
+            <div className="relative z-20 flex items-center justify-between gap-2 border-b border-hairline/80 pb-3">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-deep">Indore Campuses:</span>
-                <span>{BRANCHES.map((b) => b.name).join("  ·  ")}</span>
+                <span className="size-2 rounded-full bg-brand" />
+                <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-muted">
+                  The Prime Step · Architecture
+                </span>
               </div>
 
-              <div className="hidden min-[900px]:flex items-center gap-2 text-brand font-medium">
-                <span>Scroll to explore</span>
-                <span className="text-base">↓</span>
-              </div>
+              <button
+                type="button"
+                onClick={toggleExplode}
+                className={`press-scale hidden items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-[11px] font-semibold transition-colors min-[900px]:inline-flex ${
+                  exploded
+                    ? "border-brand bg-brand text-white"
+                    : "border-hairline bg-paper text-ink hover:border-brand hover:text-brand"
+                }`}
+              >
+                <span>{exploded ? "Assemble Mark" : "Inspect Layers"}</span>
+                <span aria-hidden="true">{exploded ? "↙" : "↗"}</span>
+              </button>
             </div>
-          </div>
+
+            {/* 3D Canvas Stage */}
+            <div className="relative mx-auto h-[300px] w-full sm:h-[360px] lg:h-[420px]">
+              {gl ? <HeroScene active={inView} /> : <StaticMarkStage />}
+            </div>
+
+            {/* Frame Footer Telemetry */}
+            <div className="relative z-20 flex flex-wrap items-center justify-between gap-2 border-t border-hairline/80 pt-3 font-mono text-[11px] text-ink-subtle">
+              <span>{exploded ? "VIEW: DECONSTRUCTED LAYERS" : "LABS OPEN 8 AM – 8 PM"}</span>
+              <a
+                href={SITE.phoneHref}
+                className="font-semibold text-ink transition-colors hover:text-brand"
+              >
+                {SITE.phoneDisplay}
+              </a>
+            </div>
+          </motion.div>
         </div>
       </div>
-
     </section>
   );
 }

@@ -1,33 +1,49 @@
 @import "tailwindcss";
 
-/* Brand palette — calibrated to official Prime Step logo (#1E9C99 / #2DB6AE) with WCAG AA contrast */
+/*
+ * THE PRIME STEP 2.0 — Architectural Engineering Design System
+ * Crisp white & warm-cool alabaster surfaces, deep obsidian charcoal ink,
+ * disciplined institutional teal (#0E6E6B), and 1px hairline structure.
+ */
 @theme inline {
-  --color-brand: #147a77;
-  --color-deep: #0f5250;
-  --color-obsidian: #093534;
-  --color-light: #2db6ae;
-  --color-pale: #bfe8e6;
-  --color-soft: #f2fbfb;
+  /* Core brand & semantic tokens (mapped cleanly for all 46+ routes) */
+  --color-brand: #0e6e6b;
+  --color-brand-hover: #0a5654;
+  --color-deep: #0b1215;
+  --color-obsidian: #072b2a;
+  --color-light: #22a69f;
+  --color-pale: #e2e8f0;
+  --color-soft: #f7f8f9;
   --color-paper: #ffffff;
-  --color-ink: #1a1d21;
-  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-display: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+  --color-ink: #0b1215;
+  --color-ink-muted: #475467;
+  --color-ink-subtle: #667085;
+  --color-canvas: #f7f8f9;
+  --color-surface: #ffffff;
+  --color-hairline: #e4e7ec;
+  --color-accent: #0e6e6b;
+  --color-accent-soft: #edf7f6;
+
+  /* Typography */
+  --font-sans: var(--font-sans-loaded), -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-mono-loaded), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: var(--font-sans-loaded), -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
 }
 
 :root {
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html {
   background: #ffffff;
+  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   overflow-x: clip;
 }
 
 body {
   background: var(--color-paper);
-  color: var(--color-deep);
+  color: var(--color-ink);
   font-family: var(--font-sans);
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
@@ -36,7 +52,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Prevent unwanted iOS auto-zoom on input focus while maintaining typography */
+/* Prevent unwanted iOS auto-zoom on input focus */
 @media (max-width: 768px) {
   input,
   select,
@@ -45,14 +61,12 @@ body {
   }
 }
 
-/* Ensure all images and vectors are strictly responsive */
 img,
 svg,
 canvas {
   max-width: 100%;
 }
 
-/* Safe-area insets for notched iPhones and edge-to-edge Android devices */
 .safe-top {
   padding-top: max(1rem, env(safe-area-inset-top));
 }
@@ -66,117 +80,64 @@ canvas {
 
 ::selection {
   background: var(--color-brand);
-  color: #fff;
+  color: #ffffff;
 }
 
 :focus-visible {
   outline: 2px solid var(--color-brand);
-  outline-offset: 4px;
+  outline-offset: 3px;
   border-radius: 6px;
 }
 
-/* Lenis smooth scrolling */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-/* Apple-grade typography helpers — bold, tightly tracked modern sans */
+/* Architectural typography helpers */
 .display {
   font-family: var(--font-display);
   font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 0.96;
+  letter-spacing: -0.032em;
+  line-height: 1.04;
 }
+
 .eyebrow {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
 }
-.outline-text {
-  color: transparent;
-  -webkit-text-stroke: 1px var(--color-pale);
+
+.prose-measure {
+  max-width: 64ch;
 }
 
-/* Horizontal programs track — desktop + motion only */
-.h-track {
-  display: flex;
-  flex-direction: column;
-}
-.h-panel {
-  min-height: 100svh;
-}
-@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
-  .h-track {
-    flex-direction: row;
-    width: max-content;
-  }
-  .h-panel {
-    width: 100vw;
-    height: 100svh;
-  }
+/* Ultra-subtle architectural grid used sparingly in Hero & Studio surfaces */
+.arch-grid {
+  background-image:
+    linear-gradient(to right, rgba(11, 18, 21, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(11, 18, 21, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
-/* Slow, purposeful float for illustration glyphs */
-@keyframes glyph-float {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-10px) rotate(0.6deg);
-  }
-}
-.glyph-float {
-  animation: glyph-float 9s ease-in-out infinite;
-  transform-origin: 50% 50%;
+.arch-grid-dark {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
-@keyframes caret {
-  50% {
-    opacity: 0;
-  }
+/* Tactile button & interactive surface micro-feedback */
+.press-scale {
+  transition:
+    transform 0.2s var(--ease-out),
+    background-color 0.2s var(--ease-out),
+    border-color 0.2s var(--ease-out),
+    color 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out);
 }
-.caret {
-  animation: caret 1s steps(1) infinite;
-}
-
-@keyframes caret-blink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-.animate-caret-blink {
-  animation: caret-blink 0.95s ease-in-out infinite;
+.press-scale:active {
+  transform: scale(0.98);
 }
 
-/* Homepage course cards: soft rise when the filter changes (content is never hidden at rest) */
-@keyframes course-card-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-.course-card-in {
-  animation: course-card-in 0.55s var(--ease-out) backwards;
-}
-
-/* Tactile micro-interaction surface: cursor-tracked radial spotlight + spring press */
+/* Subtle cursor-tracked card highlight */
 .spotlight-card {
   position: relative;
   overflow: hidden;
@@ -190,12 +151,12 @@ html.lenis body {
   inset: 0;
   border-radius: inherit;
   background: radial-gradient(
-    460px circle at var(--spot-x) var(--spot-y),
-    rgba(20, 122, 119, 0.085),
-    transparent 62%
+    420px circle at var(--spot-x) var(--spot-y),
+    rgba(14, 110, 107, 0.06),
+    transparent 60%
   );
   opacity: 0;
-  transition: opacity 0.45s var(--ease-out);
+  transition: opacity 0.35s var(--ease-out);
   z-index: 0;
 }
 .spotlight-card:hover::before {
@@ -206,20 +167,7 @@ html.lenis body {
   z-index: 1;
 }
 
-/* Crisp spring press on interactive buttons and chips */
-.press-scale {
-  transition:
-    transform 0.25s var(--ease-out),
-    background-color 0.25s var(--ease-out),
-    border-color 0.25s var(--ease-out),
-    color 0.25s var(--ease-out),
-    box-shadow 0.25s var(--ease-out);
-}
-.press-scale:active {
-  transform: scale(0.97);
-}
-
-/* Animated underline slide for inline links */
+/* Subtle link underline slide */
 .link-slide {
   position: relative;
 }
@@ -233,11 +181,26 @@ html.lenis body {
   background: currentColor;
   transform: scaleX(0);
   transform-origin: right;
-  transition: transform 0.4s var(--ease-out);
+  transition: transform 0.3s var(--ease-out);
 }
 .link-slide:hover::after {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+/* Course filter entrance */
+@keyframes course-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.course-card-in {
+  animation: course-card-in 0.35s var(--ease-out) backwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -246,14 +209,6 @@ html.lenis body {
   }
   .spotlight-card::before {
     display: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .glyph-float,
-  .caret,
-  .animate-caret-blink {
-    animation: none;
   }
   * {
     scroll-behavior: auto !important;

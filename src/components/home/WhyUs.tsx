@@ -1,92 +1,163 @@
-import Image from "next/image";
-import { WHY_US } from "@/lib/homepage";
-import SectionHeading from "./SectionHeading";
+"use client";
 
-const PHOTOS = [
+import { useState } from "react";
+import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
+import Chapter from "@/components/ui/Chapter";
+import { EASE_OUT, Reveal } from "@/components/ui/Motion";
+
+const LAB_STAGES = [
   {
-    src: "/brand/tps-practical-lab.jpg",
-    alt: "Students doing hands-on coding practice in The Prime Step computer lab, Indore",
-    caption: "Practical lab · Indore",
+    n: "01",
+    title: "Code on lab workstations from day one",
+    detail:
+      "Every concept is demonstrated and immediately implemented on dedicated computers in our Indore labs — no passive slide-reading or theory-only lectures.",
+    metric: "100% Hands-On Lab Sessions",
+    photo: "/brand/tps-practical-lab.jpg",
+    photoAlt: "Students writing code on lab workstations at The Prime Step Indore",
+    caption: "Practical Computer Lab · Indore",
   },
   {
-    src: "/brand/tps-mentor-classroom.jpg",
-    alt: "Trainer explaining a concept to students during a live class at The Prime Step",
-    caption: "Live mentorship",
+    n: "02",
+    title: "One-on-one mentor debugging at your desk",
+    detail:
+      "When your build breaks or a query fails, trainers sit beside your screen to trace the root cause with you until you understand why it happened.",
+    metric: "Direct Faculty Code Reviews",
+    photo: "/brand/tps-mentor-classroom.jpg",
+    photoAlt: "Senior mentor explaining architecture concepts in classroom at The Prime Step",
+    caption: "Guided Mentor Session · Small Batch",
   },
   {
-    src: "/brand/tps-indore-campus.jpg",
-    alt: "A batch of students learning inside The Prime Step classroom in Indore",
-    caption: "Vijay Nagar · Bhawarkua · Annapurna",
+    n: "03",
+    title: "Production-grade projects, not toy exercises",
+    detail:
+      "Every module concludes with a working deliverable — REST APIs, full-stack web apps, Power BI dashboards, or GST books — pushed to GitHub for recruiters to inspect.",
+    metric: "Portfolio-Ready Capstones",
+    photo: "/brand/tps-practical-lab.jpg",
+    photoAlt: "Students building capstone software projects in The Prime Step lab",
+    caption: "Capstone Architecture & GitHub",
+  },
+  {
+    n: "04",
+    title: "Accessible across 3 Indore campuses, 8 AM – 8 PM",
+    detail:
+      "Flexible morning, afternoon, and evening batches across Vijay Nagar, Bhawarkua, and Annapurna Road — designed for college students, freshers, and working learners.",
+    metric: "Vijay Nagar · Bhawarkua · Annapurna",
+    photo: "/brand/tps-indore-campus.jpg",
+    photoAlt: "The Prime Step Indore campus and student learning space",
+    caption: "The Prime Step · Indore Campus",
   },
 ] as const;
 
-/** Why choose The Prime Step — six plain-language reasons beside real campus photos. */
 export default function WhyUs() {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const current = LAB_STAGES[activeIdx];
+
   return (
     <section
-      id="learning"
-      aria-labelledby="learning-title"
-      className="relative scroll-mt-20 bg-paper py-20 sm:py-24 md:py-32"
+      id="why-us"
+      aria-labelledby="why-us-title"
+      className="border-t border-hairline bg-canvas py-20 md:py-28"
     >
-      <div className="mx-auto grid max-w-[1480px] gap-12 px-4 sm:px-6 md:px-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
-        {/* Real campus photography */}
-        <div className="order-2 grid grid-cols-2 gap-3 sm:gap-4 lg:order-1 lg:self-start lg:sticky lg:top-28" data-fade>
-          {PHOTOS.map((p, i) => (
-            <figure
-              key={p.src}
-              className={`group relative overflow-hidden rounded-2xl border border-deep/10 bg-soft ${
-                i === 0 ? "col-span-2 aspect-[16/10]" : "aspect-[4/5]"
-              }`}
-            >
-              <Image
-                src={p.src}
-                alt={p.alt}
-                fill
-                sizes={i === 0 ? "(min-width: 1024px) 45vw, 100vw" : "(min-width: 1024px) 22vw, 50vw"}
-                className="object-cover saturate-[0.9] transition-transform duration-700 [transition-timing-function:var(--ease-out)] group-hover:scale-[1.04]"
-              />
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-gradient-to-t from-obsidian/70 via-obsidian/5 to-transparent"
-              />
-              <figcaption className="absolute bottom-3 left-3 right-3 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-white sm:bottom-4 sm:left-4 sm:text-[11px]">
-                {p.caption}
-              </figcaption>
-            </figure>
-          ))}
-        </div>
+      <div className="mx-auto max-w-[1380px] px-4 sm:px-6 lg:px-10">
+        <Reveal className="max-w-2xl">
+          <Chapter n="02" title="The Lab Method" />
+          <h2
+            id="why-us-title"
+            className="display mt-4 text-[clamp(2rem,4vw,3.25rem)] text-ink"
+          >
+            Built like an engineering workspace, not a lecture hall.
+          </h2>
+          <p className="mt-3 text-base leading-relaxed text-ink-muted">
+            How we turn beginners and college graduates into confident developers and analysts.
+          </p>
+        </Reveal>
 
-        <div className="order-1 lg:order-2">
-          <SectionHeading
-            id="learning-title"
-            eyebrow="Why The Prime Step"
-            title={
-              <>
-                A classroom where you <span className="text-brand">actually build things.</span>
-              </>
-            }
-            lead="Students choose us for one simple reason: they don't just listen to lectures — they practise, build and get their doubts cleared until things make sense."
-          />
-
-          <ol className="mt-10 grid gap-x-8 gap-y-2 sm:grid-cols-2">
-            {WHY_US.map((item, i) => (
-              <li
-                key={item.title}
-                className="group relative border-t border-pale py-6 transition-colors duration-300 hover:border-brand"
-                data-fade
-              >
-                <span className="inline-flex items-center gap-2 font-mono text-xs font-semibold text-brand">
-                  <span className="grid size-6 place-items-center rounded-full bg-soft transition-colors duration-300 group-hover:bg-brand group-hover:text-paper">
-                    {String(i + 1).padStart(2, "0")}
+        <div className="mt-12 grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start lg:gap-14">
+          {/* Left: Interactive 4-Stage Editorial List */}
+          <div className="divide-y divide-hairline border-y border-hairline">
+            {LAB_STAGES.map((stage, idx) => {
+              const isActive = idx === activeIdx;
+              return (
+                <button
+                  key={stage.n}
+                  type="button"
+                  onClick={() => setActiveIdx(idx)}
+                  onMouseEnter={() => setActiveIdx(idx)}
+                  className={`group flex w-full items-start gap-5 py-6 text-left transition-colors ${
+                    isActive ? "bg-paper/70 px-4 -mx-4 rounded-xl" : "hover:opacity-95"
+                  }`}
+                >
+                  <span
+                    className={`mt-0.5 font-mono text-xs font-bold transition-colors ${
+                      isActive ? "text-brand" : "text-ink-subtle"
+                    }`}
+                  >
+                    {stage.n}
                   </span>
+
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between gap-3">
+                      <h3
+                        className={`text-lg font-bold tracking-[-0.02em] transition-colors ${
+                          isActive ? "text-ink" : "text-ink-muted group-hover:text-ink"
+                        }`}
+                      >
+                        {stage.title}
+                      </h3>
+                      <span
+                        aria-hidden="true"
+                        className={`size-2 shrink-0 rounded-full transition-colors ${
+                          isActive ? "bg-brand" : "bg-hairline"
+                        }`}
+                      />
+                    </div>
+                    <p className="mt-2 text-sm leading-relaxed text-ink-muted">
+                      {stage.detail}
+                    </p>
+                    <p className="mt-3 font-mono text-[11px] font-semibold uppercase tracking-wider text-brand">
+                      {stage.metric}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Right: Synced Real Indore Campus Photography Frame */}
+          <div className="lg:sticky lg:top-28">
+            <div className="overflow-hidden rounded-2xl border border-hairline bg-paper p-3 shadow-[0_24px_60px_-28px_rgba(11,18,21,0.14)]">
+              <div className="relative aspect-[16/11] w-full overflow-hidden rounded-xl bg-obsidian">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={current.n}
+                    initial={{ opacity: 0, scale: 1.02 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.35, ease: EASE_OUT }}
+                    className="absolute inset-0"
+                  >
+                    <Image
+                      src={current.photo}
+                      alt={current.photoAlt}
+                      fill
+                      sizes="(min-width: 1024px) 52vw, 100vw"
+                      className="object-cover"
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              <div className="mt-3 flex items-center justify-between px-1.5 py-1">
+                <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
+                  {current.caption}
                 </span>
-                <h3 className="mt-3 text-lg font-semibold tracking-tight text-deep transition-colors duration-300 group-hover:text-brand">
-                  {item.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-deep/80">{item.text}</p>
-              </li>
-            ))}
-          </ol>
+                <span className="font-mono text-[11px] text-brand">
+                  {current.n} / 04
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

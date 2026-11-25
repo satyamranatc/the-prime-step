@@ -1,34 +1,32 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
-import { BRANCHES, FAQS, SITE } from "@/lib/content";
+import Script from "next/script";
+import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { BRANCHES, SITE } from "@/lib/content";
+import { MotionProvider } from "@/components/ui/Motion";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-sans-loaded",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
   preload: true,
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono-loaded",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
   display: "swap",
   preload: false,
-});
-
-const instrument = Instrument_Serif({
-  variable: "--font-instrument",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  display: "swap",
-  preload: true,
 });
 
 const siteTitle = "The Prime Step | IT & Skill Training Institute — Indore";
 const siteDescription =
   "Indore's premier IT training institute. Job-oriented courses in Java Full Stack, Python, MERN Stack, Data Science, AI & Machine Learning with hands-on live projects and dedicated placement cell across Vijay Nagar, Bhawarkua & Annapurna campuses.";
+
+const gscVerification = process.env.NEXT_PUBLIC_GSC_VERIFICATION;
+const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -55,6 +53,13 @@ export const metadata: Metadata = {
   creator: SITE.name,
   publisher: SITE.name,
   category: "Education & Technology",
+  ...(gscVerification
+    ? {
+        verification: {
+          google: gscVerification,
+        },
+      }
+    : {}),
   alternates: {
     canonical: SITE.url,
   },
@@ -114,7 +119,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
-    { media: "(prefers-color-scheme: dark)", color: "#1E9C99" },
+    { media: "(prefers-color-scheme: dark)", color: "#072B2A" },
   ],
 };
 
@@ -154,7 +159,7 @@ const jsonLd = {
       "@type": "LocalBusiness",
       "@id": `${SITE.url}/#branch-vijaynagar`,
       name: `${SITE.name} — Vijay Nagar (Head Office)`,
-      url: SITE.url,
+      url: `${SITE.url}/vijay-nagar`,
       telephone: BRANCHES[0].phone,
       address: {
         "@type": "PostalAddress",
@@ -189,7 +194,7 @@ const jsonLd = {
       "@type": "LocalBusiness",
       "@id": `${SITE.url}/#branch-bhawarkua`,
       name: `${SITE.name} — Bhawarkua Campus`,
-      url: SITE.url,
+      url: `${SITE.url}/bhawarkua`,
       telephone: BRANCHES[1].phone,
       address: {
         "@type": "PostalAddress",
@@ -224,7 +229,7 @@ const jsonLd = {
       "@type": "LocalBusiness",
       "@id": `${SITE.url}/#branch-annapurna`,
       name: `${SITE.name} — Annapurna Campus`,
-      url: SITE.url,
+      url: `${SITE.url}/annapurna`,
       telephone: BRANCHES[2].phone,
       address: {
         "@type": "PostalAddress",
@@ -254,7 +259,7 @@ const jsonLd = {
       },
     },
 
-    // 5. WebSite with Site Navigation
+    // 5. WebSite
     {
       "@type": "WebSite",
       "@id": `${SITE.url}/#website`,
@@ -264,52 +269,6 @@ const jsonLd = {
       publisher: {
         "@id": `${SITE.url}/#organization`,
       },
-    },
-
-    // 6. Course Offerings Schema
-    {
-      "@type": "Course",
-      "@id": `${SITE.url}/#course-java`,
-      name: "Java Full Stack Developer Master Program",
-      description:
-        "Comprehensive enterprise Java training covering Core Java, Advanced Java, Spring Boot, Microservices, Hibernate, and Full Stack architecture.",
-      provider: {
-        "@id": `${SITE.url}/#organization`,
-      },
-    },
-    {
-      "@type": "Course",
-      "@id": `${SITE.url}/#course-python`,
-      name: "Python Full Stack, Data Science & Applied AI",
-      description:
-        "Practical Python development covering automation, Django, FastAPI, Data Analytics, Pandas, NumPy, Machine Learning, and Generative AI applications.",
-      provider: {
-        "@id": `${SITE.url}/#organization`,
-      },
-    },
-    {
-      "@type": "Course",
-      "@id": `${SITE.url}/#course-mern`,
-      name: "MERN Stack Web Development Program",
-      description:
-        "Full stack JavaScript engineering covering MongoDB, Express.js, React, Node.js, Next.js, REST APIs, and production deployment.",
-      provider: {
-        "@id": `${SITE.url}/#organization`,
-      },
-    },
-
-    // 7. FAQPage Schema
-    {
-      "@type": "FAQPage",
-      "@id": `${SITE.url}/#faq`,
-      mainEntity: FAQS.map((faq) => ({
-        "@type": "Question",
-        name: faq.q,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: faq.a,
-        },
-      })),
     },
   ],
 };
@@ -322,18 +281,34 @@ export default function RootLayout({
   return (
     <html
       lang="en-IN"
-      className={`${geistSans.variable} ${geistMono.variable} ${instrument.variable} antialiased`}
+      className={`${plusJakarta.variable} ${jetbrainsMono.variable} antialiased`}
     >
       <head>
         <link rel="preconnect" href="https://www.theprimestep.com" />
         <link rel="dns-prefetch" href="https://www.theprimestep.com" />
       </head>
       <body>
+        {gaId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gaId}');
+              `}
+            </Script>
+          </>
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {children}
+        <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
   );

@@ -1,136 +1,152 @@
 "use client";
 
 import { useState } from "react";
-import { PERSONAS, SITE, type PersonaId } from "@/lib/content";
-import { WhatsAppIcon } from "@/components/ui/SocialIcons";
-import SectionHeading from "./SectionHeading";
+import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
+import Chapter from "@/components/ui/Chapter";
+import { EASE_OUT, Reveal } from "@/components/ui/Motion";
 
-/** "Where are you starting from?" — persona tabs with a recommended path for each. */
+const PATHWAYS = [
+  {
+    id: "college",
+    label: "College Students",
+    tag: "B.Tech · BCA · B.Sc · MCA",
+    headline: "Build real projects before campus placements begin.",
+    body: "Stop waiting for final-year panic. Learn C/C++, DSA, Java, Python, or MERN alongside your semester schedule with evening and weekend lab batches.",
+    tracks: [
+      { label: "C & C++ with DSA", href: "/c-and-cpp-programming-classes" },
+      { label: "Python Programming", href: "/python-programming-classes" },
+      { label: "Java Full Stack", href: "/java-full-stack-developer" },
+    ],
+  },
+  {
+    id: "freshers",
+    label: "Final-Year & Freshers",
+    tag: "Job-Ready Transition",
+    headline: "Turn your degree into a portfolio companies actually hire from.",
+    body: "Intensive, project-first tracks paired with GitHub code reviews, resume architecture, and mock technical + HR interviews to bridge the fresher gap.",
+    tracks: [
+      { label: "MERN Stack Developer", href: "/mern-stack-developer-course" },
+      { label: "Data Analytics (SQL + Power BI)", href: "/data-analytics-course-in-indore" },
+      { label: "AI & Machine Learning", href: "/artificial-intelligence-and-machine-learning-course" },
+    ],
+  },
+  {
+    id: "non-it",
+    label: "Non-IT & Commerce",
+    tag: "B.Com · BBA · BA · 12th Pass",
+    headline: "Start from zero — explained in clear, jargon-free language.",
+    body: "You do not need a computer science degree to build a strong career. Start with Data Analytics, Power BI, Digital Marketing, MS Office, Tally + GST, or Spoken English.",
+    tracks: [
+      { label: "Data Analytics", href: "/data-analytics-course-in-indore" },
+      { label: "Tally Prime + GST", href: "/tally-gst-mastery-course" },
+      { label: "MS Office & Advanced Excel", href: "/ms-office-and-excel-course-in-indore" },
+      { label: "Spoken English & Interview Prep", href: "/english-courses" },
+    ],
+  },
+  {
+    id: "working",
+    label: "Working Professionals",
+    tag: "Upskilling & Role Switch",
+    headline: "Upgrade your stack with flexible morning & evening batches.",
+    body: "Move from support, operations, or manual reporting into Cloud/DevOps, Power BI analytics, Python automation, or modern Full Stack engineering.",
+    tracks: [
+      { label: "DevOps & AWS Cloud", href: "/devops-and-cloud-computing-course" },
+      { label: "Power BI Mastery", href: "/power-bi-course-in-indore" },
+      { label: "Corporate Training", href: "/corporate-training" },
+    ],
+  },
+] as const;
+
 export default function Pathways() {
-  const [personaId, setPersonaId] = useState<PersonaId>("student");
-  const [showHindi, setShowHindi] = useState(false);
-  const active = PERSONAS.find((p) => p.id === personaId) ?? PERSONAS[0];
+  const [activeId, setActiveId] = useState<string>(PATHWAYS[0].id);
+  const current = PATHWAYS.find((p) => p.id === activeId) ?? PATHWAYS[0];
 
   return (
     <section
       id="pathways"
       aria-labelledby="pathways-title"
-      className="relative border-t border-pale/60 bg-soft/60 py-20 sm:py-24 md:py-32"
+      className="border-t border-hairline bg-paper py-20 md:py-28"
     >
-      <div className="mx-auto max-w-[1480px] px-4 sm:px-6 md:px-12">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <SectionHeading
+      <div className="mx-auto max-w-[1380px] px-4 sm:px-6 lg:px-10">
+        <Reveal className="max-w-2xl">
+          <Chapter n="05" title="Learner Pathways" />
+          <h2
             id="pathways-title"
-            eyebrow="Find your path"
-            title={
-              <>
-                Where are you <span className="text-brand">starting from?</span>
-              </>
-            }
-            lead="Choose what describes you best. We'll show the courses most students in your situation begin with."
-          />
-
-          <div
-            role="group"
-            aria-label="Language"
-            className="inline-flex w-max items-center rounded-full border border-deep/20 bg-paper p-1 text-xs font-semibold"
+            className="display mt-4 text-[clamp(2rem,4vw,3.25rem)] text-ink"
           >
-            {[
-              { v: false, l: "EN" },
-              { v: true, l: "EN + हिं" },
-            ].map((o) => (
-              <button
-                key={o.l}
-                type="button"
-                onClick={() => setShowHindi(o.v)}
-                aria-pressed={showHindi === o.v}
-                className={`rounded-full px-3.5 py-1.5 transition-colors ${
-                  showHindi === o.v ? "bg-deep text-paper" : "text-deep hover:bg-soft"
-                }`}
-              >
-                {o.l}
-              </button>
-            ))}
-          </div>
-        </div>
+            Not sure where to start? Pick your current stage.
+          </h2>
+        </Reveal>
 
-        <div className="mt-10 grid gap-4 md:mt-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)] lg:gap-6">
-          {/* Persona list */}
-          <div role="tablist" aria-label="Your background" className="grid grid-cols-2 gap-2 lg:grid-cols-1">
-            {PERSONAS.map((p) => {
-              const selected = p.id === personaId;
+        <div className="mt-10 grid gap-8 lg:grid-cols-[0.38fr_0.62fr] lg:items-start">
+          {/* Left Segmented Selector */}
+          <div
+            role="tablist"
+            aria-label="Learner backgrounds"
+            className="flex flex-row gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0"
+          >
+            {PATHWAYS.map((p) => {
+              const isSelected = p.id === current.id;
               return (
                 <button
                   key={p.id}
-                  id={`persona-tab-${p.id}`}
                   type="button"
                   role="tab"
-                  aria-selected={selected}
-                  aria-controls="persona-panel"
-                  onClick={() => setPersonaId(p.id)}
-                  className={`press-scale rounded-2xl border p-4 text-left sm:p-5 ${
-                    selected
-                      ? "border-deep bg-deep text-paper shadow-[0_16px_32px_-20px_rgba(15,82,80,0.6)]"
-                      : "border-pale/90 bg-paper text-deep hover:-translate-y-0.5 hover:border-brand/60"
+                  aria-selected={isSelected}
+                  onClick={() => setActiveId(p.id)}
+                  className={`shrink-0 rounded-xl border px-4 py-3.5 text-left transition-all lg:w-full ${
+                    isSelected
+                      ? "border-brand bg-accent-soft text-ink"
+                      : "border-hairline bg-paper text-ink-muted hover:border-ink/30 hover:text-ink"
                   }`}
                 >
-                  <span className="block text-sm font-semibold leading-snug sm:text-base">{p.label}</span>
-                  <span className={`mt-1 block text-xs leading-snug ${selected ? "text-pale" : "text-deep/70"}`}>
-                    {p.hindi}
+                  <span className="block text-sm font-bold">{p.label}</span>
+                  <span className="mt-0.5 block font-mono text-[11px] text-ink-subtle">
+                    {p.tag}
                   </span>
                 </button>
               );
             })}
           </div>
 
-          {/* Recommended path */}
-          <div
-            key={active.id}
-            id="persona-panel"
-            role="tabpanel"
-            aria-labelledby={`persona-tab-${active.id}`}
-            className="course-card-in spotlight-card rounded-3xl border border-pale/90 bg-paper p-6 sm:p-8 md:p-10"
-          >
-            <p className="eyebrow text-brand">{showHindi ? active.hindi : `For: ${active.label}`}</p>
-            <h3 className="display mt-3 text-2xl leading-tight text-deep sm:text-3xl md:text-4xl">
-              {active.headline}
-            </h3>
-            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-deep/80 sm:text-base">{active.sub}</p>
-
-            <p className="eyebrow mt-8 text-deep/75">Good courses to start with</p>
-            <ol className="mt-4 grid gap-2 sm:grid-cols-2">
-              {active.recommended.map((item, i) => (
-                <li
-                  key={item}
-                  className="group/step flex items-center gap-3 rounded-xl border border-pale/80 bg-soft/60 px-4 py-3 text-sm font-semibold text-deep transition-all duration-300 hover:-translate-y-0.5 hover:border-brand/40 hover:bg-paper"
-                >
-                  <span className="grid size-6 shrink-0 place-items-center rounded-full bg-paper font-mono text-[11px] text-brand transition-colors duration-300 group-hover/step:bg-brand group-hover/step:text-paper">
-                    {i + 1}
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ol>
-
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={`${SITE.whatsappHref}?text=${encodeURIComponent(
-                  `Hi The Prime Step! I am a ${active.label} and would like to talk to a career counsellor.`,
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-deep"
+          {/* Right Animated Recommendation Panel */}
+          <div className="rounded-2xl border border-hairline bg-canvas p-7 md:p-10">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={current.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25, ease: EASE_OUT }}
               >
-                <WhatsAppIcon className="size-4 fill-current" />
-                {active.cta}
-              </a>
-              <a
-                href={SITE.phoneHref}
-                className="inline-flex items-center justify-center rounded-full border border-deep/20 px-5 py-3 text-sm font-semibold text-deep transition-colors hover:border-brand hover:text-brand"
-              >
-                Call {SITE.phoneDisplay}
-              </a>
-            </div>
+                <span className="eyebrow text-brand">{current.tag}</span>
+                <h3 className="display mt-3 text-2xl text-ink md:text-3xl">
+                  {current.headline}
+                </h3>
+                <p className="prose-measure mt-4 text-sm leading-relaxed text-ink-muted md:text-base">
+                  {current.body}
+                </p>
+
+                <div className="mt-8 border-t border-hairline pt-6">
+                  <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-ink-subtle">
+                    Recommended Starting Tracks
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2.5">
+                    {current.tracks.map((track) => (
+                      <Link
+                        key={track.href}
+                        href={track.href}
+                        className="press-scale inline-flex items-center gap-2 rounded-full border border-hairline bg-paper px-4 py-2 text-xs font-semibold text-ink transition-colors hover:border-brand hover:text-brand sm:text-sm"
+                      >
+                        <span>{track.label}</span>
+                        <span aria-hidden="true">→</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </div>

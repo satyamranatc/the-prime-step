@@ -1,4 +1,4 @@
-/** Small chapter marker that anchors each scene in the narrative. */
+/** Architectural section index marker. */
 export default function Chapter({
   n,
   title,
@@ -10,13 +10,16 @@ export default function Chapter({
 }) {
   return (
     <div
-      className={`eyebrow flex items-center gap-4 ${dark ? "text-pale" : "text-brand"}`}
-      data-fade
+      className={`eyebrow inline-flex items-center gap-3 ${
+        dark ? "text-light" : "text-brand"
+      }`}
     >
-      <span>Chapter {n}</span>
-      <span className={`h-px w-12 ${dark ? "bg-pale/60" : "bg-brand/40"}`} />
+      <span className="font-mono">{n}</span>
+      <span
+        aria-hidden="true"
+        className={`h-px w-8 ${dark ? "bg-white/25" : "bg-hairline"}`}
+      />
       <span>{title}</span>
     </div>
   );
 }
-

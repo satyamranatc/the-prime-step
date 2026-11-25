@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { AnimatePresence, motion } from "framer-motion";
 import { SITE, SOCIAL_LINKS } from "@/lib/content";
-import { getLenis, scrollToId } from "@/lib/scroll";
-import CTA from "@/components/ui/CTA";
+import { scrollToId } from "@/lib/scroll";
+import { EASE_OUT } from "@/components/ui/Motion";
 import Logo from "@/components/ui/Logo";
 import {
   InstagramIcon,
@@ -17,13 +17,13 @@ import {
 } from "@/components/ui/SocialIcons";
 
 const TOP_NAV = [
-  { href: "/", label: "Home" },
-  { href: "/about-us", label: "About Us" },
   { href: "/courses", label: "Courses", hasDropdown: true },
-  { href: "/career-courses", label: "Career Courses" },
-  { href: "/corporate-training", label: "Corporate Training" },
-  { href: "/english-courses", label: "English Courses" },
-  { href: "/contact-us", label: "Contact Us" },
+  { href: "/career-courses", label: "Career Tracks" },
+  { href: "/corporate-training", label: "Corporate" },
+  { href: "/english-courses", label: "English" },
+  { href: "/about-us", label: "About" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact-us", label: "Contact" },
 ] as const;
 
 const COURSE_DROPDOWN = [
@@ -34,101 +34,85 @@ const COURSE_DROPDOWN = [
   },
   {
     href: "/mern-stack-developer-course",
-    title: "MERN Stack Developer Course",
+    title: "MERN Stack Developer",
     meta: "MongoDB · Express · React · Node.js",
   },
   {
     href: "/python-programming-classes",
-    title: "Python Programming Classes",
+    title: "Python Programming",
     meta: "Core Python · Django · FastAPI · SQL",
   },
   {
     href: "/data-science-and-analytics-courses-in-indore",
-    title: "Data Science and Analytics Courses in Indore",
+    title: "Data Science & Analytics",
     meta: "Python · Pandas · Machine Learning",
   },
   {
     href: "/data-analytics-course-in-indore",
-    title: "Data Analytics Course in Indore",
+    title: "Data Analytics",
     meta: "SQL · Power BI · Tableau · Excel",
   },
   {
     href: "/power-bi-course-in-indore",
-    title: "Power BI Course in Indore",
+    title: "Power BI Mastery",
     meta: "Power Query · DAX · BI Dashboards",
   },
   {
     href: "/artificial-intelligence-and-machine-learning-course",
-    title: "Artificial Intelligence and Machine Learning Course",
+    title: "AI & Machine Learning",
     meta: "ML · Deep Learning · NLP · GenAI",
   },
   {
     href: "/c-and-cpp-programming-classes",
-    title: "C and C++ Programming Classes",
+    title: "C & C++ Programming",
     meta: "C · C++ OOP · STL · Data Structures",
   },
   {
     href: "/android-app-development",
-    title: "Android App Development",
+    title: "Android & Flutter Apps",
     meta: "Dart · Flutter · Android & iOS",
   },
   {
     href: "/web-design-and-php-full-stack-course",
-    title: "Web Design and PHP Full Stack Course",
+    title: "Web Design & PHP Full Stack",
     meta: "HTML/CSS · JS · PHP · Laravel · MySQL",
   },
   {
     href: "/devops-and-cloud-computing-course",
-    title: "DevOps and Cloud Computing Course",
-    meta: "AWS · Linux · Docker · Kubernetes · CI/CD",
+    title: "DevOps & Cloud Computing",
+    meta: "AWS · Linux · Docker · Kubernetes",
   },
   {
     href: "/digital-marketing-course-in-indore",
-    title: "Digital Marketing Course in Indore",
+    title: "Digital Marketing",
     meta: "SEO · Google Ads · Meta Ads · GA4",
   },
   {
-    href: "/tally-gst-mastery-course",
-    title: "Tally GST Mastery Course",
-    meta: "Tally Prime · GST Filing · Advanced Excel",
+    href: "/ms-office-and-excel-course-in-indore",
+    title: "MS Office & Advanced Excel",
+    meta: "XLOOKUP · Pivot Tables · MIS Reporting",
   },
   {
-    href: "/english-courses",
-    title: "English Courses",
-    meta: "Spoken Fluency · GD & HR Interview",
+    href: "/tally-gst-mastery-course",
+    title: "Tally Prime + GST Mastery",
+    meta: "Tally Prime · GST Filing · Accounting",
   },
 ] as const;
 
 export default function Nav() {
-  const bar = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
   const [coursesOpen, setCoursesOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
-    const el = bar.current;
-    if (!el) return;
-    const st = ScrollTrigger.create({
-      start: 0,
-      end: "max",
-      onUpdate: (self) => {
-        const y = self.scroll();
-        el.dataset.solid = y > 40 ? "1" : "0";
-        gsap.to(el, {
-          yPercent: self.direction === 1 && y > 300 ? -110 : 0,
-          duration: 0.5,
-          ease: "power3.out",
-          overwrite: "auto",
-        });
-      },
-    });
-    return () => st.kill();
+    const onScroll = () => setScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    const l = getLenis();
-    if (open) l?.stop();
-    else l?.start();
     document.documentElement.style.overflow = open ? "hidden" : "";
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -154,157 +138,192 @@ export default function Nav() {
   return (
     <>
       <header
-        ref={bar}
-        data-solid="0"
-        className="group/nav fixed inset-x-0 top-0 z-[120] transition-colors duration-500 data-[solid='1']:bg-paper/90 data-[solid='1']:backdrop-blur-xl"
+        className={`fixed inset-x-0 top-0 z-[120] transition-all duration-300 ${
+          scrolled
+            ? "border-b border-hairline bg-paper/90 backdrop-blur-xl shadow-[0_1px_16px_rgba(11,18,21,0.04)]"
+            : "border-b border-transparent bg-paper/75 backdrop-blur-md"
+        }`}
       >
         <nav
           aria-label="Primary"
-          className="mx-auto flex h-20 max-w-[1520px] items-center justify-between px-4 sm:px-6 md:px-12"
+          className="mx-auto flex h-[72px] max-w-[1380px] items-center justify-between px-4 sm:px-6 lg:px-10"
         >
+          {/* Brand */}
           <Link
             href="/"
             onClick={onLogoClick}
             className="relative z-[130] flex items-center"
-            aria-label={`${SITE.name} — home`}
+            aria-label={`${SITE.name} — Home`}
           >
-            <Logo height={64} variant={open ? "light" : "color"} />
+            <Logo height={48} variant={open ? "light" : "color"} />
           </Link>
 
-          <ul className="hidden items-center gap-6 xl:gap-8 lg:flex">
-            {TOP_NAV.map((l) => {
+          {/* Center Navigation */}
+          <ul className="hidden items-center gap-1 lg:flex">
+            {TOP_NAV.map((item) => {
               const isActive =
-                pathname === l.href ||
-                ("hasDropdown" in l &&
-                  l.hasDropdown &&
+                pathname === item.href ||
+                ("hasDropdown" in item &&
+                  item.hasDropdown &&
                   COURSE_DROPDOWN.some((c) => c.href === pathname));
 
-              if ("hasDropdown" in l && l.hasDropdown) {
+              if ("hasDropdown" in item && item.hasDropdown) {
                 return (
                   <li
-                    key={l.href}
-                    className="relative py-6"
+                    key={item.href}
+                    className="relative py-3"
                     onMouseEnter={() => setCoursesOpen(true)}
                     onMouseLeave={() => setCoursesOpen(false)}
                   >
                     <Link
-                      href={l.href}
-                      className={`group relative inline-flex items-center gap-1.5 text-[0.92rem] transition-colors ${
-                        isActive ? "font-semibold text-brand" : "text-deep hover:text-brand"
+                      href={item.href}
+                      className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-[14px] font-medium transition-colors ${
+                        isActive
+                          ? "bg-accent-soft text-brand"
+                          : "text-ink-muted hover:bg-canvas hover:text-ink"
                       }`}
                     >
-                      <span>{l.label}</span>
+                      <span>{item.label}</span>
                       <svg
-                        width="10"
-                        height="10"
-                        viewBox="0 0 10 10"
+                        width="11"
+                        height="11"
+                        viewBox="0 0 12 12"
                         fill="none"
                         aria-hidden="true"
-                        className={`transition-transform duration-300 ${
-                          coursesOpen ? "rotate-180 text-brand" : "text-deep/60"
+                        className={`transition-transform duration-200 ${
+                          coursesOpen ? "rotate-180 text-brand" : "text-ink-subtle"
                         }`}
                       >
                         <path
-                          d="M2 3.5L5 6.5L8 3.5"
+                          d="M2.5 4.5L6 8L9.5 4.5"
                           stroke="currentColor"
-                          strokeWidth="1.4"
+                          strokeWidth="1.5"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         />
                       </svg>
-                      <span
-                        className={`absolute -bottom-1 left-0 h-px w-full origin-left bg-brand transition-transform duration-500 [transition-timing-function:var(--ease-out)] ${
-                          isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                        }`}
-                      />
                     </Link>
 
-                    {/* Clean Apple-grade Courses Popover */}
-                    <div
-                      className={`absolute top-full left-1/2 w-[680px] -translate-x-1/2 pt-1 transition-all duration-200 ${
-                        coursesOpen
-                          ? "pointer-events-auto translate-y-0 opacity-100"
-                          : "pointer-events-none -translate-y-1.5 opacity-0"
-                      }`}
-                    >
-                      <div className="max-h-[78vh] overflow-y-auto rounded-2xl border border-pale/90 bg-paper p-5 shadow-[0_20px_50px_rgba(0,36,36,0.12)]">
-                        <div className="flex items-center justify-between border-b border-pale/60 pb-3 mb-3">
-                          <span className="eyebrow text-brand">All Courses</span>
-                          <Link
-                            href="/courses"
-                            onClick={() => setCoursesOpen(false)}
-                            className="text-xs font-semibold text-deep hover:text-brand transition-colors"
-                          >
-                            View Courses Page →
-                          </Link>
-                        </div>
+                    <AnimatePresence>
+                      {coursesOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8, scale: 0.99 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 6, scale: 0.99 }}
+                          transition={{ duration: 0.2, ease: EASE_OUT }}
+                          className="absolute top-full left-1/2 w-[680px] -translate-x-1/2 pt-2"
+                        >
+                          <div className="max-h-[78vh] overflow-y-auto rounded-2xl border border-hairline bg-paper p-5 shadow-[0_24px_60px_-12px_rgba(11,18,21,0.14)]">
+                            <div className="mb-3.5 flex items-center justify-between border-b border-hairline pb-3">
+                              <div>
+                                <span className="eyebrow text-brand">Academic Catalog</span>
+                                <p className="mt-0.5 text-xs text-ink-muted">
+                                  15 lab-based programs across 3 Indore campuses
+                                </p>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <Link
+                                  href="/roadmap/java"
+                                  onClick={() => setCoursesOpen(false)}
+                                  className="text-xs font-semibold text-ink-muted transition-colors hover:text-brand"
+                                >
+                                  3D Roadmaps
+                                </Link>
+                                <Link
+                                  href="/courses"
+                                  onClick={() => setCoursesOpen(false)}
+                                  className="rounded-lg bg-canvas px-3 py-1.5 text-xs font-semibold text-ink transition-colors hover:bg-accent-soft hover:text-brand"
+                                >
+                                  All Courses →
+                                </Link>
+                              </div>
+                            </div>
 
-                        <div className="grid grid-cols-2 gap-1.5">
-                          {COURSE_DROPDOWN.map((item) => (
-                            <Link
-                              key={item.href}
-                              href={item.href}
-                              onClick={() => setCoursesOpen(false)}
-                              className="group rounded-xl p-2.5 transition-colors hover:bg-soft"
-                            >
-                              <p className="text-[13px] font-semibold text-deep group-hover:text-brand transition-colors">
-                                {item.title}
-                              </p>
-                              <p className="mt-0.5 text-[11px] text-deep/65">{item.meta}</p>
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                            <div className="grid grid-cols-2 gap-1">
+                              {COURSE_DROPDOWN.map((c) => (
+                                <Link
+                                  key={c.href}
+                                  href={c.href}
+                                  onClick={() => setCoursesOpen(false)}
+                                  className="group rounded-xl px-3 py-2.5 transition-colors hover:bg-canvas"
+                                >
+                                  <p className="text-[13.5px] font-semibold text-ink transition-colors group-hover:text-brand">
+                                    {c.title}
+                                  </p>
+                                  <p className="mt-0.5 font-mono text-[11px] text-ink-subtle">
+                                    {c.meta}
+                                  </p>
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </li>
                 );
               }
 
               return (
-                <li key={l.href}>
+                <li key={item.href}>
                   <Link
-                    href={l.href}
-                    className={`group relative text-[0.92rem] transition-colors ${
-                      isActive ? "font-semibold text-brand" : "text-deep hover:text-brand"
+                    href={item.href}
+                    className={`rounded-lg px-3.5 py-2 text-[14px] font-medium transition-colors ${
+                      isActive
+                        ? "bg-accent-soft text-brand"
+                        : "text-ink-muted hover:bg-canvas hover:text-ink"
                     }`}
                   >
-                    {l.label}
-                    <span
-                      className={`absolute -bottom-1 left-0 h-px w-full origin-left bg-brand transition-transform duration-500 [transition-timing-function:var(--ease-out)] ${
-                        isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                      }`}
-                    />
+                    {item.label}
                   </Link>
                 </li>
               );
             })}
           </ul>
 
-          <div className="flex items-center gap-3">
-            <div className="hidden lg:block">
-              <CTA
-                href={pathname === "/" ? "#admission" : "/contact-us"}
-                label="Admissions"
-              />
-            </div>
+          {/* Right Actions */}
+          <div className="flex items-center gap-2.5">
+            <a
+              href={SITE.phoneHref}
+              className="hidden font-mono text-xs font-medium text-ink-muted transition-colors hover:text-brand xl:inline-block"
+            >
+              {SITE.phoneDisplay}
+            </a>
+
+            <Link
+              href={pathname === "/" ? "#admission" : "/contact-us"}
+              onClick={(e) => {
+                if (pathname === "/") {
+                  e.preventDefault();
+                  scrollToId("admission");
+                }
+              }}
+              className="press-scale hidden items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-[13.5px] font-semibold text-white hover:bg-brand lg:inline-flex"
+            >
+              <span>Book Free Demo</span>
+              <span aria-hidden="true">→</span>
+            </Link>
+
             <button
               type="button"
               aria-expanded={open}
-              aria-controls="menu"
+              aria-controls="mobile-menu"
               aria-label={open ? "Close menu" : "Open menu"}
               onClick={() => setOpen((v) => !v)}
-              className={`relative z-[130] grid size-12 place-items-center rounded-full border transition-colors lg:hidden ${
-                open ? "border-pale/40" : "border-deep/30"
+              className={`relative z-[130] grid size-11 place-items-center rounded-full border transition-colors lg:hidden ${
+                open
+                  ? "border-white/25 bg-white/10"
+                  : "border-hairline bg-paper hover:border-ink/40"
               }`}
             >
               <span
-                className={`absolute h-px w-5 transition-transform duration-500 ${
-                  open ? "rotate-45 bg-paper" : "-translate-y-1.5 bg-deep"
+                className={`absolute h-[1.5px] w-4.5 transition-transform duration-300 ${
+                  open ? "rotate-45 bg-white" : "-translate-y-1.5 bg-ink"
                 }`}
               />
               <span
-                className={`absolute h-px w-5 transition-transform duration-500 ${
-                  open ? "-rotate-45 bg-paper" : "translate-y-1.5 bg-deep"
+                className={`absolute h-[1.5px] w-4.5 transition-transform duration-300 ${
+                  open ? "-rotate-45 bg-white" : "translate-y-1.5 bg-ink"
                 }`}
               />
             </button>
@@ -312,79 +331,104 @@ export default function Nav() {
         </nav>
       </header>
 
-      <div
-        id="menu"
-        aria-hidden={!open}
-        inert={!open}
-        className="fixed inset-0 z-[110] flex flex-col justify-between overflow-y-auto bg-deep px-5 sm:px-6 pt-[max(6.5rem,calc(env(safe-area-inset-top)+4rem))] pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+1.5rem))] transition-[clip-path] duration-700 [transition-timing-function:var(--ease-out)] lg:hidden"
-        style={{ clipPath: open ? "inset(0 0 0 0)" : "inset(0 0 100% 0)" }}
-      >
-        <div className="space-y-6">
-          <ul className="space-y-1">
-            {TOP_NAV.map((l, i) => (
-              <li key={l.href} className="overflow-hidden">
-                <Link
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  style={{ transitionDelay: open ? `${200 + i * 50}ms` : "0ms" }}
-                  className={`display block text-[clamp(1.75rem,8.5vw,3rem)] leading-[1.08] text-paper transition-transform duration-700 [transition-timing-function:var(--ease-out)] break-words sm:text-5xl ${
-                    open ? "translate-y-0" : "translate-y-full"
-                  }`}
-                >
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+      {/* Mobile Fullscreen Drawer */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            id="mobile-menu"
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.28, ease: EASE_OUT }}
+            className="fixed inset-0 z-[110] flex flex-col justify-between overflow-y-auto bg-obsidian px-5 pt-[max(5.5rem,calc(env(safe-area-inset-top)+4rem))] pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+1.5rem))] text-white lg:hidden"
+          >
+            <div className="space-y-6">
+              <ul className="divide-y divide-white/10">
+                <li>
+                  <Link
+                    href="/"
+                    onClick={() => setOpen(false)}
+                    className="display block py-3.5 text-2xl text-white transition-colors hover:text-light"
+                  >
+                    Home
+                  </Link>
+                </li>
+                {TOP_NAV.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className="display block py-3.5 text-2xl text-white transition-colors hover:text-light"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
 
-          <div className="border-t border-pale/20 pt-5">
-            <p className="eyebrow text-pale/70 mb-3">Popular Courses</p>
-            <div className="flex flex-wrap gap-2">
-              {COURSE_DROPDOWN.map((c) => (
-                <Link
-                  key={c.href}
-                  href={c.href}
-                  onClick={() => setOpen(false)}
-                  className="rounded-full border border-pale/30 bg-paper/10 px-3 py-1.5 text-xs font-medium text-paper transition-colors hover:bg-brand break-words"
-                >
-                  {c.title}
-                </Link>
-              ))}
+              <div className="pt-2">
+                <p className="eyebrow mb-3 text-white/60">Flagship Courses</p>
+                <div className="flex flex-wrap gap-2">
+                  {COURSE_DROPDOWN.slice(0, 8).map((c) => (
+                    <Link
+                      key={c.href}
+                      href={c.href}
+                      onClick={() => setOpen(false)}
+                      className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/90 hover:border-light hover:text-white"
+                    >
+                      {c.title}
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="space-y-4 border-t border-pale/20 pt-6 text-pale">
-          <div className="space-y-1">
-            <a href={SITE.phoneHref} className="block text-xl font-medium text-paper">
-              {SITE.phoneDisplay}
-            </a>
-            <p className="text-xs text-pale/80">Counseling: {SITE.phoneSecondaryDisplay}</p>
-            <a href={`mailto:${SITE.email}`} className="block text-sm text-pale hover:underline">
-              {SITE.email}
-            </a>
-          </div>
+            <div className="mt-8 space-y-4 border-t border-white/15 pt-6">
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href={SITE.phoneHref}
+                  className="inline-flex flex-1 items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-ink"
+                >
+                  Call {SITE.phoneDisplay}
+                </a>
+                <a
+                  href={SITE.whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white"
+                >
+                  <WhatsAppIcon className="size-4 fill-current" />
+                  <span>WhatsApp</span>
+                </a>
+              </div>
 
-          <div className="flex items-center gap-3 pt-2">
-            {SOCIAL_LINKS.map((s) => (
-              <a
-                key={s.id}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={s.name}
-                className="flex size-9 items-center justify-center rounded-full border border-pale/30 bg-paper/10 text-paper transition-all hover:bg-brand"
-              >
-                {s.id === "instagram" && <InstagramIcon className="size-4" />}
-                {s.id === "linkedin" && <LinkedInIcon className="size-4" />}
-                {s.id === "youtube" && <YouTubeIcon className="size-4" />}
-                {s.id === "facebook" && <FacebookIcon className="size-4" />}
-                {s.id === "whatsapp" && <WhatsAppIcon className="size-4" />}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
+              <div className="flex items-center justify-between pt-2">
+                <a href={`mailto:${SITE.email}`} className="text-xs text-white/70">
+                  {SITE.email}
+                </a>
+                <div className="flex items-center gap-2">
+                  {SOCIAL_LINKS.map((s) => (
+                    <a
+                      key={s.id}
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={s.name}
+                      className="flex size-8 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/80 hover:border-light hover:text-white"
+                    >
+                      {s.id === "instagram" && <InstagramIcon className="size-3.5" />}
+                      {s.id === "linkedin" && <LinkedInIcon className="size-3.5" />}
+                      {s.id === "youtube" && <YouTubeIcon className="size-3.5" />}
+                      {s.id === "facebook" && <FacebookIcon className="size-3.5" />}
+                      {s.id === "whatsapp" && <WhatsAppIcon className="size-3.5" />}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

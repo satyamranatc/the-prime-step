@@ -26,11 +26,16 @@ export default function BranchLandingTemplate({
 }: BranchPageProps) {
   const branch = BRANCHES.find((b) => b.name === branchKey) || BRANCHES[0];
 
+  const breadcrumbs = [
+    { name: "Home", path: "/" },
+    { name: `${branch.name} Campus`, path: `/${slug}` },
+  ];
+
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: `The Prime Step — ${branch.name} Campus, Indore`,
-    description: description,
+    description,
     url: `${SITE.url}/${slug}`,
     telephone: branch.phone,
     email: SITE.email,
@@ -42,65 +47,89 @@ export default function BranchLandingTemplate({
       streetAddress: branch.address,
       addressLocality: "Indore",
       addressRegion: "Madhya Pradesh",
-      postalCode: branchKey === "Vijay Nagar" ? "452010" : branchKey === "Bhawarkua" ? "452001" : "452009",
+      postalCode:
+        branchKey === "Vijay Nagar"
+          ? "452010"
+          : branchKey === "Bhawarkua"
+            ? "452001"
+            : "452009",
       addressCountry: "IN",
     },
     geo: {
       "@type": "GeoCoordinates",
-      latitude: branchKey === "Vijay Nagar" ? 22.7533 : branchKey === "Bhawarkua" ? 22.6926 : 22.6978,
-      longitude: branchKey === "Vijay Nagar" ? 75.8937 : branchKey === "Bhawarkua" ? 75.8676 : 75.8362,
+      latitude:
+        branchKey === "Vijay Nagar"
+          ? 22.7533
+          : branchKey === "Bhawarkua"
+            ? 22.6926
+            : 22.6978,
+      longitude:
+        branchKey === "Vijay Nagar"
+          ? 75.8937
+          : branchKey === "Bhawarkua"
+            ? 75.8676
+            : 75.8362,
     },
   };
 
   return (
-    <PageShell title={headline} eyebrow={`${branch.name} Campus · Indore`} lead={lead}>
+    <PageShell
+      breadcrumbs={breadcrumbs}
+      title={headline}
+      eyebrow={`${branch.name} Campus · Indore`}
+      lead={lead}
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
       />
 
-      <section className="mx-auto max-w-5xl space-y-16">
-        {/* Campus Overview & Essential Info Card */}
-        <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
-          <div className="rounded-2xl sm:rounded-3xl border border-pale/80 bg-paper p-5 sm:p-8 md:col-span-2 space-y-5 sm:space-y-6">
+      <section className="mx-auto max-w-[1380px] space-y-16">
+        {/* Campus Overview & Location Grid */}
+        <div className="grid gap-6 md:grid-cols-3">
+          <div className="space-y-6 rounded-2xl border border-hairline bg-paper p-6 sm:p-8 md:col-span-2">
             <span className="eyebrow text-brand">{branch.tag}</span>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-deep">
-              Campus Facilities & Practical Labs
+            <h2 className="display text-2xl text-ink md:text-3xl">
+              Campus Facilities &amp; Practical Labs
             </h2>
-            <p className="text-sm sm:text-base text-deep/75 leading-relaxed">
+            <p className="prose-measure text-sm leading-relaxed text-ink-muted sm:text-base">
               {description}
             </p>
 
-            <div className="grid gap-4 sm:grid-cols-2 pt-4 border-t border-pale">
+            <div className="grid gap-5 border-t border-hairline pt-5 sm:grid-cols-2">
               <div>
-                <span className="text-xs uppercase tracking-wider text-deep/50 font-semibold">
+                <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-ink-subtle">
                   Operating Hours
                 </span>
-                <p className="mt-1 text-sm font-semibold text-deep">{branch.hours}</p>
-                <p className="text-xs text-brand font-medium">Labs available 24/7 for project students</p>
+                <p className="mt-1 text-sm font-semibold text-ink">{branch.hours}</p>
+                <p className="mt-0.5 text-xs text-brand">
+                  Dedicated lab workstations for all batches
+                </p>
               </div>
               <div>
-                <span className="text-xs uppercase tracking-wider text-deep/50 font-semibold">
+                <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-ink-subtle">
                   Direct Campus Phone
                 </span>
-                <p className="mt-1 text-sm font-semibold text-deep">
+                <p className="mt-1 text-sm font-semibold text-ink">
                   <a href={branch.phoneHref} className="hover:text-brand hover:underline">
                     {branch.phone}
                   </a>
                 </p>
-                <p className="text-xs text-deep/60">Call or WhatsApp for batch timings</p>
+                <p className="mt-0.5 text-xs text-ink-muted">
+                  Call or WhatsApp for batch timings
+                </p>
               </div>
             </div>
 
             <div className="pt-2">
-              <span className="text-xs uppercase tracking-wider text-deep/50 font-semibold">
+              <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-ink-subtle">
                 Serving Students From
               </span>
-              <div className="mt-2 flex flex-wrap gap-1.5 sm:gap-2">
+              <div className="mt-2.5 flex flex-wrap gap-2">
                 {nearbyAreas.map((area) => (
                   <span
                     key={area}
-                    className="rounded-full bg-soft px-3 py-1 text-xs font-medium text-deep/80"
+                    className="rounded-full border border-hairline bg-canvas px-3 py-1 text-xs font-medium text-ink-muted"
                   >
                     {area}
                   </span>
@@ -109,31 +138,30 @@ export default function BranchLandingTemplate({
             </div>
           </div>
 
-          {/* Quick Location & Direction Card */}
-          <div className="rounded-2xl sm:rounded-3xl border border-brand/20 bg-soft p-5 sm:p-8 flex flex-col justify-between">
+          <div className="flex flex-col justify-between rounded-2xl border border-hairline bg-canvas p-6 sm:p-8">
             <div>
               <span className="eyebrow text-brand">Physical Location</span>
-              <h3 className="mt-2 text-lg sm:text-xl font-bold text-deep">Visit the Campus</h3>
-              <p className="mt-3 sm:mt-4 text-xs sm:text-sm font-medium text-deep/90 leading-relaxed">
+              <h3 className="display mt-2 text-xl text-ink">Visit the Campus</h3>
+              <p className="mt-3 text-sm leading-relaxed text-ink-muted">
                 {branch.address}
               </p>
-              <p className="mt-2 text-xs font-semibold text-brand">
+              <p className="mt-2 font-mono text-xs font-semibold text-brand">
                 Landmark: {branch.landmark}
               </p>
             </div>
 
-            <div className="mt-6 sm:mt-8 space-y-3">
+            <div className="mt-8 space-y-3">
               <a
                 href={googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex w-full items-center justify-center rounded-full bg-deep py-3 text-xs sm:text-sm font-semibold text-paper transition-all hover:bg-brand"
+                className="press-scale flex w-full items-center justify-center rounded-full bg-ink py-3 text-sm font-semibold text-white hover:bg-brand"
               >
-                Open Google Maps Directions ↗
+                Open Google Maps ↗
               </a>
               <a
                 href={branch.phoneHref}
-                className="flex w-full items-center justify-center rounded-full border border-deep/20 bg-paper py-3 text-xs sm:text-sm font-semibold text-deep transition-all hover:border-brand"
+                className="press-scale flex w-full items-center justify-center rounded-full border border-hairline bg-paper py-3 text-sm font-semibold text-ink hover:border-brand hover:text-brand"
               >
                 Call Front Desk
               </a>
@@ -141,12 +169,12 @@ export default function BranchLandingTemplate({
           </div>
         </div>
 
-        {/* Featured Courses at this Branch */}
+        {/* Courses at this Branch */}
         <div className="space-y-6">
-          <div className="flex flex-wrap items-end justify-between gap-4 border-b border-pale pb-4">
+          <div className="flex flex-wrap items-end justify-between gap-4 border-b border-hairline pb-4">
             <div>
               <span className="eyebrow text-brand">Academic Offerings</span>
-              <h2 className="text-2xl font-bold tracking-tight text-deep">
+              <h2 className="display mt-2 text-2xl text-ink md:text-3xl">
                 Courses Taught at {branch.name} Campus
               </h2>
             </div>
@@ -158,26 +186,26 @@ export default function BranchLandingTemplate({
             </Link>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {ALL_CATALOG_COURSES.slice(0, 6).map((c) => (
               <Link
                 key={c.href}
                 href={c.href}
-                className="group rounded-2xl border border-pale/80 bg-paper p-6 transition-all hover:-translate-y-1 hover:border-brand/40 hover:shadow-md flex flex-col justify-between"
+                className="group flex flex-col justify-between rounded-2xl border border-hairline bg-paper p-6 transition-all hover:border-brand/50 hover:shadow-[0_12px_28px_-16px_rgba(11,18,21,0.12)]"
               >
                 <div>
-                  <div className="flex items-center justify-between text-xs font-semibold text-brand">
-                    <span>{c.duration}</span>
+                  <div className="flex items-center justify-between font-mono text-[11px] text-ink-subtle">
+                    <span className="font-semibold text-brand">{c.duration}</span>
                     <span>{c.level}</span>
                   </div>
-                  <h3 className="mt-3 text-lg font-bold text-deep group-hover:text-brand transition-colors">
+                  <h3 className="mt-3 text-lg font-bold text-ink transition-colors group-hover:text-brand">
                     {c.title}
                   </h3>
-                  <p className="mt-2 text-xs text-deep/70 line-clamp-2">
+                  <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-ink-muted">
                     {c.description}
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-pale/60 text-xs font-semibold text-deep/60 group-hover:text-brand">
+                <div className="mt-4 border-t border-hairline pt-3 text-xs font-semibold text-ink-muted group-hover:text-brand">
                   Explore Course Details →
                 </div>
               </Link>
@@ -185,61 +213,36 @@ export default function BranchLandingTemplate({
           </div>
         </div>
 
-        {/* Local Verified Reviews */}
+        {/* Local Student Experiences */}
         <div className="space-y-6">
-          <div className="border-b border-pale pb-4">
+          <div className="border-b border-hairline pb-4">
             <span className="eyebrow text-brand">Student Experiences</span>
-            <h2 className="text-2xl font-bold tracking-tight text-deep">
+            <h2 className="display mt-2 text-2xl text-ink md:text-3xl">
               Student Reviews from {branch.name}
             </h2>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-5 md:grid-cols-3">
             {reviews.map((rev, idx) => (
               <div
                 key={idx}
-                className="rounded-2xl border border-pale/70 bg-paper p-6 space-y-4"
+                className="space-y-4 rounded-2xl border border-hairline bg-canvas p-6"
               >
-                <div className="flex items-center text-amber-500 text-sm">
+                <div className="text-sm text-amber-500">
                   {"★".repeat(rev.rating)}
                 </div>
-                <p className="text-sm text-deep/80 leading-relaxed italic">
+                <p className="text-sm leading-relaxed text-ink-muted">
                   &ldquo;{rev.text}&rdquo;
                 </p>
-                <div className="pt-2 border-t border-pale/60">
-                  <p className="text-xs font-bold text-deep">{rev.author}</p>
-                  <p className="text-[11px] text-deep/60">{rev.role}</p>
+                <div className="border-t border-hairline pt-3">
+                  <p className="text-xs font-bold text-ink">{rev.author}</p>
+                  <p className="font-mono text-[11px] text-ink-subtle">{rev.role}</p>
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Branch Admissions CTA */}
-        <div className="rounded-3xl border border-brand/20 bg-soft p-8 md:p-12 text-center">
-          <h3 className="text-2xl md:text-3xl font-bold text-deep">
-            Join the Next Batch at {branch.name} Campus
-          </h3>
-          <p className="mt-3 text-base text-deep/70 max-w-xl mx-auto">
-            Book a 2-day free demo class to experience our practical computer labs, meet the mentors, and discuss personalized learning paths.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
-            <a
-              href={branch.phoneHref}
-              className="rounded-full bg-deep px-8 py-3.5 text-sm font-semibold text-paper transition-all hover:bg-brand"
-            >
-              Call {branch.phone}
-            </a>
-            <Link
-              href="/contact-us"
-              className="rounded-full border border-deep/20 bg-paper px-8 py-3.5 text-sm font-semibold text-deep transition-all hover:border-brand"
-            >
-              Book Free Demo Class
-            </Link>
           </div>
         </div>
       </section>
     </PageShell>
   );
 }
-
