@@ -1,24 +1,16 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import { BRANCHES, SITE } from "@/lib/content";
 import { MotionProvider } from "@/components/ui/Motion";
 import "./globals.css";
 
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-sans-loaded",
+const appleSans = Inter({
+  variable: "--font-apple-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
   preload: true,
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-mono-loaded",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  display: "swap",
-  preload: false,
 });
 
 const siteTitle = "The Prime Step | IT & Skill Training Institute — Indore";
@@ -281,7 +273,7 @@ export default function RootLayout({
   return (
     <html
       lang="en-IN"
-      className={`${plusJakarta.variable} ${jetbrainsMono.variable} antialiased`}
+      className={`${appleSans.variable} antialiased`}
     >
       <head>
         <link rel="preconnect" href="https://www.theprimestep.com" />

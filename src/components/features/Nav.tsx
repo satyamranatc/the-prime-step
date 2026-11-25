@@ -3,7 +3,7 @@
 import { useEffect, useState, type MouseEvent } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { SITE, SOCIAL_LINKS } from "@/lib/content";
 import { scrollToId } from "@/lib/scroll";
 import { EASE_OUT } from "@/components/ui/Motion";
@@ -105,8 +105,10 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
+  const darkSurface = false;
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
+    const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -139,9 +141,11 @@ export default function Nav() {
     <>
       <header
         className={`fixed inset-x-0 top-0 z-[120] transition-all duration-300 ${
-          scrolled
-            ? "border-b border-hairline bg-paper/90 backdrop-blur-xl shadow-[0_1px_16px_rgba(11,18,21,0.04)]"
-            : "border-b border-transparent bg-paper/75 backdrop-blur-md"
+          darkSurface
+            ? "border-b border-white/[0.06] bg-[#06090b]/55 backdrop-blur-md"
+            : scrolled
+              ? "border-b border-hairline bg-paper/92 backdrop-blur-xl shadow-[0_1px_16px_rgba(11,18,21,0.05)]"
+              : "border-b border-transparent bg-paper/80 backdrop-blur-md"
         }`}
       >
         <nav
@@ -155,7 +159,7 @@ export default function Nav() {
             className="relative z-[130] flex items-center"
             aria-label={`${SITE.name} — Home`}
           >
-            <Logo height={48} variant={open ? "light" : "color"} />
+            <Logo height={48} variant={open || darkSurface ? "light" : "color"} />
           </Link>
 
           {/* Center Navigation */}
@@ -167,6 +171,14 @@ export default function Nav() {
                   item.hasDropdown &&
                   COURSE_DROPDOWN.some((c) => c.href === pathname));
 
+              const linkTone = darkSurface
+                ? isActive
+                  ? "bg-white/10 text-white"
+                  : "text-white/75 hover:bg-white/[0.07] hover:text-white"
+                : isActive
+                  ? "bg-accent-soft text-brand"
+                  : "text-ink-muted hover:bg-canvas hover:text-ink";
+
               if ("hasDropdown" in item && item.hasDropdown) {
                 return (
                   <li
@@ -177,11 +189,7 @@ export default function Nav() {
                   >
                     <Link
                       href={item.href}
-                      className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-[14px] font-medium transition-colors ${
-                        isActive
-                          ? "bg-accent-soft text-brand"
-                          : "text-ink-muted hover:bg-canvas hover:text-ink"
-                      }`}
+                      className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-[14px] font-medium transition-colors ${linkTone}`}
                     >
                       <span>{item.label}</span>
                       <svg
@@ -191,7 +199,11 @@ export default function Nav() {
                         fill="none"
                         aria-hidden="true"
                         className={`transition-transform duration-200 ${
-                          coursesOpen ? "rotate-180 text-brand" : "text-ink-subtle"
+                          coursesOpen
+                            ? "rotate-180 text-light"
+                            : darkSurface
+                              ? "text-white/50"
+                              : "text-ink-subtle"
                         }`}
                       >
                         <path
@@ -213,7 +225,7 @@ export default function Nav() {
                           transition={{ duration: 0.2, ease: EASE_OUT }}
                           className="absolute top-full left-1/2 w-[680px] -translate-x-1/2 pt-2"
                         >
-                          <div className="max-h-[78vh] overflow-y-auto rounded-2xl border border-hairline bg-paper p-5 shadow-[0_24px_60px_-12px_rgba(11,18,21,0.14)]">
+                          <div className="max-h-[78vh] overflow-y-auto rounded-2xl border border-hairline bg-paper p-5 text-ink shadow-[0_28px_64px_-12px_rgba(11,18,21,0.22)]">
                             <div className="mb-3.5 flex items-center justify-between border-b border-hairline pb-3">
                               <div>
                                 <span className="eyebrow text-brand">Academic Catalog</span>
@@ -268,11 +280,7 @@ export default function Nav() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`rounded-lg px-3.5 py-2 text-[14px] font-medium transition-colors ${
-                      isActive
-                        ? "bg-accent-soft text-brand"
-                        : "text-ink-muted hover:bg-canvas hover:text-ink"
-                    }`}
+                    className={`rounded-lg px-3.5 py-2 text-[14px] font-medium transition-colors ${linkTone}`}
                   >
                     {item.label}
                   </Link>
@@ -283,12 +291,16 @@ export default function Nav() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2.5">
-            <a
-              href={SITE.phoneHref}
-              className="hidden font-mono text-xs font-medium text-ink-muted transition-colors hover:text-brand xl:inline-block"
+            <Link
+              href="/roadmap/java"
+              className={`hidden rounded-full border px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-wider transition-colors xl:inline-flex ${
+                darkSurface
+                  ? "border-white/20 text-white/85 hover:border-white/50 hover:text-white"
+                  : "border-hairline text-ink-muted hover:border-ink/40 hover:text-ink"
+              }`}
             >
-              {SITE.phoneDisplay}
-            </a>
+              3D Roadmaps
+            </Link>
 
             <Link
               href={pathname === "/" ? "#admission" : "/contact-us"}
@@ -298,7 +310,11 @@ export default function Nav() {
                   scrollToId("admission");
                 }
               }}
-              className="press-scale hidden items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-[13.5px] font-semibold text-white hover:bg-brand lg:inline-flex"
+              className={`press-scale hidden items-center gap-2 rounded-full px-5 py-2.5 text-[13px] font-semibold lg:inline-flex ${
+                darkSurface
+                  ? "border border-white/25 bg-white text-ink hover:bg-accent-soft"
+                  : "bg-ink text-white hover:bg-brand"
+              }`}
             >
               <span>Book Free Demo</span>
               <span aria-hidden="true">→</span>
@@ -311,19 +327,27 @@ export default function Nav() {
               aria-label={open ? "Close menu" : "Open menu"}
               onClick={() => setOpen((v) => !v)}
               className={`relative z-[130] grid size-11 place-items-center rounded-full border transition-colors lg:hidden ${
-                open
+                open || darkSurface
                   ? "border-white/25 bg-white/10"
                   : "border-hairline bg-paper hover:border-ink/40"
               }`}
             >
               <span
                 className={`absolute h-[1.5px] w-4.5 transition-transform duration-300 ${
-                  open ? "rotate-45 bg-white" : "-translate-y-1.5 bg-ink"
+                  open
+                    ? "rotate-45 bg-white"
+                    : darkSurface
+                      ? "-translate-y-1.5 bg-white"
+                      : "-translate-y-1.5 bg-ink"
                 }`}
               />
               <span
                 className={`absolute h-[1.5px] w-4.5 transition-transform duration-300 ${
-                  open ? "-rotate-45 bg-white" : "translate-y-1.5 bg-ink"
+                  open
+                    ? "-rotate-45 bg-white"
+                    : darkSurface
+                      ? "translate-y-1.5 bg-white"
+                      : "translate-y-1.5 bg-ink"
                 }`}
               />
             </button>
@@ -340,7 +364,7 @@ export default function Nav() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.28, ease: EASE_OUT }}
-            className="fixed inset-0 z-[110] flex flex-col justify-between overflow-y-auto bg-obsidian px-5 pt-[max(5.5rem,calc(env(safe-area-inset-top)+4rem))] pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+1.5rem))] text-white lg:hidden"
+            className="fixed inset-0 z-[110] flex flex-col justify-between overflow-y-auto bg-[#06090b] px-5 pt-[max(5.5rem,calc(env(safe-area-inset-top)+4rem))] pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+1.5rem))] text-white lg:hidden"
           >
             <div className="space-y-6">
               <ul className="divide-y divide-white/10">

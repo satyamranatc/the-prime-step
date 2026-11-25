@@ -5,6 +5,7 @@ import TrustStrip from "@/components/home/TrustStrip";
 import CourseCatalog from "@/components/home/CourseCatalog";
 import WhyUs from "@/components/home/WhyUs";
 import PopularPrograms from "@/components/home/PopularPrograms";
+import StudentProjectsAndProof from "@/components/home/StudentProjectsAndProof";
 import TrainingPlacement from "@/components/home/TrainingPlacement";
 import Pathways from "@/components/home/Pathways";
 import CampusesAndFAQ from "@/components/home/CampusesAndFAQ";
@@ -66,6 +67,7 @@ export default function Home() {
         <CourseCatalog />
         <WhyUs />
         <PopularPrograms />
+        <StudentProjectsAndProof />
         <TrainingPlacement />
         <Pathways />
         <CampusesAndFAQ />

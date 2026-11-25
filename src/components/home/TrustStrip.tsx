@@ -1,16 +1,17 @@
-import Link from "next/link";
 import { TRUST_ITEMS } from "@/lib/homepage";
 import { Reveal } from "@/components/ui/Motion";
 
 const QUICK_TRACKS = [
-  { label: "Java Full Stack", href: "/java-full-stack-developer" },
-  { label: "MERN Stack", href: "/mern-stack-developer-course" },
-  { label: "Python & AI", href: "/python-programming-classes" },
-  { label: "Data Analytics", href: "/data-analytics-course-in-indore" },
-  { label: "Power BI", href: "/power-bi-course-in-indore" },
-  { label: "DevOps & AWS", href: "/devops-and-cloud-computing-course" },
-  { label: "Tally + GST", href: "/tally-gst-mastery-course" },
-  { label: "Spoken English", href: "/english-courses" },
+  { label: "Java Full Stack", meta: "Spring Boot · React", href: "/java-full-stack-developer" },
+  { label: "MERN Stack", meta: "MongoDB · Node.js", href: "/mern-stack-developer-course" },
+  { label: "Python & AI", meta: "Django · GenAI", href: "/python-programming-classes" },
+  { label: "Data Analytics", meta: "SQL · Power BI", href: "/data-analytics-course-in-indore" },
+  { label: "Power BI Mastery", meta: "DAX · Dashboards", href: "/power-bi-course-in-indore" },
+  { label: "DevOps & AWS", meta: "Docker · Kubernetes", href: "/devops-and-cloud-computing-course" },
+  { label: "Android & Flutter", meta: "Dart · iOS/Android", href: "/android-app-development" },
+  { label: "Tally Prime + GST", meta: "GST Filing · Accounts", href: "/tally-gst-mastery-course" },
+  { label: "Advanced Excel", meta: "XLOOKUP · MIS", href: "/ms-office-and-excel-course-in-indore" },
+  { label: "Spoken English", meta: "GD & HR Prep", href: "/english-courses" },
 ] as const;
 
 export default function TrustStrip() {
@@ -42,20 +43,26 @@ export default function TrustStrip() {
           </dl>
         </Reveal>
 
-        {/* Quick-Jump Program Index */}
-        <div className="flex flex-wrap items-center gap-2 border-t border-hairline py-4">
-          <span className="mr-2 font-mono text-[11px] font-semibold uppercase tracking-wider text-ink-subtle">
-            Popular Tracks:
-          </span>
-          {QUICK_TRACKS.map((track) => (
-            <Link
-              key={track.href}
-              href={track.href}
-              className="rounded-full border border-hairline bg-paper px-3.5 py-1.5 text-xs font-medium text-ink-muted transition-colors hover:border-brand/50 hover:text-brand"
-            >
-              {track.label}
-            </Link>
-          ))}
+        {/* Infinite Moving Course & Tech Strip */}
+        <div
+          className="group relative overflow-hidden border-t border-hairline py-4 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
+          aria-label="Technologies and courses taught at The Prime Step"
+        >
+          <div className="flex w-max gap-3 animate-[tps-marquee_34s_linear_infinite] group-hover:[animation-play-state:paused]">
+            {[...QUICK_TRACKS, ...QUICK_TRACKS].map((item, idx) => (
+              <a
+                key={`${item.label}-${idx}`}
+                href={item.href}
+                className="inline-flex shrink-0 items-center gap-2.5 rounded-full border border-hairline bg-paper px-4 py-2 text-xs font-semibold text-ink transition-colors hover:border-brand hover:text-brand"
+              >
+                <span className="size-1.5 rounded-full bg-brand" />
+                <span>{item.label}</span>
+                <span className="font-mono text-[10.5px] font-normal text-ink-subtle">
+                  {item.meta}
+                </span>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </section>

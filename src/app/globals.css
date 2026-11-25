@@ -24,10 +24,10 @@
   --color-accent: #0e6e6b;
   --color-accent-soft: #edf7f6;
 
-  /* Typography */
-  --font-sans: var(--font-sans-loaded), -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-  --font-mono: var(--font-mono-loaded), ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-display: var(--font-sans-loaded), -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  /* Single unified Apple-grade grotesque typography (SF Pro on Apple devices, Inter everywhere else) */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", var(--font-apple-sans), "Helvetica Neue", system-ui, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", var(--font-apple-sans), "Helvetica Neue", system-ui, sans-serif;
+  --font-mono: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-apple-sans), "Helvetica Neue", system-ui, sans-serif;
 }
 
 :root {
@@ -89,20 +89,24 @@ canvas {
   border-radius: 6px;
 }
 
-/* Architectural typography helpers */
+/* Apple-grade typography helpers — single unified sans, clean tracking */
 .display {
   font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.032em;
-  line-height: 1.04;
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  line-height: 1.06;
 }
 
 .eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.11em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.font-mono {
+  font-variant-numeric: tabular-nums;
 }
 
 .prose-measure {
@@ -186,6 +190,74 @@ canvas {
 .link-slide:hover::after {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+/* Huly-inspired luminous beam & bento craft utilities */
+.huly-pill-cta {
+  position: relative;
+  background: linear-gradient(105deg, #f3f5f7 0%, #ffffff 55%, #ffdfc4 100%);
+  color: #0b1215;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.45),
+    0 0 28px -4px rgba(255, 166, 98, 0.55),
+    0 12px 32px -10px rgba(34, 166, 159, 0.45);
+  transition:
+    transform 0.25s var(--ease-out),
+    box-shadow 0.25s var(--ease-out);
+}
+.huly-pill-cta:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.7),
+    0 0 38px -2px rgba(255, 166, 98, 0.75),
+    0 16px 38px -8px rgba(34, 166, 159, 0.55);
+}
+
+.huly-dark-card {
+  position: relative;
+  overflow: hidden;
+  background-color: #071618;
+  background-image:
+    radial-gradient(
+      110% 75% at 50% -10%,
+      rgba(20, 184, 166, 0.22) 0%,
+      rgba(14, 110, 107, 0.08) 45%,
+      transparent 75%
+    ),
+    linear-gradient(180deg, #091d20 0%, #050d0f 100%);
+  border: 1px solid rgba(94, 234, 212, 0.14);
+  box-shadow:
+    0 20px 50px -22px rgba(7, 22, 24, 0.55),
+    inset 0 1px 0 rgba(94, 234, 212, 0.16);
+}
+
+.floorplan-grid {
+  background-image:
+    linear-gradient(to right, rgba(14, 110, 107, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(14, 110, 107, 0.08) 1px, transparent 1px);
+  background-size: 92px 92px;
+}
+
+@keyframes beam-pulse {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.animate-beam {
+  animation: beam-pulse 5s ease-in-out infinite;
+}
+
+@keyframes tps-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 /* Course filter entrance */

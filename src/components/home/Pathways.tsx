@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import Chapter from "@/components/ui/Chapter";
 import { EASE_OUT, Reveal } from "@/components/ui/Motion";
 
