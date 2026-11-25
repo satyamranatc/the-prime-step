@@ -46,6 +46,13 @@ export default function ContactInquiryForm() {
     e.preventDefault();
     setSubmitting(true);
 
+    const whatsappUrl = buildWhatsAppUrl();
+
+    // Open WhatsApp synchronously inside the user gesture so mobile/desktop popup blockers don't block it
+    if (typeof window !== "undefined") {
+      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    }
+
     // Extract UTM parameters for attribution
     const params = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
     const utm = {
@@ -58,6 +65,7 @@ export default function ContactInquiryForm() {
       await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        keepalive: true,
         body: JSON.stringify({
           name,
           phone,
@@ -69,7 +77,7 @@ export default function ContactInquiryForm() {
         }),
       });
     } catch {
-      // Even if offline, allow immediate counselor connection below
+      // Even if offline, WhatsApp message is already launched above
     } finally {
       setSubmitting(false);
       setSubmitted(true);
@@ -187,7 +195,8 @@ export default function ContactInquiryForm() {
               className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white"
             />
           )}
-          <span>{submitting ? "Saving Inquiry..." : "Request Free 2-Day Demo Slot"}</span>
+          <WhatsAppIcon className="size-4 fill-current" />
+          <span>{submitting ? "Opening WhatsApp..." : "Book Free Demo on WhatsApp"}</span>
         </button>
 
         <AnimatePresence>
@@ -200,10 +209,10 @@ export default function ContactInquiryForm() {
               className="space-y-3 rounded-2xl border border-brand/35 bg-paper p-4 shadow-xs sm:p-5"
             >
               <p className="text-sm font-semibold text-deep">
-                ✓ Inquiry saved! Our {branch} counselor will reach out shortly.
+                ✓ Inquiry saved &amp; WhatsApp chat opened for our {branch} counselor.
               </p>
               <p className="text-xs text-deep/75">
-                Want an immediate reply right now? Connect with our counselor directly:
+                If WhatsApp didn&apos;t open automatically, tap below to send your pre-filled message:
               </p>
               <div className="flex flex-col flex-wrap gap-2.5 pt-1 sm:flex-row">
                 <a

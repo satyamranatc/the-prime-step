@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ALL_CATALOG_COURSES } from "@/lib/seoPages";
 import { Reveal } from "@/components/ui/Motion";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 
@@ -30,32 +29,32 @@ function GlowCardShell({
 export default function PopularPrograms() {
   return (
     <section
-      id="flagship"
-      aria-labelledby="flagship-title"
+      id="ecosystem"
+      aria-labelledby="ecosystem-title"
       className="relative overflow-hidden border-t border-hairline bg-paper py-20 md:py-28"
     >
-      {/* Soft ambient teal/warm bloom behind the mosaic */}
+      {/* Soft ambient teal bloom behind the mosaic */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute top-1/2 left-1/2 h-[420px] w-[780px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
         style={{
           background:
-            "radial-gradient(ellipse at 35% 50%, rgba(34,166,159,0.14), transparent 60%), radial-gradient(ellipse at 70% 55%, rgba(255,158,82,0.11), transparent 60%)",
+            "radial-gradient(ellipse at 35% 50%, rgba(20,184,166,0.14), transparent 60%), radial-gradient(ellipse at 70% 55%, rgba(14,110,107,0.1), transparent 60%)",
         }}
       />
 
       <div className="relative z-10 mx-auto max-w-[1220px] px-4 sm:px-6 lg:px-10">
         <Reveal className="max-w-xl">
           <h2
-            id="flagship-title"
-            className="display text-[clamp(2.2rem,4.6vw,3.6rem)] font-extrabold text-ink"
+            id="ecosystem-title"
+            className="display text-[clamp(2.2rem,4.6vw,3.5rem)] font-bold text-ink"
           >
-            The Prime Step
+            Inside The Prime Step
             <br />
-            Curriculum Engine
+            Learning Ecosystem
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-ink-muted sm:text-base">
-            Every career track connects core fundamentals, real lab builds, and interview preparation into one structured pathway.
+            Everything built around your course — from dedicated lab infrastructure and live code reviews to QR-verified certificates and 3D syllabus previews.
           </p>
         </Reveal>
 
@@ -63,22 +62,22 @@ export default function PopularPrograms() {
         <div className="mt-10 grid gap-4 md:grid-cols-12">
           <GlowCardShell className="md:col-span-4">
             <Link
-              href="/java-full-stack-developer"
+              href="/vijay-nagar"
               className="huly-dark-card group flex h-full min-h-[215px] flex-col justify-between rounded-[13px] p-5 text-white"
             >
               <div>
-                <span className="font-mono text-[10.5px] font-semibold uppercase tracking-wider text-[#5eead4]">
-                  Enterprise Backend
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5eead4]">
+                  01 · Dedicated Infrastructure
                 </span>
                 <h3 className="display mt-2 text-xl text-white group-hover:text-[#5eead4]">
-                  Java Full Stack
+                  Workstation-First Labs
                 </h3>
                 <p className="mt-1.5 text-xs leading-relaxed text-white/70">
-                  Core Java, Spring Boot, Microservices, Hibernate &amp; React.
+                  Dedicated computers across Vijay Nagar, Bhawarkua &amp; Annapurna — open 8 AM to 8 PM for daily practice.
                 </p>
               </div>
-              <span className="mt-4 inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold text-white/90 group-hover:text-[#5eead4]">
-                <span>Explore Syllabus</span>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-white/90 group-hover:text-[#5eead4]">
+                <span>Explore Campuses</span>
                 <span aria-hidden="true">→</span>
               </span>
             </Link>
@@ -86,88 +85,88 @@ export default function PopularPrograms() {
 
           <GlowCardShell className="md:col-span-3">
             <Link
-              href="/mern-stack-developer-course"
+              href="/about-us"
               className="huly-dark-card group flex h-full min-h-[215px] flex-col justify-between rounded-[13px] p-5 text-white"
             >
               <div>
-                <span className="font-mono text-[10.5px] font-semibold uppercase tracking-wider text-[#5eead4]">
-                  Web Engineering
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5eead4]">
+                  02 · Mentorship
                 </span>
                 <h3 className="display mt-2 text-xl text-white group-hover:text-[#5eead4]">
-                  MERN Stack
+                  1-on-1 Code Reviews
                 </h3>
                 <p className="mt-1.5 text-xs leading-relaxed text-white/70">
-                  MongoDB, Express, React, Node.js &amp; Next.js production apps.
+                  Senior faculty sit beside your screen to debug errors and review every project commit.
                 </p>
               </div>
-              <span className="mt-4 inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold text-white/90 group-hover:text-[#5eead4]">
-                <span>Syllabus →</span>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-white/90 group-hover:text-[#5eead4]">
+                <span>Our Teaching Method →</span>
               </span>
             </Link>
           </GlowCardShell>
 
           {/* Signature Circular Obsidian Disc */}
           <Link
-            href="/courses"
+            href="/about-us"
             className="group relative flex min-h-[200px] items-center justify-center md:col-span-2"
-            aria-label={`View all ${ALL_CATALOG_COURSES.length} career courses`}
+            aria-label="Established in 2019 in Indore — Learn about The Prime Step"
           >
             <div className="huly-dark-card relative flex size-44 flex-col items-center justify-center rounded-full text-center text-white transition-transform duration-300 group-hover:scale-[1.03]">
-              <span className="display text-5xl font-extrabold tracking-tight text-white">
-                {ALL_CATALOG_COURSES.length}
+              <span className="display text-4xl font-bold tracking-tight text-white">
+                2019
               </span>
-              <span className="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/70">
-                Programs
+              <span className="mt-1 text-[11px] font-medium uppercase tracking-widest text-[#5eead4]">
+                Est. Indore
               </span>
               <span
                 aria-hidden="true"
                 className="absolute right-3 bottom-3 grid size-8 place-items-center rounded-full border border-white/25 bg-[#071618] text-sm font-bold text-white transition-colors group-hover:border-[#5eead4] group-hover:text-[#5eead4]"
               >
-                +
+                →
               </span>
             </div>
           </Link>
 
           <GlowCardShell className="md:col-span-3">
             <Link
-              href="/python-programming-classes"
+              href="/verify-certificate"
               className="huly-dark-card group flex h-full min-h-[215px] flex-col justify-between rounded-[13px] p-5 text-white"
             >
               <div>
-                <span className="font-mono text-[10.5px] font-semibold uppercase tracking-wider text-[#5eead4]">
-                  Automation &amp; AI
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5eead4]">
+                  03 · Credentials
                 </span>
                 <h3 className="display mt-2 text-xl text-white group-hover:text-[#5eead4]">
-                  Python &amp; Applied AI
+                  QR-Verified Certificates
                 </h3>
                 <p className="mt-1.5 text-xs leading-relaxed text-white/70">
-                  Python, Django, FastAPI, Machine Learning &amp; GenAI tools.
+                  Every graduate receives an official credential that recruiters can verify online in seconds.
                 </p>
               </div>
-              <span className="mt-4 inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold text-white/90 group-hover:text-[#5eead4]">
-                <span>Syllabus →</span>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-white/90 group-hover:text-[#5eead4]">
+                <span>Verify Portal →</span>
               </span>
             </Link>
           </GlowCardShell>
 
           <GlowCardShell className="md:col-span-3">
             <Link
-              href="/data-analytics-course-in-indore"
+              href="/faq"
               className="huly-dark-card group flex h-full min-h-[215px] flex-col justify-between rounded-[13px] p-5 text-white"
             >
               <div>
-                <span className="font-mono text-[10.5px] font-semibold uppercase tracking-wider text-[#5eead4]">
-                  BI &amp; Insights
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5eead4]">
+                  04 · Flexibility
                 </span>
                 <h3 className="display mt-2 text-xl text-white group-hover:text-[#5eead4]">
-                  Data Analytics &amp; Power BI
+                  College-Friendly Batches
                 </h3>
                 <p className="mt-1.5 text-xs leading-relaxed text-white/70">
-                  SQL, Power BI DAX dashboards, Advanced Excel &amp; Python EDA.
+                  Morning, afternoon, evening &amp; weekend schedules with simple monthly installment options.
                 </p>
               </div>
-              <span className="mt-4 inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold text-white/90 group-hover:text-[#5eead4]">
-                <span>Syllabus →</span>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-white/90 group-hover:text-[#5eead4]">
+                <span>Batch &amp; Fee FAQs →</span>
               </span>
             </Link>
           </GlowCardShell>
@@ -186,17 +185,17 @@ export default function PopularPrograms() {
                 }}
               />
               <div className="relative z-10">
-                <span className="font-mono text-[10.5px] font-semibold uppercase tracking-wider text-[#5eead4]">
-                  Interactive 3D Experience
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5eead4]">
+                  05 · Interactive 3D Syllabus
                 </span>
                 <h3 className="display mt-2 text-2xl text-white group-hover:text-[#5eead4]">
-                  Drive through any syllabus in 3D.
+                  Drive through any roadmap in 3D.
                 </h3>
                 <p className="mt-1.5 max-w-sm text-xs leading-relaxed text-white/70">
-                  Explore week-by-week milestones, projects, and tools across 14 interactive 3D course roadmaps.
+                  Preview week-by-week milestones, capstone projects, and tools across 14 interactive 3D course roadmaps before enrolling.
                 </p>
               </div>
-              <div className="relative z-10 mt-5 flex items-center justify-between border-t border-white/12 pt-3.5 font-mono text-xs font-semibold text-[#5eead4]">
+              <div className="relative z-10 mt-5 flex items-center justify-between border-t border-white/12 pt-3.5 text-xs font-semibold text-[#5eead4]">
                 <span>Launch 3D Career Roadmap</span>
                 <span aria-hidden="true">↗</span>
               </div>
@@ -204,25 +203,25 @@ export default function PopularPrograms() {
           </GlowCardShell>
 
           <GlowCardShell className="md:col-span-4">
-            <Link
-              href="/devops-and-cloud-computing-course"
+            <a
+              href="#admission"
               className="huly-dark-card group flex h-full min-h-[215px] flex-col justify-between rounded-[13px] p-5 text-white"
             >
               <div>
-                <span className="font-mono text-[10.5px] font-semibold uppercase tracking-wider text-[#5eead4]">
-                  Cloud &amp; Operations
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5eead4]">
+                  06 · Zero-Risk Start
                 </span>
                 <h3 className="display mt-2 text-xl text-white group-hover:text-[#5eead4]">
-                  DevOps, AWS &amp; Career Skills
+                  Attend 2 Real Lab Classes Free
                 </h3>
                 <p className="mt-1.5 text-xs leading-relaxed text-white/70">
-                  Linux, Docker, Kubernetes, CI/CD pipelines — plus Tally + GST, Digital Marketing &amp; Spoken English tracks.
+                  Sit inside an actual Indore batch, meet your faculty, and test our teaching style before making any commitment.
                 </p>
               </div>
-              <span className="mt-4 inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold text-white/90 group-hover:text-[#5eead4]">
-                <span>Explore Cloud Track →</span>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-white/90 group-hover:text-[#5eead4]">
+                <span>Book Free 2-Day Demo →</span>
               </span>
-            </Link>
+            </a>
           </GlowCardShell>
         </div>
       </div>

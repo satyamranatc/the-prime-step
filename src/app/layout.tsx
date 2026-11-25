@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Inter } from "next/font/google";
 import { BRANCHES, SITE } from "@/lib/content";
 import { MotionProvider } from "@/components/ui/Motion";
+import CursorFollower from "@/components/ui/CursorFollower";
 import "./globals.css";
 
 const appleSans = Inter({
@@ -300,7 +301,10 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <MotionProvider>{children}</MotionProvider>
+        <MotionProvider>
+          <CursorFollower />
+          {children}
+        </MotionProvider>
       </body>
     </html>
   );

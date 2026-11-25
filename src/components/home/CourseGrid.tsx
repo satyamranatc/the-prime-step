@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import type { CatalogCourseItem } from "@/lib/seoPages";
@@ -10,150 +11,113 @@ import {
   type CourseFilterId,
 } from "@/lib/homepage";
 
-/**
- * Airy, bespoke mini-UI wireframe preview tailored to each course category.
- * Inspired by clean SaaS workspace cards: translucent stacked tiles, subtle
- * category glow, and one focal element that illuminates on card hover.
- */
-function CourseWireframePreview({
+/** Maps course slugs to real official tech logos in public/tech/ where available. */
+function getCourseLogo(href: string): { src: string; alt: string } | null {
+  if (href.includes("java")) return { src: "/tech/java.png", alt: "Java" };
+  if (href.includes("mern") || href.includes("web-design"))
+    return { src: "/tech/react.png", alt: "React" };
+  if (href.includes("python")) return { src: "/tech/python.png", alt: "Python" };
+  if (href.includes("artificial-intelligence"))
+    return { src: "/tech/tensorflow.png", alt: "AI & ML" };
+  if (href.includes("devops")) return { src: "/tech/aws.png", alt: "AWS & Cloud" };
+  return null;
+}
+
+/** Crisp category-specific vector mark when a course has no PNG logo. */
+function CategoryGlyph({
   category,
-  tags,
-  duration,
+  href,
 }: {
   category: CatalogCourseItem["category"];
-  tags: readonly string[];
-  duration: string;
+  href: string;
 }) {
-  const glowStyle =
-    category === "Full Stack & Web"
-      ? "radial-gradient(ellipse 70% 65% at 50% 25%, rgba(14,110,107,0.12), transparent 72%)"
-      : category === "Data & AI"
-        ? "radial-gradient(ellipse 70% 65% at 50% 25%, rgba(34,166,159,0.14), transparent 72%)"
-        : category === "Programming & Core"
-          ? "radial-gradient(ellipse 70% 65% at 50% 25%, rgba(99,102,241,0.1), transparent 72%)"
-          : "radial-gradient(ellipse 70% 65% at 50% 25%, rgba(245,158,11,0.12), transparent 72%)";
-
+  if (href.includes("excel") || href.includes("tally")) {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" className="size-5 text-brand" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="16" rx="3" stroke="currentColor" strokeWidth="1.75" />
+        <path d="M3 10h18M9 10v10" stroke="currentColor" strokeWidth="1.75" />
+      </svg>
+    );
+  }
   if (category === "Data & AI") {
     return (
-      <div
-        className="relative flex h-[138px] w-full flex-col justify-center gap-2 overflow-hidden rounded-xl px-4 py-3"
-        style={{ background: glowStyle }}
-      >
-        <div className="ml-auto flex w-[82%] items-center justify-between rounded-lg border border-hairline/70 bg-white/75 px-3 py-1.5 backdrop-blur-xs">
-          <div className="h-2 w-24 rounded-full bg-slate-200/80" />
-          <span className="size-3.5 rounded bg-brand/15 transition-colors group-hover:bg-brand/30" />
-        </div>
-        <div className="mr-auto flex w-[88%] items-center gap-2 rounded-lg border border-hairline bg-white px-3 py-2 shadow-[0_6px_20px_-10px_rgba(11,18,21,0.12)] transition-colors group-hover:border-brand/45">
-          <span className="grid size-5 shrink-0 place-items-center rounded-md bg-brand/12 font-mono text-[10px] font-bold text-brand">
-            ✦
-          </span>
-          <span className="truncate font-mono text-[10.5px] font-medium text-ink">
-            {tags.slice(0, 2).join(" · ")}
-          </span>
-        </div>
-        <div className="ml-auto flex w-[76%] items-center justify-between rounded-lg border border-hairline/70 bg-white/75 px-3 py-1.5 backdrop-blur-xs">
-          <div className="h-2 w-20 rounded-full bg-slate-200/80" />
-          <span className="font-mono text-[9.5px] text-ink-subtle">{duration}</span>
-        </div>
-      </div>
+      <svg viewBox="0 0 24 24" fill="none" className="size-5 text-brand" aria-hidden="true">
+        <rect x="4" y="13" width="3.5" height="7" rx="1" fill="currentColor" opacity="0.45" />
+        <rect x="10.25" y="9" width="3.5" height="11" rx="1" fill="currentColor" opacity="0.75" />
+        <rect x="16.5" y="4" width="3.5" height="16" rx="1" fill="currentColor" />
+      </svg>
     );
   }
-
-  if (category === "Mobile & Business") {
-    return (
-      <div
-        className="relative flex h-[138px] w-full items-center justify-center overflow-hidden rounded-xl px-4 py-3"
-        style={{ background: glowStyle }}
-      >
-        <div className="relative flex w-full max-w-[240px] flex-col items-center">
-          <div className="grid w-full grid-cols-2 gap-2 opacity-80">
-            <div className="rounded-lg border border-hairline/70 bg-white/80 p-2.5">
-              <div className="h-1.5 w-10 rounded-full bg-slate-200" />
-              <div className="mt-1.5 h-5 rounded bg-slate-100" />
-            </div>
-            <div className="rounded-lg border border-hairline/70 bg-white/80 p-2.5">
-              <div className="h-1.5 w-12 rounded-full bg-slate-200" />
-              <div className="mt-1.5 h-5 rounded bg-slate-100" />
-            </div>
-          </div>
-          <div className="-mt-6 w-[74%] rounded-lg border border-hairline bg-white p-2.5 shadow-[0_10px_24px_-12px_rgba(11,18,21,0.16)] transition-colors group-hover:border-brand/45">
-            <div className="flex items-center justify-between">
-              <span className="truncate font-mono text-[10px] font-semibold text-brand">
-                {tags[0] ?? "Workspace"}
-              </span>
-              <span className="font-mono text-[9.5px] text-ink-subtle">{duration}</span>
-            </div>
-            <div className="mt-2 grid grid-cols-2 gap-1.5">
-              <div className="h-5 rounded bg-accent-soft transition-colors group-hover:bg-brand/15" />
-              <div className="h-5 rounded bg-slate-100" />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   if (category === "Programming & Core") {
     return (
-      <div
-        className="relative flex h-[138px] w-full flex-col justify-center gap-2 overflow-hidden rounded-xl px-4 py-3"
-        style={{ background: glowStyle }}
-      >
-        <div className="flex items-center justify-between rounded-lg border border-hairline/70 bg-white/75 px-3 py-1.5">
-          <div className="flex items-center gap-2">
-            <span className="size-3 rounded bg-slate-200" />
-            <div className="h-2 w-24 rounded-full bg-slate-200/80" />
-          </div>
-          <span className="font-mono text-[10px] text-slate-300">+</span>
-        </div>
-        <div className="flex items-center justify-between rounded-lg border border-hairline bg-white px-3 py-2 shadow-[0_6px_20px_-10px_rgba(11,18,21,0.12)] transition-colors group-hover:border-brand/45">
-          <div className="flex items-center gap-2 truncate">
-            <span className="size-3.5 shrink-0 rounded bg-brand/15 transition-colors group-hover:bg-brand" />
-            <span className="truncate font-mono text-[10.5px] font-semibold text-ink">
-              {tags.slice(0, 2).join(" · ")}
-            </span>
-          </div>
-          <span className="ml-2 font-mono text-xs font-semibold text-brand">+</span>
-        </div>
-        <div className="flex items-center justify-between rounded-lg border border-hairline/70 bg-white/75 px-3 py-1.5">
-          <div className="flex items-center gap-2">
-            <span className="size-3 rounded bg-slate-200" />
-            <div className="h-2 w-20 rounded-full bg-slate-200/80" />
-          </div>
-          <span className="font-mono text-[9.5px] text-ink-subtle">{duration}</span>
-        </div>
-      </div>
+      <svg viewBox="0 0 24 24" fill="none" className="size-5 text-brand" aria-hidden="true">
+        <path
+          d="M8.5 8L4 12l4.5 4M15.5 8L20 12l-4.5 4M13.5 5.5l-3 13"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
     );
   }
-
-  // Full Stack & Web
   return (
-    <div
-      className="relative flex h-[138px] w-full flex-col justify-center gap-2 overflow-hidden rounded-xl px-4 py-3"
-      style={{ background: glowStyle }}
-    >
-      <div className="flex items-center justify-between rounded-lg border border-hairline/70 bg-white/75 px-3 py-1.5">
-        <div className="flex items-center gap-2">
-          <span className="size-2.5 rounded-full bg-slate-200" />
-          <div className="h-2 w-24 rounded-full bg-slate-200/85" />
+    <svg viewBox="0 0 24 24" fill="none" className="size-5 text-brand" aria-hidden="true">
+      <rect x="4" y="4" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.75" />
+      <rect x="13" y="4" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.75" />
+      <rect x="4" y="13" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.75" />
+      <path d="M16.5 13.5v6M13.5 16.5h6" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/**
+ * Clean, structured visual header for each course card:
+ * Real tech logo / crisp glyph + level pill + real skill chips over a soft teal-tinted surface.
+ * Zero overlapping borders, zero generic grey skeleton bars, zero duplicate duration text.
+ */
+function CourseVisualHeader({ course }: { course: CatalogCourseItem }) {
+  const logo = getCourseLogo(course.href);
+
+  return (
+    <div className="relative flex h-[124px] w-full flex-col justify-between overflow-hidden rounded-xl border border-hairline/70 bg-gradient-to-br from-[#f8fcfc] via-[#f4f9f9] to-[#edf6f5] p-3.5 transition-colors duration-200 group-hover:border-brand/30 group-hover:from-[#f3fbfa] group-hover:to-[#e5f4f3]">
+      {/* Subtle top-right ambient sheen */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-8 -right-8 size-28 rounded-full bg-brand/[0.07] blur-2xl transition-opacity duration-300 group-hover:opacity-100"
+      />
+
+      {/* Row 1: Real Tech Icon Tile + Level Pill */}
+      <div className="relative z-10 flex items-center justify-between gap-2">
+        <div className="flex size-10 items-center justify-center rounded-xl border border-white bg-white shadow-[0_6px_16px_-6px_rgba(14,110,107,0.22),0_1px_2px_rgba(11,18,21,0.05)] transition-transform duration-200 group-hover:scale-105">
+          {logo ? (
+            <Image
+              src={logo.src}
+              alt={logo.alt}
+              width={24}
+              height={24}
+              className="size-6 object-contain"
+            />
+          ) : (
+            <CategoryGlyph category={course.category} href={course.href} />
+          )}
         </div>
-        <span className="font-mono text-[9.5px] text-ink-subtle">{duration}</span>
+
+        <span className="rounded-full border border-hairline bg-white/90 px-2.5 py-1 text-[10.5px] font-medium text-ink-muted">
+          {course.level}
+        </span>
       </div>
-      <div className="flex items-center justify-between rounded-lg border border-hairline bg-white px-3 py-2 shadow-[0_6px_20px_-10px_rgba(11,18,21,0.12)] transition-colors group-hover:border-brand/45">
-        <div className="flex items-center gap-2 truncate">
-          <span className="size-2.5 shrink-0 rounded-full bg-brand" />
-          <span className="truncate font-mono text-[10.5px] font-semibold text-ink">
-            {tags.slice(0, 3).join(" · ")}
+
+      {/* Row 2: Real Skill Stack Chips */}
+      <div className="relative z-10 flex flex-wrap items-center gap-1.5">
+        {course.tags.slice(0, 3).map((tag) => (
+          <span
+            key={tag}
+            className="rounded-md border border-hairline/80 bg-white/90 px-2 py-0.5 text-[11px] font-medium text-ink shadow-[0_1px_2px_rgba(11,18,21,0.03)]"
+          >
+            {tag}
           </span>
-        </div>
-        <span className="ml-2 font-mono text-xs text-brand">→</span>
-      </div>
-      <div className="flex items-center justify-between rounded-lg border border-hairline/70 bg-white/75 px-3 py-1.5">
-        <div className="flex items-center gap-2">
-          <span className="size-2.5 rounded-full bg-slate-200" />
-          <div className="h-2 w-20 rounded-full bg-slate-200/85" />
-        </div>
-        <div className="h-2 w-8 rounded-full bg-slate-200/70" />
+        ))}
       </div>
     </div>
   );
@@ -184,7 +148,7 @@ export default function CourseGrid({
 
   return (
     <div className="mt-8">
-      {/* Filter Pills (with Framer Motion layoutId) + Live Search */}
+      {/* Filter Pills + Live Search */}
       <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
         <div
           role="tablist"
@@ -264,69 +228,73 @@ export default function CourseGrid({
                     layoutId="courseHoverBg"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1, transition: { duration: 0.16 } }}
-                    exit={{ opacity: 0, transition: { duration: 0.18, delay: 0.1 } }}
-                    className="pointer-events-none absolute inset-0 rounded-[20px] bg-accent-soft/90"
+                    exit={{ opacity: 0, transition: { duration: 0.18, delay: 0.08 } }}
+                    className="pointer-events-none absolute inset-0 rounded-[20px] bg-accent-soft/85"
                   />
                 )}
               </AnimatePresence>
 
               <article
                 style={{ animationDelay: `${Math.min(idx * 25, 220)}ms` }}
-                className="course-card-in group relative z-10 flex h-full flex-col justify-between rounded-2xl border border-hairline bg-paper p-5 transition-all duration-200 hover:border-brand hover:shadow-[0_14px_34px_-16px_rgba(14,110,107,0.18)]"
+                className="course-card-in group relative z-10 flex h-full flex-col justify-between rounded-2xl border border-[#dfe4ea] bg-paper p-5 shadow-[0_2px_8px_-4px_rgba(11,18,21,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:border-brand hover:shadow-[0_18px_38px_-16px_rgba(14,110,107,0.2)]"
               >
-              <div>
-                {/* Top Wireframe Micro-Illustration */}
-                <CourseWireframePreview
-                  category={course.category}
-                  tags={course.tags}
-                  duration={course.duration}
-                />
+                <div>
+                  <CourseVisualHeader course={course} />
 
-                {/* Clean Editorial Text Block */}
-                <div className="mt-4 px-0.5">
-                  <div className="flex items-center justify-between gap-2 font-mono text-[10.5px] text-ink-subtle">
-                    <span>{CATEGORY_LABEL[course.category]}</span>
-                    <span>{course.duration}</span>
+                  {/* Clean Metadata + Title + Description */}
+                  <div className="mt-4 px-0.5">
+                    <div className="flex items-center justify-between gap-2 text-[11.5px]">
+                      <span className="font-medium text-brand">
+                        {CATEGORY_LABEL[course.category]}
+                      </span>
+                      <span className="font-mono text-ink-subtle">
+                        {course.duration}
+                      </span>
+                    </div>
+
+                    <h3 className="mt-1.5 text-[16.5px] font-semibold leading-snug tracking-[-0.015em] text-ink">
+                      <Link
+                        href={course.href}
+                        className="transition-colors hover:text-brand focus:outline-none"
+                      >
+                        {course.title}
+                      </Link>
+                    </h3>
+
+                    <p className="mt-1.5 line-clamp-2 text-[13.5px] leading-relaxed text-ink-muted">
+                      {course.description}
+                    </p>
                   </div>
-
-                  <h3 className="mt-1.5 text-[16.5px] font-semibold leading-snug tracking-[-0.015em] text-ink">
-                    <Link
-                      href={course.href}
-                      className="transition-colors hover:text-brand focus:outline-none"
-                    >
-                      {course.title}
-                    </Link>
-                  </h3>
-
-                  <p className="mt-1.5 line-clamp-2 text-[13.5px] leading-relaxed text-ink-muted">
-                    {course.description}
-                  </p>
                 </div>
-              </div>
 
-              {/* Crisp Compact Action Row (Outlined at rest -> Filled Brand on card hover) */}
-              <div className="mt-5 flex items-center justify-between gap-3 px-0.5 pt-1">
-                <Link
-                  href={course.href}
-                  className="press-scale inline-flex items-center gap-1.5 rounded-lg border border-brand/35 bg-paper px-3.5 py-2 text-[12.5px] font-semibold text-brand transition-colors duration-200 group-hover:border-brand group-hover:bg-brand group-hover:text-white"
-                >
-                  <span>View Syllabus</span>
-                  <span aria-hidden="true">→</span>
-                </Link>
-
-                {course.roadmapId ? (
+                {/* Action Footer */}
+                <div className="mt-5 flex items-center justify-between gap-3 border-t border-hairline/70 px-0.5 pt-4">
                   <Link
-                    href={`/roadmap/${course.roadmapId}`}
-                    className="font-mono text-[11px] font-medium text-ink-subtle transition-colors hover:text-brand"
+                    href={course.href}
+                    className="press-scale inline-flex min-h-[38px] items-center gap-1.5 rounded-lg border border-brand/35 bg-paper px-3.5 py-1.5 text-[12.5px] font-semibold text-brand transition-colors duration-200 group-hover:border-brand group-hover:bg-brand group-hover:text-white"
                   >
-                    3D Roadmap ↗
+                    <span>View Syllabus</span>
+                    <span
+                      aria-hidden="true"
+                      className="transition-transform duration-200 group-hover:translate-x-0.5"
+                    >
+                      →
+                    </span>
                   </Link>
-                ) : (
-                  <span className="font-mono text-[11px] text-ink-subtle">
-                    {course.level}
-                  </span>
-                )}
-              </div>
+
+                  {course.roadmapId ? (
+                    <Link
+                      href={`/roadmap/${course.roadmapId}`}
+                      className="text-[12px] font-medium text-ink-subtle transition-colors hover:text-brand"
+                    >
+                      3D Roadmap ↗
+                    </Link>
+                  ) : (
+                    <span className="text-[11.5px] text-ink-subtle">
+                      Indore Labs
+                    </span>
+                  )}
+                </div>
               </article>
             </div>
           ))}
