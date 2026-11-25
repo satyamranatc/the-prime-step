@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { SITE } from "@/lib/content";
 import Chapter from "@/components/ui/Chapter";
