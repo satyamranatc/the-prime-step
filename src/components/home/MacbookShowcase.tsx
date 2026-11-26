@@ -10,7 +10,12 @@ export default function MacbookShowcase() {
     <section
       id="lab-workspace"
       aria-labelledby="lab-workspace-title"
-      className="relative w-full overflow-hidden border-t border-hairline bg-paper"
+      className="relative w-full border-t border-hairline bg-paper"
+      style={{
+        isolation: "isolate",
+        contain: "layout paint",
+        clipPath: "inset(0)",          /* clips 3D-transformed children that escape overflow:hidden */
+      }}
     >
       {/* 1. Official Aceternity MacbookScroll with Real Indore Practical Lab Content */}
       <MacbookScroll
