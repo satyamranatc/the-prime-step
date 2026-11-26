@@ -121,7 +121,7 @@ export default function Hero() {
       ref={sectionRef}
       id="top"
       aria-labelledby="hero-title"
-      className="relative overflow-hidden bg-white pt-28 pb-16 text-ink sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24"
+      className="relative overflow-hidden bg-white pt-[calc(5.25rem+env(safe-area-inset-top))] pb-14 text-ink sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24"
     >
       {/* Smooth Sculpted Teal Orbital Halo Backdrop */}
       <div
@@ -245,12 +245,15 @@ export default function Hero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: EASE_OUT }}
-            className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-white/90 p-1 pr-3.5 text-xs font-medium text-ink shadow-[0_4px_20px_-6px_rgba(14,110,107,0.2)] backdrop-blur-md transition-colors hover:border-brand/45"
+            className="inline-flex max-w-full items-center gap-2 rounded-full border border-brand/20 bg-white/90 p-1 pr-3 text-[11.5px] font-medium text-ink shadow-[0_4px_20px_-6px_rgba(14,110,107,0.2)] backdrop-blur-md transition-colors hover:border-brand/45 sm:pr-3.5 sm:text-xs"
           >
-            <span className="rounded-full bg-brand px-2.5 py-0.5 text-[11px] font-semibold text-white">
+            <span className="shrink-0 rounded-full bg-brand px-2.5 py-0.5 text-[10.5px] font-semibold text-white sm:text-[11px]">
               Free Demo
             </span>
-            <span className="text-ink-muted">
+            <span className="truncate text-ink-muted sm:hidden">
+              2-day free lab demo · 3 Indore campuses →
+            </span>
+            <span className="hidden text-ink-muted sm:inline">
               2-day practical lab sessions across 3 Indore campuses →
             </span>
           </motion.a>
@@ -261,7 +264,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.06, ease: EASE_OUT }}
-            className="display mt-7 text-[clamp(2.45rem,5.5vw,4.55rem)] font-bold leading-[1.06] tracking-[-0.032em] text-ink"
+            className="display mt-6 text-[clamp(2.1rem,8vw,4.55rem)] font-bold leading-[1.06] tracking-[-0.032em] text-ink sm:mt-7"
           >
             Master Real{" "}
             <span className="bg-gradient-to-r from-[#0a5654] via-brand to-[#22a69f] bg-clip-text text-transparent">
@@ -276,7 +279,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.12, ease: EASE_OUT }}
-            className="mx-auto mt-5 max-w-xl text-sm leading-[1.7] text-ink-muted sm:text-base"
+            className="mx-auto mt-4 max-w-xl text-[14.5px] leading-[1.68] text-ink-muted sm:mt-5 sm:text-base"
           >
             Indore&apos;s hands-on IT &amp; software engineering institute — learn Java Full Stack, MERN, Python, Data Analytics, Power BI &amp; AI on real lab workstations with 1-on-1 mentor code reviews.
           </motion.p>
@@ -286,7 +289,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.18, ease: EASE_OUT }}
-            className="mt-8 flex flex-wrap items-center justify-center gap-3.5"
+            className="mx-auto mt-7 flex max-w-sm flex-col items-stretch justify-center gap-3 sm:mt-8 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:gap-3.5"
           >
             <a
               href="#admission"
@@ -294,7 +297,7 @@ export default function Hero() {
                 e.preventDefault();
                 scrollToId("admission");
               }}
-              className="press-scale inline-flex min-h-[48px] items-center justify-center rounded-full bg-brand px-7 text-sm font-semibold text-white shadow-[0_12px_28px_-8px_rgba(14,110,107,0.6)] transition-all hover:bg-[#0a5654] hover:shadow-[0_16px_34px_-8px_rgba(14,110,107,0.72)]"
+              className="press-scale inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-brand px-7 text-sm font-semibold text-white shadow-[0_12px_28px_-8px_rgba(14,110,107,0.6)] transition-all hover:bg-[#0a5654] hover:shadow-[0_16px_34px_-8px_rgba(14,110,107,0.72)] sm:w-auto"
             >
               Book Free Demo
             </a>
@@ -305,14 +308,14 @@ export default function Hero() {
                 e.preventDefault();
                 scrollToId("courses");
               }}
-              className="press-scale inline-flex min-h-[48px] items-center justify-center rounded-full border border-brand/35 bg-white/95 px-7 text-sm font-semibold text-brand shadow-[0_4px_14px_-6px_rgba(14,110,107,0.18)] transition-colors hover:border-brand hover:bg-accent-soft"
+              className="press-scale inline-flex min-h-[48px] w-full items-center justify-center rounded-full border border-brand/35 bg-white/95 px-7 text-sm font-semibold text-brand shadow-[0_4px_14px_-6px_rgba(14,110,107,0.18)] transition-colors hover:border-brand hover:bg-accent-soft sm:w-auto"
             >
               Explore 15 Courses
             </a>
           </motion.div>
 
           {/* Compact Programming Logo Row on Mobile */}
-          <div className="mt-7 flex items-center justify-center gap-2.5 md:hidden">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5 md:hidden">
             {ORBIT_LOGOS.map((logo) => (
               <Link
                 key={logo.name}
@@ -420,7 +423,33 @@ export default function Hero() {
               </aside>
 
               {/* Center Main Workspace */}
-              <div className="p-5 sm:p-6">
+              <div className="p-4 sm:p-6">
+                {/* Mobile & Tablet Segmented Switcher (replaces hidden desktop sidebar) */}
+                <div className="mb-4 grid grid-cols-2 gap-1.5 rounded-xl border border-hairline bg-canvas p-1 lg:hidden">
+                  <button
+                    type="button"
+                    onClick={() => setSidebarTab("tracks")}
+                    className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-all ${
+                      sidebarTab === "tracks"
+                        ? "bg-white text-brand shadow-xs"
+                        : "text-ink-muted"
+                    }`}
+                  >
+                    Career Tracks (15)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSidebarTab("campuses")}
+                    className={`min-h-[38px] rounded-lg px-3 text-xs font-semibold transition-all ${
+                      sidebarTab === "campuses"
+                        ? "bg-white text-brand shadow-xs"
+                        : "text-ink-muted"
+                    }`}
+                  >
+                    3 Indore Campuses
+                  </button>
+                </div>
+
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h2 className="text-base font-bold text-ink">
                     {sidebarTab === "tracks" ? "Career Lab Workspace" : "3 Indore Campuses"}

@@ -144,7 +144,7 @@ export default function Footer() {
             </div>
 
             {/* Street-Level Building Location Guide Short */}
-            <div className="mt-6 max-w-[230px] rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+            <div className="mt-6 w-full max-w-[260px] rounded-2xl border border-white/10 bg-white/[0.03] p-3 sm:max-w-[230px]">
               <div className="flex items-center justify-between gap-2">
                 <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#5eead4]">
                   <span className="size-1.5 rounded-full bg-[#5eead4]" />

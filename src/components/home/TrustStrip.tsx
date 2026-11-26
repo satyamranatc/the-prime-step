@@ -28,15 +28,15 @@ export default function TrustStrip() {
             {TRUST_ITEMS.map((item) => (
               <div
                 key={item.label}
-                className="py-7 pr-4 odd:pr-4 even:pl-4 md:px-7 md:py-8 md:first:pl-0 md:last:pr-0"
+                className="py-5 pr-3 odd:border-r odd:border-hairline even:pl-3.5 sm:py-7 md:border-r-0 md:px-7 md:py-8 md:first:pl-0 md:last:pr-0 md:odd:border-r-0"
               >
-                <dt className="font-mono text-[11px] font-semibold uppercase tracking-[0.09em] text-ink-subtle">
+                <dt className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.09em] text-ink-subtle sm:text-[11px]">
                   {item.label}
                 </dt>
-                <dd className="display mt-2 text-3xl font-bold text-ink sm:text-4xl">
+                <dd className="display mt-1.5 text-2xl font-bold text-ink sm:mt-2 sm:text-4xl">
                   <AnimatedCounter value={item.value} />
                 </dd>
-                <p className="mt-1 text-xs leading-relaxed text-ink-muted">
+                <p className="mt-1 text-[11.5px] leading-relaxed text-ink-muted sm:text-xs">
                   {item.note}
                 </p>
               </div>
@@ -49,7 +49,7 @@ export default function TrustStrip() {
           className="group relative overflow-hidden border-t border-hairline py-4 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
           aria-label="Technologies and courses taught at The Prime Step"
         >
-          <div className="flex w-max gap-3 animate-[tps-marquee_34s_linear_infinite] group-hover:[animation-play-state:paused]">
+          <div className="flex w-max gap-3 animate-[tps-marquee_34s_linear_infinite] group-hover:[animation-play-state:paused] motion-reduce:animate-none">
             {[...QUICK_TRACKS, ...QUICK_TRACKS].map((item, idx) => (
               <a
                 key={`${item.label}-${idx}`}

@@ -219,7 +219,7 @@ export default function Nav() {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-[120] transition-all duration-300 ${
+        className={`fixed inset-x-0 top-0 z-[120] pt-[env(safe-area-inset-top)] transition-all duration-300 ${
           scrolled
             ? "border-b border-hairline bg-paper/92 backdrop-blur-xl shadow-[0_1px_16px_rgba(11,18,21,0.05)]"
             : "border-b border-transparent bg-paper/80 backdrop-blur-md"
@@ -227,7 +227,7 @@ export default function Nav() {
       >
         <nav
           aria-label="Primary"
-          className="mx-auto flex h-[74px] max-w-[1320px] items-center justify-between px-4 sm:px-6 lg:px-10"
+          className="mx-auto flex h-[64px] max-w-[1320px] items-center justify-between px-4 sm:h-[74px] sm:px-6 lg:px-10"
         >
           {/* Left: Brand */}
           <Link
@@ -236,7 +236,7 @@ export default function Nav() {
             className="relative z-[130] flex items-center"
             aria-label={`${SITE.name} — Home`}
           >
-            <Logo height={46} variant={mobileOpen ? "light" : "color"} />
+            <Logo height={42} variant={mobileOpen ? "light" : "color"} />
           </Link>
 
           {/* Center: Clean 5-Item Spacious Navigation */}
@@ -441,8 +441,8 @@ export default function Nav() {
             </li>
           </ul>
 
-          {/* Right: Quiet Contact Link + Single Primary Pill CTA (Spacious room for future Student Login) */}
-          <div className="flex items-center gap-4">
+          {/* Right: Quiet Contact Link + Single Primary Pill CTA */}
+          <div className="flex items-center gap-2.5 sm:gap-4">
             <Link
               href="/contact-us"
               className={`hidden text-[14px] font-medium transition-colors lg:inline-block ${
@@ -453,6 +453,22 @@ export default function Nav() {
             >
               Contact
             </Link>
+
+            {!mobileOpen && (
+              <Link
+                href={pathname === "/" ? "#admission" : "/contact-us"}
+                onClick={(e) => {
+                  if (pathname === "/") {
+                    e.preventDefault();
+                    scrollToId("admission");
+                  }
+                }}
+                className="press-scale inline-flex min-h-[38px] items-center gap-1.5 rounded-full bg-ink px-3.5 text-xs font-semibold text-white transition-colors hover:bg-brand lg:hidden"
+              >
+                <span>Free Demo</span>
+                <span aria-hidden="true">→</span>
+              </Link>
+            )}
 
             <Link
               href={pathname === "/" ? "#admission" : "/contact-us"}
@@ -511,18 +527,20 @@ export default function Nav() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.28, ease: EASE_OUT }}
-            className="fixed inset-0 z-[110] flex flex-col justify-between overflow-y-auto bg-[#06090b] px-5 pt-[max(5.5rem,calc(env(safe-area-inset-top)+4rem))] pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+1.5rem))] text-white lg:hidden"
+            className="fixed inset-0 z-[110] flex h-dvh flex-col justify-between overflow-y-auto overscroll-contain bg-[#06090b] px-5 pt-[max(5.25rem,calc(env(safe-area-inset-top)+4.5rem))] pb-[max(2rem,calc(env(safe-area-inset-bottom)+1.25rem))] text-white lg:hidden"
           >
             <div className="space-y-6">
               <ul className="divide-y divide-white/10">
                 {[
                   { href: "/", label: "Home" },
-                  { href: "/courses", label: "Programs" },
+                  { href: "/courses", label: "All 15 Programs" },
                   { href: "/career-courses", label: "Career Tracks" },
+                  { href: "/roadmap/java", label: "3D Course Roadmaps" },
                   { href: "/corporate-training", label: "Corporate Training" },
                   { href: "/english-courses", label: "Spoken English" },
                   { href: "/blog", label: "Tech Career Blog" },
                   { href: "/verify-certificate", label: "Verify Certificate" },
+                  { href: "/faq", label: "FAQs" },
                   { href: "/about-us", label: "About Us" },
                   { href: "/contact-us", label: "Contact" },
                 ].map((item) => (
@@ -530,9 +548,12 @@ export default function Nav() {
                     <Link
                       href={item.href}
                       onClick={() => setMobileOpen(false)}
-                      className="display block py-3 text-xl text-white transition-colors hover:text-light"
+                      className="display flex min-h-[48px] items-center justify-between py-2.5 text-[19px] text-white transition-colors hover:text-light"
                     >
-                      {item.label}
+                      <span>{item.label}</span>
+                      <span aria-hidden="true" className="text-sm text-white/35">
+                        →
+                      </span>
                     </Link>
                   </li>
                 ))}
@@ -546,7 +567,7 @@ export default function Nav() {
                       key={c.href}
                       href={c.href}
                       onClick={() => setMobileOpen(false)}
-                      className="rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-white/90 hover:border-light hover:text-white"
+                      className="inline-flex min-h-[38px] items-center rounded-full border border-white/15 bg-white/5 px-3.5 text-xs font-medium text-white/90 hover:border-light hover:text-white"
                     >
                       {c.title}
                     </Link>
@@ -556,18 +577,18 @@ export default function Nav() {
             </div>
 
             <div className="mt-8 space-y-4 border-t border-white/15 pt-6">
-              <div className="flex flex-wrap gap-3">
+              <div className="grid grid-cols-2 gap-2.5">
                 <a
                   href={SITE.phoneHref}
-                  className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-ink"
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-white px-4 text-sm font-semibold text-ink active:scale-[0.98]"
                 >
-                  Call {SITE.phoneDisplay}
+                  Call Now
                 </a>
                 <a
                   href={SITE.whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white"
+                  className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold text-white active:scale-[0.98]"
                 >
                   <WhatsAppIcon className="size-4 fill-current" />
                   <span>WhatsApp</span>

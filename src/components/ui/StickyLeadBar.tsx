@@ -30,11 +30,11 @@ export default function StickyLeadBar() {
       </a>
 
       {/* Mobile Sticky Bottom Action Bar */}
-      <div className="fixed inset-x-0 bottom-0 z-[110] border-t border-pale/80 bg-paper/95 px-3 py-2.5 shadow-[0_-6px_24px_rgba(15,82,80,0.08)] backdrop-blur-lg md:hidden safe-bottom">
+      <div className="fixed inset-x-0 bottom-0 z-[110] border-t border-hairline bg-paper/95 px-3 pt-2.5 shadow-[0_-8px_28px_rgba(11,18,21,0.08)] backdrop-blur-xl md:hidden safe-bottom safe-x">
         <div className="mx-auto grid max-w-md grid-cols-3 gap-2">
           <a
             href={SITE.phoneHref}
-            className="flex items-center justify-center gap-1.5 rounded-full border border-deep/20 bg-soft py-2.5 text-xs font-semibold text-deep active:scale-98"
+            className="flex min-h-[44px] items-center justify-center gap-1.5 rounded-full border border-hairline bg-canvas px-2 text-xs font-semibold text-ink active:scale-[0.98]"
           >
             <span>Call Now</span>
           </a>
@@ -42,13 +42,13 @@ export default function StickyLeadBar() {
             href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1.5 rounded-full bg-brand py-2.5 text-xs font-semibold text-white active:scale-98"
+            className="flex min-h-[44px] items-center justify-center gap-1.5 rounded-full bg-brand px-2 text-xs font-semibold text-white shadow-[0_6px_16px_-6px_rgba(14,110,107,0.65)] active:scale-[0.98]"
           >
             <span>WhatsApp</span>
           </a>
           <Link
             href="/contact-us"
-            className="flex items-center justify-center gap-1.5 rounded-full bg-deep py-2.5 text-xs font-semibold text-paper active:scale-98"
+            className="flex min-h-[44px] items-center justify-center gap-1.5 rounded-full bg-ink px-2 text-xs font-semibold text-white active:scale-[0.98]"
           >
             <span>Free Demo</span>
           </Link>

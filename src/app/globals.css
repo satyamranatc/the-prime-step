@@ -61,14 +61,40 @@ body {
   }
 }
 
+/* Eliminate 300ms tap delay on mobile touch devices */
+a,
+button,
+[role="button"],
+[role="tab"] {
+  touch-action: manipulation;
+}
+
 img,
 svg,
 canvas {
   max-width: 100%;
 }
 
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
 .safe-bottom {
-  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+.safe-x {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Clean horizontal swipe rails on mobile without visible scrollbars */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 ::selection {
@@ -156,8 +182,10 @@ canvas {
   transition: opacity 0.35s var(--ease-out);
   z-index: 0;
 }
-.spotlight-card:hover::before {
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  .spotlight-card:hover::before {
+    opacity: 1;
+  }
 }
 .spotlight-card > * {
   position: relative;

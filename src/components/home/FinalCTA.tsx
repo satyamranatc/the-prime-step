@@ -26,10 +26,10 @@ export default function FinalCTA() {
             </p>
 
             <div className="mt-8 space-y-4 border-t border-hairline pt-6">
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                 <a
                   href={SITE.phoneHref}
-                  className="press-scale inline-flex min-h-[48px] items-center justify-center rounded-full bg-ink px-6 text-sm font-semibold text-white hover:bg-brand"
+                  className="press-scale inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-ink px-6 text-sm font-semibold text-white hover:bg-brand sm:w-auto"
                 >
                   Call {SITE.phoneDisplay}
                 </a>
@@ -37,7 +37,7 @@ export default function FinalCTA() {
                   href={SITE.whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="press-scale inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-hairline bg-canvas px-6 text-sm font-semibold text-ink hover:border-brand hover:text-brand"
+                  className="press-scale inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full border border-hairline bg-canvas px-6 text-sm font-semibold text-ink hover:border-brand hover:text-brand sm:w-auto"
                 >
                   <WhatsAppIcon className="size-4 fill-current text-brand" />
                   <span>WhatsApp Counselor</span>

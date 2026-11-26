@@ -27,7 +27,7 @@ export default function PageShell({
       {breadcrumbs && breadcrumbs.length > 0 && (
         <nav
           aria-label="Breadcrumb"
-          className="mx-auto max-w-[1380px] px-4 pt-24 sm:px-6 md:pt-28 lg:px-10"
+          className="mx-auto max-w-[1380px] px-4 pt-[calc(5rem+env(safe-area-inset-top))] sm:px-6 md:pt-28 lg:px-10"
         >
           <ol className="flex flex-wrap items-center gap-2 font-mono text-[11.5px] uppercase tracking-wider text-ink-subtle">
             {breadcrumbs.map((item, idx) => {
@@ -61,7 +61,9 @@ export default function PageShell({
       {title && (
         <header
           className={`mx-auto max-w-[1380px] px-4 sm:px-6 lg:px-10 ${
-            breadcrumbs && breadcrumbs.length > 0 ? "pt-6 pb-10 md:pt-8 md:pb-14" : "pt-28 pb-10 md:pt-36 md:pb-14"
+            breadcrumbs && breadcrumbs.length > 0
+              ? "pt-5 pb-8 md:pt-8 md:pb-14"
+              : "pt-[calc(5.5rem+env(safe-area-inset-top))] pb-8 md:pt-36 md:pb-14"
           }`}
         >
           <div className="max-w-3xl border-b border-hairline pb-8 md:pb-10">

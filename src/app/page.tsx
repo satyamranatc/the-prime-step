@@ -61,7 +61,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
       />
-      <main>
+      <main className="overflow-x-clip">
         <Hero />
         <TrustStrip />
         <CourseCatalog />

@@ -153,7 +153,7 @@ export default function CourseGrid({
         <div
           role="tablist"
           aria-label="Filter courses by category"
-          className="flex flex-wrap items-center gap-1.5"
+          className="no-scrollbar flex flex-nowrap items-center gap-1.5 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0"
         >
           {COURSE_FILTERS.map((f) => {
             const isSelected = active === f.id;
@@ -164,7 +164,7 @@ export default function CourseGrid({
                 role="tab"
                 aria-selected={isSelected}
                 onClick={() => setActive(f.id)}
-                className={`relative rounded-full px-4 py-2 text-[13.5px] font-medium transition-colors ${
+                className={`relative shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-[13.5px] font-medium transition-colors ${
                   isSelected ? "text-white" : "text-ink-muted hover:text-ink"
                 }`}
               >
