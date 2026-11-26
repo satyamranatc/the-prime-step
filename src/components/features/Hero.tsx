@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { scrollToId } from "@/lib/scroll";
 import { BRANCHES, SITE } from "@/lib/content";
 import { GOOGLE_RATING } from "@/lib/homepage";
@@ -108,13 +108,23 @@ export default function Hero() {
   const [sidebarTab, setSidebarTab] = useState<"tracks" | "campuses">("tracks");
   const [listMode, setListMode] = useState<"syllabus" | "roadmaps">("syllabus");
 
-  // Subtle scroll-linked parallax for the orbiting tech icons
+  const prefersReducedMotion = useReducedMotion();
+
+  // Subtle scroll-linked parallax for the orbiting tech icons (disabled on reduced-motion)
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
   });
-  const orbitParallaxY = useTransform(scrollYProgress, [0, 1], [0, -34]);
-  const portalParallaxY = useTransform(scrollYProgress, [0, 1], [0, -14]);
+  const orbitParallaxY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    prefersReducedMotion ? [0, 0] : [0, -34],
+  );
+  const portalParallaxY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    prefersReducedMotion ? [0, 0] : [0, -14],
+  );
 
   return (
     <section

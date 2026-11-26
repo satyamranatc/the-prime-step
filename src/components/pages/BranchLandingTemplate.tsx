@@ -1,5 +1,6 @@
 import Link from "next/link";
 import PageShell from "@/components/pages/PageShell";
+import { Tooltip } from "@/components/ui/tooltip-card";
 import { SITE, BRANCHES } from "@/lib/content";
 import { ALL_CATALOG_COURSES } from "@/lib/seoPages";
 
@@ -103,7 +104,19 @@ export default function BranchLandingTemplate({
                 </span>
                 <p className="mt-1 text-sm font-semibold text-ink">{branch.hours}</p>
                 <p className="mt-0.5 text-xs text-brand">
-                  Dedicated lab workstations for all batches
+                  <Tooltip
+                    containerClassName="border-b border-dashed border-brand/60 text-brand font-medium cursor-pointer"
+                    content={
+                      <span>
+                        <strong className="block text-ink">100% Practical Lab Access</strong>
+                        <span className="mt-1 block">
+                          Every learner gets a dedicated workstation during class plus open practice hours (8 AM – 8 PM) and a free 2-day trial demo before enrolling.
+                        </span>
+                      </span>
+                    }
+                  >
+                    Dedicated lab workstations for all batches
+                  </Tooltip>
                 </p>
               </div>
               <div>

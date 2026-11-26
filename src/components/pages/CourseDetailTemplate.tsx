@@ -8,6 +8,7 @@ import {
 import Chapter from "@/components/ui/Chapter";
 import CTA from "@/components/ui/CTA";
 import { Reveal } from "@/components/ui/Motion";
+import { Tooltip } from "@/components/ui/tooltip-card";
 import { WhatsAppIcon } from "@/components/ui/SocialIcons";
 import PageShell from "./PageShell";
 
@@ -113,7 +114,7 @@ export default function CourseDetailTemplate({ course }: { course: CoursePageDat
         </div>
 
         {/* Hairline 4-Column Specification Ledger */}
-        <dl className="mt-12 grid grid-cols-2 divide-y divide-hairline overflow-hidden rounded-2xl border border-hairline bg-canvas md:grid-cols-4 md:divide-x md:divide-y-0">
+        <dl className="mt-12 grid grid-cols-2 divide-y divide-hairline rounded-2xl border border-hairline bg-canvas md:grid-cols-4 md:divide-x md:divide-y-0">
           <div className="p-5 md:p-7">
             <dt className="eyebrow text-ink-subtle">Duration</dt>
             <dd className="display mt-2 text-xl text-ink md:text-2xl">{course.duration}</dd>
@@ -127,12 +128,42 @@ export default function CourseDetailTemplate({ course }: { course: CoursePageDat
           <div className="p-5 md:p-7">
             <dt className="eyebrow text-ink-subtle">Training Mode</dt>
             <dd className="display mt-2 text-xl text-ink md:text-2xl">{course.format}</dd>
-            <p className="mt-1 text-xs text-ink-muted">3 Indore Campuses</p>
+            <p className="mt-1 text-xs text-ink-muted">
+              <Tooltip
+                containerClassName="border-b border-dashed border-brand/60 font-semibold text-ink cursor-pointer"
+                content={
+                  <span>
+                    <strong className="block text-ink">3 Accessible Indore Campuses</strong>
+                    <span className="mt-1 block">
+                      • Vijay Nagar (Shagun Tower, AB Road)
+                      <br />• Bhawarkua (Indrapuri Main Road)
+                      <br />• Annapurna (Kalyan Tower, Annapurna Rd)
+                    </span>
+                  </span>
+                }
+              >
+                3 Indore Campuses
+              </Tooltip>
+            </p>
           </div>
           <div className="p-5 md:p-7">
             <dt className="eyebrow text-ink-subtle">Portfolio Output</dt>
             <dd className="display mt-2 text-xl text-ink md:text-2xl">{course.projectsCount}</dd>
-            <p className="mt-1 text-xs text-ink-muted">With 1-on-1 Code Reviews</p>
+            <p className="mt-1 text-xs text-ink-muted">
+              <Tooltip
+                containerClassName="border-b border-dashed border-brand/60 font-semibold text-ink cursor-pointer"
+                content={
+                  <span>
+                    <strong className="block text-ink">1-on-1 Faculty Code Reviews</strong>
+                    <span className="mt-1 block">
+                      Senior trainers review every project commit on your workstation and issue an official QR-verified certificate upon completion.
+                    </span>
+                  </span>
+                }
+              >
+                With 1-on-1 Code Reviews
+              </Tooltip>
+            </p>
           </div>
         </dl>
       </section>

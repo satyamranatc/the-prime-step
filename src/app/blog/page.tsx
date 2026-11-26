@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
   },
 };
 
-function BlogCard({
+function EditorialBlogCard({
   href,
   category,
   date,
@@ -32,6 +33,7 @@ function BlogCard({
   title,
   excerpt,
   author,
+  featured = false,
 }: {
   href: string;
   category: string;
@@ -40,37 +42,58 @@ function BlogCard({
   title: string;
   excerpt: string;
   author: string;
+  featured?: boolean;
 }) {
   return (
-    <article className="group flex flex-col justify-between rounded-3xl border border-pale/80 bg-paper p-5 transition-all hover:-translate-y-1 hover:border-brand/40 hover:shadow-lg sm:p-8">
-      <div className="space-y-4">
-        <div className="flex flex-wrap items-center gap-2 text-xs font-semibold sm:gap-3">
-          <span className="rounded-full bg-soft px-3 py-1 text-brand">
+    <article
+      className={`group flex flex-col justify-between rounded-3xl border border-hairline bg-paper transition-all duration-300 hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-[0_20px_50px_-24px_rgba(14,110,107,0.22)] ${
+        featured ? "p-6 sm:p-9 md:col-span-2" : "p-6 sm:p-7"
+      }`}
+    >
+      <div>
+        <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-ink-subtle">
+          <span className="rounded-full border border-brand/20 bg-accent-soft px-3 py-0.5 text-[11px] font-semibold text-brand">
             {category}
           </span>
-          <span className="text-deep/50">•</span>
-          <span className="text-deep/60">{date}</span>
-          <span className="text-deep/50">•</span>
-          <span className="text-deep/60">{readingTime}</span>
+          <span aria-hidden="true">·</span>
+          <span>{date}</span>
+          <span aria-hidden="true">·</span>
+          <span>{readingTime}</span>
         </div>
 
-        <h2 className="break-words text-xl font-bold tracking-tight text-deep transition-colors group-hover:text-brand sm:text-2xl md:text-3xl">
+        <h2
+          className={`display mt-4 font-bold tracking-tight text-ink transition-colors group-hover:text-brand ${
+            featured
+              ? "text-2xl sm:text-3xl md:text-[2rem]"
+              : "text-xl sm:text-[1.35rem]"
+          }`}
+        >
           <Link href={href}>{title}</Link>
         </h2>
 
-        <p className="text-sm leading-relaxed text-deep/75 sm:text-base">
+        <p
+          className={`mt-3 leading-relaxed text-ink-muted ${
+            featured ? "max-w-3xl text-sm sm:text-base" : "text-sm"
+          }`}
+        >
           {excerpt}
         </p>
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-2 border-t border-pale pt-4">
+      <div className="mt-6 flex items-center justify-between gap-3 border-t border-hairline pt-4">
+        <div className="flex items-center gap-2">
+          <span className="grid size-7 place-items-center rounded-full bg-brand/10 text-[10px] font-bold text-brand">
+            TPS
+          </span>
+          <span className="text-xs font-medium text-ink-subtle">{author}</span>
+        </div>
         <Link
           href={href}
-          className="flex items-center gap-1 text-sm font-semibold text-brand group-hover:underline"
+          className="inline-flex items-center gap-1 text-xs font-semibold text-brand transition-transform group-hover:translate-x-0.5"
         >
-          Read Full Article <span>→</span>
+          <span>Read article</span>
+          <span aria-hidden="true">→</span>
         </Link>
-        <span className="text-xs font-medium text-deep/50">By {author}</span>
       </div>
     </article>
   );
@@ -84,7 +107,7 @@ async function CmsPublishedBlogCards() {
   return (
     <>
       {cmsPosts.map((post) => (
-        <BlogCard
+        <EditorialBlogCard
           key={post.id}
           href={`/blog/${post.slug}`}
           category={post.category}
@@ -103,20 +126,76 @@ async function CmsPublishedBlogCards() {
 }
 
 export default function BlogListingPage() {
+  const [leadPost, ...restStaticPosts] = STATIC_BLOG_POSTS;
+
   return (
-    <PageShell
-      title="Technology & Career Insights"
-      eyebrow="The Prime Step Editorial"
-      lead="Practical guides, programming tutorials, industry trends, and career roadmaps designed to help students and professionals build high-growth tech careers in Indore and beyond."
-    >
-      <section className="mx-auto max-w-4xl space-y-8 sm:space-y-10">
-        <div className="grid gap-6 sm:gap-8">
+    <PageShell>
+      {/* Centered Aceternity-style Editorial Masthead */}
+      <section className="mx-auto max-w-5xl pt-[calc(5.25rem+env(safe-area-inset-top))] sm:pt-32">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-accent-soft px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-brand">
+            The Prime Step Editorial
+          </span>
+          <h1 className="display mt-4 text-[clamp(2.1rem,5vw,3.5rem)] font-bold text-ink">
+            Technology &amp; Career Insights
+          </h1>
+          <p className="mt-4 text-sm leading-relaxed text-ink-muted sm:text-base">
+            Practical roadmaps, programming guides, salary benchmarks, and hands-on tutorials written by senior faculty across our Indore campuses.
+          </p>
+        </div>
+
+        {/* Centered Editorial Cover Strip */}
+        <div className="relative mt-10 overflow-hidden rounded-3xl border border-hairline bg-[#071618] shadow-[0_24px_60px_-28px_rgba(11,18,21,0.3)]">
+          <div className="relative aspect-[21/9] min-h-[200px] w-full">
+            <Image
+              src="/brand/tps-mentor-classroom.jpg"
+              alt="The Prime Step Indore faculty mentoring students on real tech projects"
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="object-cover opacity-55"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#061315] via-[#061315]/55 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 flex flex-col justify-between gap-3 p-5 text-white sm:flex-row sm:items-end sm:p-8">
+              <div>
+                <span className="font-mono text-[10.5px] font-semibold uppercase tracking-widest text-[#5eead4]">
+                  Indore Tech Career Guides · 2026
+                </span>
+                <p className="mt-1 max-w-xl text-sm font-medium text-white/90 sm:text-base">
+                  Written by practitioners teaching Java Full Stack, MERN, Python AI, Data Analytics, and Power BI daily.
+                </p>
+              </div>
+              <Link
+                href="/courses"
+                className="inline-flex min-h-[40px] shrink-0 items-center justify-center rounded-full bg-white px-5 text-xs font-semibold text-ink transition-colors hover:bg-[#edf7f6] hover:text-brand"
+              >
+                Explore 15 Courses →
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Editorial Grid (CMS Published Posts + Featured & Static SEO Posts) */}
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
           <Suspense fallback={null}>
             <CmsPublishedBlogCards />
           </Suspense>
 
-          {STATIC_BLOG_POSTS.map((post) => (
-            <BlogCard
+          {leadPost && (
+            <EditorialBlogCard
+              href={leadPost.href}
+              category={leadPost.category}
+              date={leadPost.date}
+              readingTime={leadPost.readingTime}
+              title={leadPost.title}
+              excerpt={leadPost.excerpt}
+              author="The Prime Step Faculty"
+              featured
+            />
+          )}
+
+          {restStaticPosts.map((post) => (
+            <EditorialBlogCard
               key={post.slug}
               href={post.href}
               category={post.category}
@@ -130,25 +209,25 @@ export default function BlogListingPage() {
         </div>
 
         {/* Career Counseling CTA */}
-        <div className="rounded-3xl border border-brand/20 bg-soft p-5 text-center sm:p-8 md:p-12">
-          <h3 className="text-xl font-bold text-deep sm:text-2xl">
-            Ready to launch your tech career?
-          </h3>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-deep/70 sm:text-base">
-            Book a free 1-on-1 counseling session with our senior mentors across our Vijay Nagar, Bhawarkua, or Annapurna campuses.
+        <div className="mt-14 rounded-3xl border border-brand/20 bg-canvas p-6 text-center sm:p-10">
+          <h2 className="display text-2xl font-bold text-ink sm:text-3xl">
+            Ready to turn these roadmaps into a job offer?
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm text-ink-muted sm:text-base">
+            Book a free 2-day hands-on lab demo across our Vijay Nagar, Bhawarkua, or Annapurna campuses in Indore.
           </p>
-          <div className="mt-6 flex w-full flex-col flex-wrap items-stretch justify-center gap-2.5 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
+          <div className="mt-6 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
             <Link
               href="/courses"
-              className="w-full rounded-full bg-deep px-7 py-3 text-center text-xs font-semibold text-paper transition-all hover:bg-brand sm:w-auto sm:px-8 sm:py-3.5 sm:text-sm"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-ink px-7 text-xs font-semibold text-white transition-colors hover:bg-brand sm:text-sm"
             >
               Explore Job-Oriented Courses
             </Link>
             <Link
               href="/contact-us"
-              className="w-full rounded-full border border-deep/20 bg-paper px-7 py-3 text-center text-xs font-semibold text-deep transition-all hover:border-brand sm:w-auto sm:px-8 sm:py-3.5 sm:text-sm"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-hairline bg-paper px-7 text-xs font-semibold text-ink transition-colors hover:border-brand hover:text-brand sm:text-sm"
             >
-              Contact Counselors
+              Book Free Counseling
             </Link>
           </div>
         </div>

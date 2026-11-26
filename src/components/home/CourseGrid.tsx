@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
+import { GooeyInput } from "@/components/ui/gooey-input";
 import type { CatalogCourseItem } from "@/lib/seoPages";
 import {
   CATEGORY_LABEL,
@@ -181,14 +182,14 @@ export default function CourseGrid({
           })}
         </div>
 
-        <div className="relative w-full lg:w-72">
-          <input
-            type="search"
+        <div className="flex w-full justify-start lg:w-auto lg:justify-end">
+          <GooeyInput
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search Python, React, Excel..."
-            aria-label="Search courses"
-            className="w-full rounded-xl border border-hairline bg-canvas px-4 py-2.5 text-sm text-ink placeholder:text-ink-subtle transition-colors focus:border-brand focus:bg-paper focus:outline-none"
+            onValueChange={setQuery}
+            placeholder="Search courses..."
+            collapsedWidth={170}
+            expandedWidth={250}
+            expandedOffset={50}
           />
         </div>
       </div>

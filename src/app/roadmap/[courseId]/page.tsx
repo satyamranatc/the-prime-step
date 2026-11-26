@@ -54,7 +54,7 @@ export function generateStaticParams() {
   }));
 }
 
-export default async function RoadmapPage({
+async function RoadmapContent({
   params,
 }: {
   params: Promise<{ courseId: string }>;
@@ -91,11 +91,23 @@ export default async function RoadmapPage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
+        }}
       />
-      <Suspense fallback={<div className="h-screen w-screen bg-paper" />}>
-        <RoadmapClient courseId={courseId} />
-      </Suspense>
+      <RoadmapClient courseId={courseId} />
     </>
+  );
+}
+
+export default function RoadmapPage({
+  params,
+}: {
+  params: Promise<{ courseId: string }>;
+}) {
+  return (
+    <Suspense fallback={<div className="h-dvh w-screen bg-paper" />}>
+      <RoadmapContent params={params} />
+    </Suspense>
   );
 }
